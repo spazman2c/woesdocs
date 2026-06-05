@@ -5,8 +5,6 @@ description: "Migrated IQConnect developer reference page for Helpers."
 
 # Helpers
 
-Shared Libraries — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Overview 
 ## VssHelpers &amp; VssHelpers.StdLib — Shared Utility Libraries 
 
 Two parallel helper libraries that provide common utilities across the solution. VssHelpers targets .NET Framework 4.7.2 (used by IqSync, VssLastMile). VssHelpers.StdLib targets .NET Standard (used by IqConnectCore, Azure Functions). 
@@ -14,6 +12,7 @@ Two parallel helper libraries that provide common utilities across the solution.
 ### VssHelpers (.NET Framework) 
 
  | File | Key Functions 
+| --- | --- |
  | General.cs | ReadSetting(), IsNumeric(), SWIFT/Fedwire tag parsers, ApplicationInstanceId, NormalizeString() 
  | WebApi.cs | PostRequest(), GetValue() — HTTP helpers for VssLastMile query endpoint calls 
  | Xml.cs | XML parsing helpers, GetValueOrEmptyString(), node traversal 
@@ -23,6 +22,7 @@ Two parallel helper libraries that provide common utilities across the solution.
 ### VssHelpers.StdLib (.NET Standard) 
 
  | File | Key Functions 
+| --- | --- |
  | Encryption.cs | Encrypt(), Decrypt() — AES encryption for URL parameter security 
  | General.cs | Cross-platform ReadSetting(), utility methods 
  | LastMileServiceClient.cs | HTTP client for VssLastMile API calls from .NET Core projects 
@@ -32,6 +32,4 @@ Two parallel helper libraries that provide common utilities across the solution.
 
 ### VsMarshals (External Dependency) 
 
-Referenced from outside the IQConnect repo ( ..\VsMarshals\VsMarshals\VsMarshals.csproj ). Provides SFTP operations (Renci.SshNet wrapper) and file marshaling utilities used by VssLastMile and Uhaul. Also exposed via the VsMarshalsWcf WCF service project. 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+Referenced from outside the IQConnect repo ( ..\VsMarshals\VsMarshals\VsMarshals.csproj ). Provides SFTP operations (Renci.SshNet wrapper) and file marshaling utilities used by VssLastMile and Uhaul. Also exposed via the VsMarshalsWcf WCF service project.

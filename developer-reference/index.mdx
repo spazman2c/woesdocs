@@ -78,6 +78,7 @@ Product catalog feed to Channable's marketplace aggregation platform. Pushes ful
 The system uses a bidirectional convention in its command-line arguments. The prefix indicates the direction relative to the external system: 
 
  | Command Prefix | Direction | Example 
+| --- | --- | --- |
  | from-bestbuy | External → IQ Reseller (inbound orders, returns, cancels) | Best Buy sends a PO to IQ Reseller 
  | to-bestbuy | IQ Reseller → External (catalog, ASN, invoices) | IQ Reseller sends shipment confirmation to Best Buy 
  | to-hubspot | IQ Reseller → HubSpot (CRM sync of deals, companies, contacts) | New sales pipeline record pushed to HubSpot 
@@ -100,6 +101,4 @@ Each customer's IQ Reseller instance is identified by a unique API token stored 
 
 #### Incremental by Default 
 
-All feeds support both full-reset and incremental (delta) modes. Delta mode is the default — only records flagged as unread=1 or not yet synced are processed. Full resets are triggered by an explicit reset command-line argument. 
-
-IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+All feeds support both full-reset and incremental (delta) modes. Delta mode is the default — only records flagged as unread=1 or not yet synced are processed. Full resets are triggered by an explicit reset command-line argument.

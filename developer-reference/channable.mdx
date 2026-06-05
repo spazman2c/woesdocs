@@ -1,39 +1,25 @@
 ---
-title: "Channable"
-description: "Migrated IQConnect developer reference page for Channable."
+title: "Channable Developer Notes"
+description: "Code-level reference for the Renewtech Channable catalog feed."
 ---
 
-# Channable
+# Channable Developer Notes
 
-Channable — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Integrations 
-## Channable Product Feed 
+For the operational workflow, field mapping, command, and troubleshooting checklist, start with [Channable](/integrations/channable).
 
-Product catalog feed integration with Channable , a marketplace aggregation platform. Used by Renewtech . Pushes the full IQ Reseller product catalog (items, pricing tiers, stock levels, categories) to Channable for distribution to downstream marketplaces. 
-801 
-Lines 
+## Main Components
 
-1 
-Feed (catalog) 
+| Component | Purpose |
+| --- | --- |
+| `GetDataFromVendor_Channable()` | Entry point used by the catalog command. |
+| `PopulateCheetSheetFromDb()` | Loads Channable settings from database configuration. |
+| `Uri_FullCatalog` | SQL/API query that builds the flat catalog feed. |
+| `maxlist_items` | Marketplace listing table joined into the catalog query. |
 
-### Catalog Feed Structure 
+## Developer Checks
 
-The catalog query ( Uri_FullCatalog ) joins maxlist_items with item to produce a flat feed containing: 
-
- | Field | Source 
- | id | Composite key: UPPER(CONCAT(mfgr, '~~', itemnumber, '~~', conditioncode)) 
- | brand | mfgr 
- | title / item_group_id | itemnumber 
- | condition | conditioncode 
- | description | item description 
- | price | item price 
- | sale_price1–8 | 8 tier pricing from item table 
- | stock | available qty 
- | product_type | Concatenated category hierarchy (up to 4 levels) 
- | image_link | item imageurl 
-
-### Invocation 
-IqSync to-channable catalog &lt;tenantID&gt; production 
-Uses GetDataFromVendor_Channable() handler with PopulateCheetSheetFromDb() (settings loaded from database, not App.config). 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+| Area | What To Check |
+| --- | --- |
+| Missing item | Confirm the item exists in both the item master data and the MaxList records used by the catalog query. |
+| Pricing | Verify the item pricing tier fields used by `sale_price1` through `sale_price8`. |
+| Images | Confirm `imageurl` is populated for the item. |

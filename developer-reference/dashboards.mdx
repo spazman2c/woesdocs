@@ -5,8 +5,6 @@ description: "Migrated IQConnect developer reference page for Dashboards."
 
 # Dashboards
 
-Dashboards — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Overview 
 ## Monitoring Dashboards 
 
 Three web application projects provide monitoring and operational visibility into IQConnect's sync operations. They share similar UI structures but target different frameworks and authentication models. 
@@ -18,6 +16,7 @@ Authentication: Azure AD B2C (tenant: poigai.b2clogin.com )
 Features: Sync status, WebJob management, feed log viewer, settings display 
 
  | View | Purpose 
+| --- | --- |
  | Index | Dashboard landing — initializes CheatSheet from session 
  | Settings | Displays resolved CheatSheet configuration 
  | Sync | Sync page with feed status overview 
@@ -33,6 +32,4 @@ Purpose: Earlier versions of the monitoring dashboard. IQConnectWeb3 includes it
 ### IqFeedApi 
 
 Framework: ASP.NET Web API 2 
-Purpose: Exposes feed data via REST API with auto-generated help documentation (HelpPage area). Contains HomeController and ValuesController. Used for programmatic access to feed data from external systems. 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+Purpose: Exposes feed data via REST API with auto-generated help documentation (HelpPage area). Contains HomeController and ValuesController. Used for programmatic access to feed data from external systems.

@@ -5,8 +5,6 @@ description: "Migrated IQConnect developer reference page for Integrations."
 
 # Integrations
 
-Integrations — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Overview 
 ## Integration Wrappers 
 
 Each external system integration is encapsulated in a dedicated wrapper class within IqSync/ApiWrapper/ . These classes handle protocol translation, feed formatting, SFTP file management, and post-operation state tracking. 
@@ -64,6 +62,4 @@ All active wrappers follow the same structural pattern:
 2. Constructor calls PrepareFeed_[FeedType]() to transform IQ XML into target format
 3. WriteFeed() / WriteSymphonyFeedToFile() writes to SFTP or posts to API
 4. PostOpUpdateQuery is set with SQL to mark records as processed
-5. Caller (IqSync Program.cs) executes PostOpUpdateQuery via VssLastMile 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+5. Caller (IqSync Program.cs) executes PostOpUpdateQuery via VssLastMile

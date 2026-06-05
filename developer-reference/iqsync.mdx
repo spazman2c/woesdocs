@@ -5,8 +5,6 @@ description: "Migrated IQConnect developer reference page for Iqsync."
 
 # Iqsync
 
-IqSync Engine — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Overview 
 ## IqSync — Core Sync Engine 
 
 The main orchestrator of all IQConnect data flows. A .NET Framework 4.7.2 console application deployed as Azure WebJobs. Dispatches work to integration-specific wrapper classes based on command-line arguments. 
@@ -24,6 +22,7 @@ Feed Types
 IqSync accepts up to 5 positional arguments: 
 IqSync &lt;integrationName&gt; &lt;feedType&gt; [tenantID] [production|test] [reset|delta] 
  | Arg | Purpose | Examples 
+| --- | --- | --- |
  | integrationName | Which integration to invoke | from-bestbuy, to-bestbuy, to-hubspot, from-sps, to-channable 
  | feedType | Which data feed to process | itemsku, bom, subs, avl, price, so, shipment, invoice, returns, sp, catalog 
  | tenantID | IQ Reseller tenant identifier (loads API key from CertKey/&#123;tenantID&#125;.apitoken) | partpoint, renewtech, osiglobal 
@@ -44,6 +43,7 @@ Post-Op Update
 The Main() method is essentially a large switch statement over integrationName . Each case populates the CheatSheet configuration object, validates tenant context, then delegates to one of three handler methods: 
 
  | Handler | Direction | Used By 
+| --- | --- | --- |
  | GetDataFromVendor() | Reads from IQ API, writes to external system | to-bestbuy, to-sps, to-staples, to-ebay 
  | PostDataToVendor() | Reads from external system, writes to IQ API | from-bestbuy, from-sps, from-sellercloud 
  | GetCrmDataFromIqr() | Reads from IQ API, pushes to CRM (HubSpot) | to-hubspot (companies, contacts, deals) 
@@ -56,6 +56,7 @@ CheatSheet IqReader Symphony SpsCommerce HubSpot Channable SellerCloud Uhaul (SF
 ### Feed Types Reference 
 
  | Constant | Feed Type | Description 
+| --- | --- | --- |
  | k_itemsku | itemsku | Master item / SKU catalog 
  | k_bom | bom | Bill of Materials (part associations) 
  | k_subs | subs | Item substitutions 
@@ -78,9 +79,8 @@ CheatSheet IqReader Symphony SpsCommerce HubSpot Channable SellerCloud Uhaul (SF
 IqSync supports manual resending of specific transactions via override commands. When OverrideMode is true, the engine reads SO IDs from a resend queue table in IQ Connect Database Tables rather than scanning for unprocessed records: 
 
  | Override Feed | Source Table | Purpose 
+| --- | --- | --- |
  | resendasn | ASN resend list | Re-transmit a specific shipment 
  | resendinvoice | Invoice resend list | Re-transmit a specific invoice 
  | resendsoupdate | SO update resend list | Re-transmit a specific order update 
-After each resend, the record is deleted from the resend queue to prevent duplicates. 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+After each resend, the record is deleted from the resend queue to prevent duplicates.

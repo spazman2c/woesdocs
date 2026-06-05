@@ -5,7 +5,6 @@ description: "Migrated IQConnect developer reference page for Iqreader."
 
 # Iqreader
 
-IqReader — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
 Back to IqSync 
 ## IqReader — IQ API Data Fetcher 
 
@@ -29,11 +28,10 @@ IqReader is the bridge between IQ Reseller's WCF API and the integration wrapper
 ### Static Utility Methods 
 
  | Method | Purpose 
+| --- | --- |
  | GetUnshippedSoIDsAsList() | Returns SO IDs that have not yet had ASN sent 
  | GetUninvoicedSoIDsAsList() | Returns SO IDs that have not yet been invoiced 
  | GetAsnResendList() | Returns SO IDs queued for ASN retransmission 
  | GetInvoiceResendList() | Returns SO IDs queued for invoice retransmission 
  | GetSoUpdateResendList() | Returns SO IDs queued for order update retransmission 
- | DeleteFromAsnResendList() | Removes a processed SO from the ASN resend queue 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+ | DeleteFromAsnResendList() | Removes a processed SO from the ASN resend queue

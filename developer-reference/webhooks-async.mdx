@@ -5,8 +5,6 @@ description: "Migrated IQConnect developer reference page for Webhooks Async."
 
 # Webhooks Async
 
-Webhooks Async — IQConnect Architecture Overview Sync Engine Integrations Azure Database 
-Back to Overview 
 ## IqConnectWebhooksAsync — Durable Functions Orchestrator 
 
 Azure Durable Functions project that handles long-running, multi-step webhook workflows. Primary use case: converting a HubSpot quote acceptance into an IQ Reseller sales order with full line item resolution and master item creation. 
@@ -21,6 +19,7 @@ C# Files
 The CrmIntegrationAync.RunOrchestrator() method dispatches based on action type: 
 
  | Action | Activity Function | Description 
+| --- | --- | --- |
  | heartbeat | CheckHeartbeat (x3) | Runs 3 sequential heartbeat checks to verify orchestrator health 
  | (default) | CreateSO | Full quote-to-SO conversion workflow 
 
@@ -51,6 +50,4 @@ IqSessionManager IqTenantContext IqSalesOrder MasterItemHelper FormatConverter D
 ### API Capsule 
 
 The ApiCapsule/ folder contains data structures for HubSpot API interaction: 
-HubSpotQuote IqWrapper Address 
-
-IQConnect Architecture Reference — ISV Zen / IQ Reseller — Confidential IQR Dev Reference v5 — ISV Zen / IQ Reseller — Confidential
+HubSpotQuote IqWrapper Address
