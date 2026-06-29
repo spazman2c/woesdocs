@@ -5,8 +5,8 @@
   "description": "Customer-facing documentation and REST API reference for Woes, the API-native developer support platform.",
   "colors": {
     "primary": "#FF7038",
-    "light": "#FFF1E8",
-    "dark": "#181716"
+    "light": "#FF7038",
+    "dark": "#FF7038"
   },
   "icons": {
     "library": "lucide"
