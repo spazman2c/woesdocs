@@ -1,14 +1,16 @@
 ---
 title: "Clients"
 sidebarTitle: "Clients API"
-description: "Read Woes client account aggregates through the REST API."
+description: "Create manual client seeds and read Woes client account aggregates through the REST API."
 ---
 
 # Clients
 
 The Clients API exposes the same account/client aggregate used by the Woes
 Clients page. Client records are derived from workspace conversations, contacts,
-channels, and recent activity. They are read-only in the REST API for now.
+channels, and recent activity. The REST API can also create a manual
+client/account seed when another system needs a client to exist before the
+first customer conversation.
 
 <Note>
   The REST Clients API does not expose workspace ids, raw conversation metadata,
@@ -122,6 +124,33 @@ curl "https://woes.dev/api/v1/clients?health=watch&limit=10" \
 }
 ```
 
+## Create Client
+
+```http
+POST /api/v1/clients
+```
+
+This creates a manual client seed as an API-origin support conversation. The
+client then appears in the same aggregate used by the Woes Clients page.
+
+```bash
+curl https://woes.dev/api/v1/clients \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "company": "Example API Co",
+    "contactName": "Ada Lovelace",
+    "contactEmail": "ada@example.com",
+    "notes": "Created from CRM sync."
+  }'
+```
+
+<Note>
+  Create Client does not invite a user, open a customer portal session, send an
+  email, or run automations. It seeds the client/account record for workspace
+  visibility.
+</Note>
+
 ## Retrieve Client
 
 ```http
@@ -150,4 +179,5 @@ may not be represented in the response.
 | Endpoint                         | Scope          |
 | -------------------------------- | -------------- |
 | `GET /api/v1/clients`            | `clients:read` |
+| `POST /api/v1/clients`           | `clients:write` |
 | `GET /api/v1/clients/{clientId}` | `clients:read` |

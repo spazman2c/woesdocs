@@ -64,11 +64,17 @@ specific resources:
 | Scope                 | Allows                                    |
 | --------------------- | ----------------------------------------- |
 | `agents:read`         | List/read public agent metadata.          |
+| `analytics:read`      | Read sanitized analytics aggregates.      |
 | `clients:read`        | List/read client account aggregates.      |
+| `clients:write`       | Create manual client/account seeds.       |
 | `conversations:read`  | List/read conversations and messages.     |
 | `conversations:write` | Create/update conversations and messages. |
+| `definitions:read`    | Read tags, statuses, priorities, and custom field definitions. |
 | `issues:read`         | List/read issues.                         |
 | `issues:write`        | Create/update issues.                     |
+| `sources:read`        | List/read API context sources.            |
+| `sources:write`       | Create/update/delete/rescan sources.      |
+| `usage:read`          | Read usage meters and per-key API usage.  |
 
 If a scoped key calls an endpoint outside its allowed scopes, the API returns
 `403 insufficient_scope`.

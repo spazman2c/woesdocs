@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Woes REST API",
-    "summary": "Public REST API for workspace conversations, issues, clients, and agents.",
-    "description": "Use workspace API keys to work with Woes support conversations, messages, issues, client account aggregates, and public agent metadata from server-side integrations.",
+    "summary": "Public REST API for Woes workspace conversations, issues, clients, agents, sources, definitions, usage, and analytics.",
+    "description": "Use workspace API keys to work with Woes support conversations, messages, issues, client account aggregates, public agent metadata, API context sources, workspace definitions, usage meters, and sanitized analytics from server-side integrations.",
     "version": "2026-06-29",
     "license": {
       "name": "Proprietary",
@@ -37,12 +37,30 @@
     {
       "name": "Agents",
       "description": "Read named support agent metadata and public widget keys."
+    },
+    {
+      "name": "Sources",
+      "description": "Create, inspect, update, delete, and rescan API context sources."
+    },
+    {
+      "name": "Definitions",
+      "description": "Read workspace tags, statuses, priorities, and custom field definitions."
+    },
+    {
+      "name": "Usage",
+      "description": "Read current-month public API and live API check usage."
+    },
+    {
+      "name": "Analytics",
+      "description": "Read sanitized workspace analytics aggregates."
     }
   ],
   "paths": {
     "/api/v1/conversations": {
       "get": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "listConversations",
         "summary": "List conversations",
         "description": "Lists recent workspace conversations visible to the API key workspace.",
@@ -119,7 +137,9 @@
         }
       },
       "post": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "createConversation",
         "summary": "Create conversation",
         "description": "Creates an API-origin conversation in the authenticated workspace.",
@@ -193,7 +213,9 @@
     },
     "/api/v1/conversations/{conversationId}": {
       "get": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "getConversation",
         "summary": "Retrieve conversation",
         "description": "Retrieves one workspace-scoped conversation. Cross-workspace ids return 404.",
@@ -231,7 +253,9 @@
         }
       },
       "patch": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "updateConversation",
         "summary": "Update conversation",
         "description": "Updates supported public fields on a workspace-scoped conversation.",
@@ -296,7 +320,9 @@
     },
     "/api/v1/conversations/{conversationId}/messages": {
       "get": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "listConversationMessages",
         "summary": "List messages",
         "description": "Lists ordered messages for a workspace-scoped conversation.",
@@ -334,7 +360,9 @@
         }
       },
       "post": {
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "operationId": "createConversationMessage",
         "summary": "Create message",
         "description": "Appends a user or assistant message to a workspace-scoped conversation.",
@@ -399,7 +427,9 @@
     },
     "/api/v1/issues": {
       "get": {
-        "tags": ["Issues"],
+        "tags": [
+          "Issues"
+        ],
         "operationId": "listIssues",
         "summary": "List issues",
         "description": "Lists recent workspace issues visible to the API key workspace.",
@@ -449,7 +479,9 @@
         }
       },
       "post": {
-        "tags": ["Issues"],
+        "tags": [
+          "Issues"
+        ],
         "operationId": "createIssue",
         "summary": "Create issue",
         "description": "Creates a workspace-scoped support issue.",
@@ -471,7 +503,10 @@
                       "email": "ada@example.com",
                       "company": "Example API Co"
                     },
-                    "tags": ["oauth", "production"]
+                    "tags": [
+                      "oauth",
+                      "production"
+                    ]
                   }
                 }
               },
@@ -486,7 +521,10 @@
                   "email": "ada@example.com",
                   "company": "Example API Co"
                 },
-                "tags": ["oauth", "production"]
+                "tags": [
+                  "oauth",
+                  "production"
+                ]
               }
             }
           }
@@ -528,7 +566,9 @@
     },
     "/api/v1/issues/{issueId}": {
       "get": {
-        "tags": ["Issues"],
+        "tags": [
+          "Issues"
+        ],
         "operationId": "getIssue",
         "summary": "Retrieve issue",
         "description": "Retrieves one workspace-scoped issue. Cross-workspace ids return 404.",
@@ -566,7 +606,9 @@
         }
       },
       "patch": {
-        "tags": ["Issues"],
+        "tags": [
+          "Issues"
+        ],
         "operationId": "updateIssue",
         "summary": "Update issue",
         "description": "Updates supported public fields on a workspace-scoped issue.",
@@ -586,14 +628,20 @@
                 "closeIssue": {
                   "value": {
                     "statusCategory": "closed",
-                    "tags": ["oauth", "resolved"]
+                    "tags": [
+                      "oauth",
+                      "resolved"
+                    ]
                   }
                 }
               },
               "example": {
                 "statusCategory": "closed",
                 "priority": "low",
-                "tags": ["oauth", "resolved"]
+                "tags": [
+                  "oauth",
+                  "resolved"
+                ]
               }
             }
           }
@@ -632,7 +680,9 @@
     },
     "/api/v1/clients": {
       "get": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "operationId": "listClients",
         "summary": "List clients",
         "description": "Lists client account aggregates derived from conversations in the API key workspace.",
@@ -664,75 +714,126 @@
                       "clients": [
                         {
                           "object": "client",
-                      "id": "example-api-co",
-                      "name": "Example API Co",
-                      "health": "watch",
-                      "healthScore": {
-                        "label": "watch",
-                        "score": 72,
-                        "activity": 85,
-                        "conversations": 66,
-                        "resolutions": 70,
-                        "reasons": [
-                          "1/4 conversations still open.",
-                          "75% resolution rate."
-                        ]
-                      },
-                      "metrics": {
-                        "conversations": 4,
-                        "openConversations": 1,
-                        "messages": 38,
-                        "verifiedContacts": 2,
-                        "visits": 6
-                      },
-                      "channels": [
-                        {
-                          "channel": "live-chat",
-                          "count": 3
-                        },
-                        {
-                          "channel": "email",
-                          "count": 1
-                        }
-                      ],
-                      "contacts": [
-                        {
-                          "id": "cus_123",
-                          "name": "Ada Lovelace",
-                          "email": "ada@example.com",
-                          "identitySource": "headers",
+                          "id": "example-api-co",
+                          "name": "Example API Co",
+                          "health": "watch",
+                          "healthScore": {
+                            "label": "watch",
+                            "score": 72,
+                            "activity": 85,
+                            "conversations": 66,
+                            "resolutions": 70,
+                            "reasons": [
+                              "1/4 conversations still open.",
+                              "75% resolution rate."
+                            ]
+                          },
+                          "metrics": {
+                            "conversations": 4,
+                            "openConversations": 1,
+                            "messages": 38,
+                            "verifiedContacts": 2,
+                            "visits": 6
+                          },
+                          "channels": [
+                            {
+                              "channel": "live-chat",
+                              "count": 3
+                            },
+                            {
+                              "channel": "email",
+                              "count": 1
+                            }
+                          ],
+                          "contacts": [
+                            {
+                              "id": "cus_123",
+                              "name": "Ada Lovelace",
+                              "email": "ada@example.com",
+                              "identitySource": "headers",
+                              "lastMessageAt": "2026-06-29T13:00:00.000Z",
+                              "online": false,
+                              "visits": 4
+                            }
+                          ],
+                          "recentConversations": [
+                            {
+                              "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
+                              "channel": "live-chat",
+                              "subject": "OAuth redirect URI mismatch",
+                              "preview": "Customer reports a redirect_uri mismatch.",
+                              "status": "open",
+                              "lastMessageAt": "2026-06-29T13:00:00.000Z"
+                            }
+                          ],
+                          "tasks": [
+                            {
+                              "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
+                              "subject": "OAuth redirect URI mismatch",
+                              "preview": "Customer reports a redirect_uri mismatch.",
+                              "status": "open",
+                              "priority": "High",
+                              "lastMessageAt": "2026-06-29T13:00:00.000Z"
+                            }
+                          ],
+                          "firstContactAt": "2026-06-20T16:00:00.000Z",
                           "lastMessageAt": "2026-06-29T13:00:00.000Z",
-                          "online": false,
-                          "visits": 4
+                          "latestConversationId": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33"
                         }
-                      ],
-                      "recentConversations": [
-                        {
-                          "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
-                          "channel": "live-chat",
-                          "subject": "OAuth redirect URI mismatch",
-                          "preview": "Customer reports a redirect_uri mismatch.",
-                          "status": "open",
-                          "lastMessageAt": "2026-06-29T13:00:00.000Z"
-                        }
-                      ],
-                      "tasks": [
-                        {
-                          "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
-                          "subject": "OAuth redirect URI mismatch",
-                          "preview": "Customer reports a redirect_uri mismatch.",
-                          "status": "open",
-                          "priority": "High",
-                          "lastMessageAt": "2026-06-29T13:00:00.000Z"
-                        }
-                      ],
-                      "firstContactAt": "2026-06-20T16:00:00.000Z",
-                      "lastMessageAt": "2026-06-29T13:00:00.000Z",
-                      "latestConversationId": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33"
+                      ]
                     }
-                  ]
-                }
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "operationId": "createClient",
+        "summary": "Create client",
+        "description": "Creates a manual client/account seed in the authenticated workspace. The client is represented by an API-origin support conversation and then returned through the same client aggregate used by the Clients page.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientSeedRequest"
+              },
+              "example": {
+                "company": "Example API Co",
+                "contactName": "Ada Lovelace",
+                "contactEmail": "ada@example.com",
+                "notes": "Created from billing CRM sync."
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Client seed created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateClientSeedResponse"
                 }
               }
             }
@@ -757,7 +858,9 @@
     },
     "/api/v1/clients/{clientId}": {
       "get": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "operationId": "getClient",
         "summary": "Retrieve client",
         "description": "Retrieves one client account aggregate from the API key workspace. Missing or cross-workspace ids return 404.",
@@ -797,7 +900,9 @@
     },
     "/api/v1/agents": {
       "get": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "operationId": "listAgents",
         "summary": "List agents",
         "description": "Lists public metadata for named support agents in the API key workspace. Prompt/config internals and learned profiles are not returned.",
@@ -869,7 +974,9 @@
     },
     "/api/v1/agents/{agentId}": {
       "get": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "operationId": "getAgent",
         "summary": "Retrieve agent",
         "description": "Retrieves one public agent metadata object from the API key workspace. Missing or cross-workspace ids return 404.",
@@ -897,6 +1004,573 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/sources": {
+      "get": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "listSources",
+        "summary": "List sources",
+        "description": "Lists API context sources for the API key workspace.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SourceStatus"
+          },
+          {
+            "$ref": "#/components/parameters/SourceType"
+          },
+          {
+            "$ref": "#/components/parameters/SourceLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Source list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceListResponse"
+                },
+                "examples": {
+                  "readySources": {
+                    "value": {
+                      "object": "list",
+                      "hasMore": false,
+                      "sources": [
+                        {
+                          "object": "source",
+                          "id": "5f6a7b8c-1111-4222-9333-123456789abc",
+                          "name": "Public API",
+                          "type": "openapi",
+                          "status": "ready",
+                          "inputUrl": "https://api.example.com/openapi.json",
+                          "error": null,
+                          "publicDocs": {
+                            "published": true,
+                            "slug": "public-api",
+                            "url": "https://woes.dev/docs/public-api"
+                          },
+                          "createdAt": "2026-06-29T16:00:00.000Z",
+                          "updatedAt": "2026-06-29T16:01:00.000Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "createSource",
+        "summary": "Create source",
+        "description": "Creates and ingests a new API context source. Provide a URL or pasted content.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSourceRequest"
+              },
+              "example": {
+                "type": "openapi",
+                "name": "Public API",
+                "url": "https://api.example.com/openapi.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Source created and ingested.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngestionResultResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{sourceId}": {
+      "get": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "retrieveSource",
+        "summary": "Retrieve source",
+        "description": "Reads one source plus redacted endpoint and document details.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SourceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Source detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "updateSource",
+        "summary": "Update source",
+        "description": "Renames a source and/or changes public docs publication state.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SourceId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSourceRequest"
+              },
+              "example": {
+                "name": "Public API v2",
+                "publicDocs": {
+                  "published": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated source detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "deleteSource",
+        "summary": "Delete source",
+        "description": "Deletes one source from the API key workspace and marks default-agent context stale for resync.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SourceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Source deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteSourceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{sourceId}/rescan": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "rescanSource",
+        "summary": "Rescan source",
+        "description": "Re-ingests a URL-backed source. Pasted/manual sources are not rescannable through this endpoint.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SourceId"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Source rescanned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngestionResultResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/tags": {
+      "get": {
+        "tags": [
+          "Definitions"
+        ],
+        "operationId": "listTags",
+        "summary": "List tags",
+        "description": "Lists workspace-managed tag definitions, optionally filtered by issue or account scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DefinitionScope"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag definitions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/statuses": {
+      "get": {
+        "tags": [
+          "Definitions"
+        ],
+        "operationId": "listStatuses",
+        "summary": "List statuses",
+        "description": "Lists workspace ticket status definitions.",
+        "responses": {
+          "200": {
+            "description": "Status definitions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/priorities": {
+      "get": {
+        "tags": [
+          "Definitions"
+        ],
+        "operationId": "listPriorities",
+        "summary": "List priorities",
+        "description": "Lists workspace ticket priority definitions.",
+        "responses": {
+          "200": {
+            "description": "Priority definitions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriorityListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/custom-fields": {
+      "get": {
+        "tags": [
+          "Definitions"
+        ],
+        "operationId": "listCustomFields",
+        "summary": "List custom fields",
+        "description": "Lists sanitized customer custom field definitions.",
+        "responses": {
+          "200": {
+            "description": "Custom field definitions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFieldListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/usage": {
+      "get": {
+        "tags": [
+          "Usage"
+        ],
+        "operationId": "retrieveUsage",
+        "summary": "Retrieve usage",
+        "description": "Reads current-month workspace usage meters for public API calls, live API checks, API sources, agents, and indexed endpoints.",
+        "responses": {
+          "200": {
+            "description": "Workspace usage.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/usage/api-keys": {
+      "get": {
+        "tags": [
+          "Usage"
+        ],
+        "operationId": "listApiKeyUsage",
+        "summary": "List API key usage",
+        "description": "Lists current-month public API call usage by workspace API key prefix. Full key secrets and hashes are never returned.",
+        "responses": {
+          "200": {
+            "description": "API key usage list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyUsageListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/analytics": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "operationId": "retrieveAnalytics",
+        "summary": "Retrieve analytics",
+        "description": "Reads sanitized workspace analytics aggregates for agents, surveys, widget activity, and customer feedback. Provider/model/cost/debug internals are excluded.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AnalyticsLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workspace analytics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -1093,6 +1767,91 @@
           "type": "boolean"
         },
         "example": false
+      },
+      "SourceLimit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "description": "Maximum number of sources to return.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50
+        }
+      },
+      "SourceStatus": {
+        "name": "status",
+        "in": "query",
+        "required": false,
+        "description": "Filter sources by ingestion status.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "processing",
+            "ready",
+            "failed"
+          ]
+        }
+      },
+      "SourceType": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "description": "Filter sources by source type.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "openapi",
+            "json",
+            "url",
+            "website",
+            "text",
+            "graphql",
+            "postman",
+            "asyncapi",
+            "grpc",
+            "soap",
+            "github"
+          ]
+        }
+      },
+      "SourceId": {
+        "name": "sourceId",
+        "in": "path",
+        "required": true,
+        "description": "Workspace API source id.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "DefinitionScope": {
+        "name": "scope",
+        "in": "query",
+        "required": false,
+        "description": "Filter tag definitions by scope.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "issue",
+            "account"
+          ]
+        }
+      },
+      "AnalyticsLimit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "description": "Maximum number of recent rows sampled per analytics area.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "default": 500
+        }
       }
     },
     "responses": {
@@ -1226,15 +1985,30 @@
     "schemas": {
       "ConversationChannel": {
         "type": "string",
-        "enum": ["api", "live-chat", "email", "discord"]
+        "enum": [
+          "api",
+          "live-chat",
+          "email",
+          "discord"
+        ]
       },
       "ConversationStatus": {
         "type": "string",
-        "enum": ["open", "waiting", "solved"]
+        "enum": [
+          "open",
+          "waiting",
+          "solved"
+        ]
       },
       "IssueStatusCategory": {
         "type": "string",
-        "enum": ["new", "on_you", "on_customer", "on_hold", "closed"]
+        "enum": [
+          "new",
+          "on_you",
+          "on_customer",
+          "on_hold",
+          "closed"
+        ]
       },
       "Customer": {
         "type": "object",
@@ -1250,7 +2024,10 @@
             "maxLength": 160
           },
           "email": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "email",
             "maxLength": 320
           },
@@ -1272,7 +2049,10 @@
             "maxLength": 160
           },
           "email": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "email",
             "maxLength": 320
           },
@@ -1330,7 +2110,10 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time"
           },
           "lastMessageAt": {
@@ -1338,7 +2121,10 @@
             "format": "date-time"
           },
           "closedAt": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time"
           }
         }
@@ -1346,7 +2132,11 @@
       "ConversationListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["object", "hasMore", "conversations"],
+        "required": [
+          "object",
+          "hasMore",
+          "conversations"
+        ],
         "properties": {
           "object": {
             "type": "string",
@@ -1366,7 +2156,9 @@
       "ConversationResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["conversation"],
+        "required": [
+          "conversation"
+        ],
         "properties": {
           "conversation": {
             "$ref": "#/components/schemas/Conversation"
@@ -1376,7 +2168,10 @@
       "CreateConversationRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["customer", "subject"],
+        "required": [
+          "customer",
+          "subject"
+        ],
         "properties": {
           "channel": {
             "$ref": "#/components/schemas/ConversationChannel",
@@ -1388,7 +2183,9 @@
                 "$ref": "#/components/schemas/Customer"
               }
             ],
-            "required": ["id"]
+            "required": [
+              "id"
+            ]
           },
           "externalId": {
             "type": "string",
@@ -1470,7 +2267,10 @@
           },
           "role": {
             "type": "string",
-            "enum": ["user", "assistant"]
+            "enum": [
+              "user",
+              "assistant"
+            ]
           },
           "body": {
             "type": "string"
@@ -1487,7 +2287,10 @@
       "MessageListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["object", "messages"],
+        "required": [
+          "object",
+          "messages"
+        ],
         "properties": {
           "object": {
             "type": "string",
@@ -1504,7 +2307,9 @@
       "MessageResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "properties": {
           "message": {
             "$ref": "#/components/schemas/Message"
@@ -1514,7 +2319,9 @@
       "CreateMessageRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["body"],
+        "required": [
+          "body"
+        ],
         "properties": {
           "body": {
             "type": "string",
@@ -1523,7 +2330,10 @@
           },
           "role": {
             "type": "string",
-            "enum": ["user", "assistant"],
+            "enum": [
+              "user",
+              "assistant"
+            ],
             "default": "user"
           }
         },
@@ -1535,13 +2345,22 @@
       "IssueSource": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["channel", "conversationId"],
+        "required": [
+          "channel",
+          "conversationId"
+        ],
         "properties": {
           "channel": {
-            "type": ["string", "null"]
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "conversationId": {
-            "type": ["string", "null"]
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -1612,7 +2431,10 @@
             "format": "date-time"
           },
           "closedAt": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time"
           }
         }
@@ -1620,7 +2442,11 @@
       "IssueListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["object", "hasMore", "issues"],
+        "required": [
+          "object",
+          "hasMore",
+          "issues"
+        ],
         "properties": {
           "object": {
             "type": "string",
@@ -1640,7 +2466,9 @@
       "IssueResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["issue"],
+        "required": [
+          "issue"
+        ],
         "properties": {
           "issue": {
             "$ref": "#/components/schemas/Issue"
@@ -1650,7 +2478,9 @@
       "CreateIssueRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["subject"],
+        "required": [
+          "subject"
+        ],
         "properties": {
           "customer": {
             "$ref": "#/components/schemas/IssueCustomer"
@@ -1706,7 +2536,10 @@
             "email": "ada@example.com",
             "company": "Example API Co"
           },
-          "tags": ["oauth", "production"]
+          "tags": [
+            "oauth",
+            "production"
+          ]
         }
       },
       "UpdateIssueRequest": {
@@ -1747,13 +2580,19 @@
         "example": {
           "statusCategory": "closed",
           "priority": "low",
-          "tags": ["oauth", "resolved"]
+          "tags": [
+            "oauth",
+            "resolved"
+          ]
         }
       },
       "ErrorResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["code", "error"],
+        "required": [
+          "code",
+          "error"
+        ],
         "properties": {
           "code": {
             "type": "string"
@@ -1765,7 +2604,11 @@
       },
       "ClientHealth": {
         "type": "string",
-        "enum": ["attention", "healthy", "watch"]
+        "enum": [
+          "attention",
+          "healthy",
+          "watch"
+        ]
       },
       "ClientHealthScore": {
         "type": "object",
@@ -1846,7 +2689,10 @@
       "ClientChannel": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["channel", "count"],
+        "required": [
+          "channel",
+          "count"
+        ],
         "properties": {
           "channel": {
             "type": "string"
@@ -1877,7 +2723,10 @@
             "type": "string"
           },
           "email": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "email"
           },
           "identitySource": {
@@ -2040,7 +2889,12 @@
       "ClientListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["object", "hasMore", "truncated", "clients"],
+        "required": [
+          "object",
+          "hasMore",
+          "truncated",
+          "clients"
+        ],
         "properties": {
           "object": {
             "type": "string",
@@ -2063,7 +2917,10 @@
       "ClientResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["client", "truncated"],
+        "required": [
+          "client",
+          "truncated"
+        ],
         "properties": {
           "client": {
             "$ref": "#/components/schemas/Client"
@@ -2075,7 +2932,12 @@
       },
       "AgentLearningStatus": {
         "type": "string",
-        "enum": ["idle", "pending", "ready", "failed"]
+        "enum": [
+          "idle",
+          "pending",
+          "ready",
+          "failed"
+        ]
       },
       "Agent": {
         "type": "object",
@@ -2110,7 +2972,10 @@
             "type": "boolean"
           },
           "widgetPublicKey": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "Public widget key for this agent. This is not a REST API credential."
           },
           "attachedSourceCount": {
@@ -2122,7 +2987,10 @@
             "$ref": "#/components/schemas/AgentLearningStatus"
           },
           "learnedAt": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time"
           },
           "createdAt": {
@@ -2138,7 +3006,11 @@
       },
       "AgentListResponse": {
         "type": "object",
-        "required": ["object", "hasMore", "agents"],
+        "required": [
+          "object",
+          "hasMore",
+          "agents"
+        ],
         "properties": {
           "object": {
             "type": "string",
@@ -2157,12 +3029,872 @@
       },
       "AgentResponse": {
         "type": "object",
-        "required": ["agent"],
+        "required": [
+          "agent"
+        ],
         "properties": {
           "agent": {
             "$ref": "#/components/schemas/Agent"
           }
         }
+      },
+      "SourceAuth": {
+        "type": "object",
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "hasSecret": {
+            "type": "boolean"
+          },
+          "lastError": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastVerifiedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicDocsMetadata": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "SourceSummary": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "object",
+          "status",
+          "type",
+          "createdAt",
+          "updatedAt",
+          "publicDocs"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "source"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "openapi",
+              "json",
+              "url",
+              "website",
+              "text",
+              "graphql",
+              "postman",
+              "asyncapi",
+              "grpc",
+              "soap",
+              "github"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "ready",
+              "failed"
+            ]
+          },
+          "inputUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "auth": {
+            "$ref": "#/components/schemas/SourceAuth"
+          },
+          "publicDocs": {
+            "$ref": "#/components/schemas/PublicDocsMetadata"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceEndpoint": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "endpoint"
+          },
+          "id": {
+            "type": "string"
+          },
+          "method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "operationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters": {},
+          "requestBody": {},
+          "responses": {},
+          "security": {},
+          "tags": {}
+        },
+        "additionalProperties": false
+      },
+      "SourceDocument": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "document"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "content": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SourceSummary"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "counts": {
+                "type": "object",
+                "properties": {
+                  "chunks": {
+                    "type": "integer"
+                  },
+                  "documents": {
+                    "type": "integer"
+                  },
+                  "endpoints": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "documents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SourceDocument"
+                }
+              },
+              "endpoints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SourceEndpoint"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "SourceListResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "hasMore",
+          "sources"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceSummary"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceResponse": {
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/SourceDetail"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSourceRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "openapi",
+              "json",
+              "url",
+              "website",
+              "text",
+              "graphql",
+              "postman",
+              "asyncapi",
+              "grpc",
+              "soap",
+              "github"
+            ],
+            "default": "auto"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 2000000
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "url"
+            ]
+          },
+          {
+            "required": [
+              "content"
+            ]
+          }
+        ],
+        "additionalProperties": false
+      },
+      "UpdateSourceRequest": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "publicDocs": {
+            "type": "object",
+            "required": [
+              "published"
+            ],
+            "properties": {
+              "published": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "IngestionResultResponse": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/SourceSummary"
+          },
+          "counts": {
+            "type": "object",
+            "properties": {
+              "chunks": {
+                "type": "integer"
+              },
+              "documents": {
+                "type": "integer"
+              },
+              "endpoints": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "path": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteSourceResponse": {
+        "type": "object",
+        "required": [
+          "deleted",
+          "id",
+          "object"
+        ],
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "const": "source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "tag"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "issue",
+              "account"
+            ]
+          },
+          "color": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagListResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusDefinition": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "status"
+          },
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "lifecycle": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "tone": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusListResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "statuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusDefinition"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "PriorityDefinition": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "priority"
+          },
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "highlightInQueue": {
+            "type": "boolean"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "tone": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PriorityListResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "priorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriorityDefinition"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomFieldDefinition": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "custom_field"
+          },
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "fillMode": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomFieldListResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "customFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFieldDefinition"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsageResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "usage"
+          },
+          "periodStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "publicApiCalls": {
+                "type": "integer"
+              },
+              "liveApiChecks": {
+                "type": "integer"
+              },
+              "apiSources": {
+                "type": "integer"
+              },
+              "agents": {
+                "type": "integer"
+              },
+              "indexedEndpoints": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiKeyUsage": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "api_key_usage"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "keyPrefix": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "callsThisMonth": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiKeyUsageListResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "periodStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "apiKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKeyUsage"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "analytics"
+          },
+          "window": {
+            "type": "integer"
+          },
+          "analytics": {
+            "type": "object",
+            "properties": {
+              "agents": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "surveys": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "widget": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "feedback": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateClientSeedRequest": {
+        "type": "object",
+        "required": [
+          "company"
+        ],
+        "properties": {
+          "company": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "contactName": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "contactEmail": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateClientSeedResponse": {
+        "type": "object",
+        "properties": {
+          "client": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Client"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

@@ -1,0 +1,61 @@
+---
+title: "Usage"
+sidebarTitle: "Usage API"
+description: "Read Woes current-month usage meters and per-key API usage through the REST API."
+---
+
+# Usage
+
+The Usage API exposes the same usage meters used by the workspace billing and
+settings views. It is useful for internal reporting, quota dashboards, and key
+rotation audits.
+
+## Workspace Usage
+
+```http
+GET /api/v1/usage
+```
+
+The response includes the current UTC month start and these meters:
+
+| Meter | Meaning |
+| --- | --- |
+| `publicApiCalls` | Valid `woesk_` REST API calls this month. |
+| `liveApiChecks` | Operator-run live API checks this month. |
+| `apiSources` | Current API context source count. |
+| `agents` | Current support agent count. |
+| `indexedEndpoints` | Current indexed endpoint count across sources. |
+
+## API Key Usage
+
+```http
+GET /api/v1/usage/api-keys
+```
+
+Returns usage by workspace API key prefix for the current month. Full secrets
+and key hashes are never returned.
+
+```json
+{
+  "object": "list",
+  "periodStart": "2026-06-01T00:00:00.000Z",
+  "hasMore": false,
+  "apiKeys": [
+    {
+      "object": "api_key_usage",
+      "name": "Backend sync",
+      "keyPrefix": "woesk_ZHg1s5cTv",
+      "callsThisMonth": 128
+    }
+  ]
+}
+```
+
+## Required Scope
+
+Both Usage endpoints require `usage:read`.
+
+<Warning>
+  Usage records are for metering and visibility. They do not store raw request
+  bodies, raw responses, key secrets, or customer-private payloads.
+</Warning>

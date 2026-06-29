@@ -8,7 +8,8 @@ description: "Test and integrate the Woes REST API with workspace API keys, gene
 
 Use the Woes REST API from server-side integrations to work with the same
 workspace-scoped records used by the Woes operator app: conversations, messages,
-issues, client aggregates, and agent metadata.
+issues, client aggregates, agent metadata, API context sources, definitions,
+usage meters, and sanitized analytics.
 
 The generated endpoint pages in this tab come from `openapi.json`. They include
 runnable request builders, schemas, examples, error responses, and Bearer-token
@@ -35,6 +36,16 @@ authentication.
   </Card>
   <Card title="Agents" icon="bot" href="/api/agents">
     Read agent metadata and public widget keys for install automation.
+  </Card>
+  <Card title="Sources" icon="database" href="/api/sources">
+    Create, inspect, publish, delete, and rescan API context sources.
+  </Card>
+  <Card title="Definitions" icon="tags" href="/api/definitions">
+    Sync tags, statuses, priorities, and customer custom field definitions.
+  </Card>
+  <Card title="Usage and analytics" icon="chart-line" href="/api/usage">
+    Read monthly usage meters, per-key API usage, and sanitized analytics
+    aggregates.
   </Card>
   <Card title="Keys and scopes" icon="key" href="/api/keys">
     Understand `woesk_` API keys, resource scopes, rotation, usage tracking,
@@ -89,12 +100,14 @@ parameters, body schemas, response examples, and test calls.
 
 | Resource      | Status      | Guide                         |
 | ------------- | ----------- | ----------------------------- |
-| Conversations | Active      | [Conversations](/api/conversations) |
-| Issues        | Active      | [Issues](/api/issues)         |
-| Clients       | Active      | [Clients](/api/clients)       |
-| Agents        | Active      | [Agents](/api/agents)         |
-| Sources       | Planned     | Use [API Context](/context/sources) for ingestion workflows. |
-| Analytics     | Planned     | Use [Analytics](/platform/analytics) for the product view. |
+| Conversations | Active | [Conversations](/api/conversations) |
+| Issues        | Active | [Issues](/api/issues) |
+| Clients       | Active | [Clients](/api/clients) |
+| Agents        | Active | [Agents](/api/agents) |
+| Sources       | Active | [Sources](/api/sources) |
+| Definitions   | Active | [Definitions](/api/definitions) |
+| Usage         | Active | [Usage](/api/usage) |
+| Analytics     | Active | [Analytics](/api/analytics) |
 
 ## Related Public Routes
 

@@ -161,7 +161,12 @@
       "proxy": true
     },
     "examples": {
-      "languages": ["curl", "node", "python", "javascript"],
+      "languages": [
+        "curl",
+        "node",
+        "python",
+        "javascript"
+      ],
       "defaults": "required",
       "prefill": true
     },
@@ -262,7 +267,15 @@
               "api-reference/overview",
               "api/overview",
               "api/authentication",
-              "api/keys"
+              "api/keys",
+              "api/sources",
+              "api/definitions",
+              "api/usage",
+              "api/analytics",
+              "api/conversations",
+              "api/issues",
+              "api/clients",
+              "api/agents"
             ]
           },
           {
@@ -303,6 +316,7 @@
                 "openapi": "openapi.json",
                 "pages": [
                   "GET /api/v1/clients",
+                  "POST /api/v1/clients",
                   "GET /api/v1/clients/{clientId}"
                 ]
               },
@@ -312,6 +326,43 @@
                 "pages": [
                   "GET /api/v1/agents",
                   "GET /api/v1/agents/{agentId}"
+                ]
+              },
+              {
+                "group": "Sources",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/sources",
+                  "POST /api/v1/sources",
+                  "GET /api/v1/sources/{sourceId}",
+                  "PATCH /api/v1/sources/{sourceId}",
+                  "DELETE /api/v1/sources/{sourceId}",
+                  "POST /api/v1/sources/{sourceId}/rescan"
+                ]
+              },
+              {
+                "group": "Definitions",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/tags",
+                  "GET /api/v1/statuses",
+                  "GET /api/v1/priorities",
+                  "GET /api/v1/custom-fields"
+                ]
+              },
+              {
+                "group": "Usage",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/usage",
+                  "GET /api/v1/usage/api-keys"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/analytics"
                 ]
               }
             ]

@@ -1,0 +1,104 @@
+---
+title: "Sources"
+sidebarTitle: "Sources API"
+description: "Create, inspect, update, delete, and rescan Woes API context sources through the REST API."
+---
+
+# Sources
+
+The Sources API lets backend systems manage the API context that Woes uses for
+grounded answers. Use it to ingest OpenAPI specs, documentation URLs, pasted
+reference text, GraphQL schemas, Postman sources, AsyncAPI, gRPC, SOAP, GitHub
+context, and other supported source types.
+
+<Warning>
+  Source endpoints can change what the support agent knows. Use a scoped key
+  with `sources:write`, keep ingestion jobs server-side, and review source
+  coverage after large imports.
+</Warning>
+
+## Supported Source Types
+
+`auto`, `openapi`, `json`, `url`, `website`, `text`, `graphql`, `postman`,
+`asyncapi`, `grpc`, `soap`, and `github`.
+
+Use `auto` when you want Woes to detect the source shape. Use a specific type
+when your pipeline already knows what it is sending.
+
+## Create a Source
+
+```http
+POST /api/v1/sources
+```
+
+Provide either a `url` or `content`.
+
+```bash
+curl https://woes.dev/api/v1/sources \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "openapi",
+    "name": "Public API",
+    "url": "https://api.example.com/openapi.json"
+  }'
+```
+
+The response includes the created source plus counts for extracted documents,
+endpoints, and chunks.
+
+## Read Source Details
+
+```http
+GET /api/v1/sources/{sourceId}
+```
+
+Source details include redacted endpoint and document content. Woes removes
+values that look like credentials before returning them.
+
+## Publish Public Docs
+
+Use `PATCH /api/v1/sources/{sourceId}` to rename a source or update its public
+docs publication state.
+
+```json
+{
+  "publicDocs": {
+    "published": true
+  }
+}
+```
+
+## Rescan
+
+```http
+POST /api/v1/sources/{sourceId}/rescan
+```
+
+Rescan works for URL-backed sources. Pasted/manual sources are not rescannable;
+create a new source when the source content lives only in the request body.
+
+## Delete
+
+```http
+DELETE /api/v1/sources/{sourceId}
+```
+
+Deleting a source removes it from the workspace and marks default-agent context
+stale so it can resync.
+
+## Required Scopes
+
+| Endpoint | Scope |
+| --- | --- |
+| `GET /api/v1/sources` | `sources:read` |
+| `GET /api/v1/sources/{sourceId}` | `sources:read` |
+| `POST /api/v1/sources` | `sources:write` |
+| `PATCH /api/v1/sources/{sourceId}` | `sources:write` |
+| `DELETE /api/v1/sources/{sourceId}` | `sources:write` |
+| `POST /api/v1/sources/{sourceId}/rescan` | `sources:write` |
+
+<Tip>
+  Use the generated Sources endpoint pages for exact request bodies, examples,
+  and runnable calls.
+</Tip>

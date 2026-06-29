@@ -1,0 +1,59 @@
+---
+title: "Definitions"
+sidebarTitle: "Definitions API"
+description: "Read workspace tags, statuses, priorities, and custom field definitions through the REST API."
+---
+
+# Definitions
+
+The Definitions API helps external tools stay aligned with workspace taxonomy:
+managed tags, issue statuses, priorities, and customer custom fields.
+
+Definitions are read-only through the REST API. Create and edit them in Woes
+Settings so permissions, validation, and usage counts stay consistent.
+
+## Tags
+
+```http
+GET /api/v1/tags
+GET /api/v1/tags?scope=issue
+GET /api/v1/tags?scope=account
+```
+
+Tags include `id`, `name`, `scope`, `color`, and `description`.
+
+## Statuses
+
+```http
+GET /api/v1/statuses
+```
+
+Statuses include lifecycle metadata, enabled state, rank, tone, and color. Use
+them when mirroring Woes issues into another system.
+
+## Priorities
+
+```http
+GET /api/v1/priorities
+```
+
+Priorities include rank, tone, color, enabled state, and whether the priority is
+highlighted in the queue.
+
+## Custom Fields
+
+```http
+GET /api/v1/custom-fields
+```
+
+Custom fields include sanitized field definitions: `id`, `label`, `type`,
+`enabled`, `fillMode`, `description`, and any select options.
+
+<Note>
+  The API returns definitions only. It does not return customer field values
+  stored on individual conversations or accounts.
+</Note>
+
+## Required Scope
+
+Every Definitions endpoint requires `definitions:read`.

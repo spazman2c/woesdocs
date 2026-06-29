@@ -1,0 +1,38 @@
+---
+title: "Analytics"
+sidebarTitle: "Analytics API"
+description: "Export sanitized Woes analytics aggregates through the REST API."
+---
+
+# Analytics
+
+The Analytics API returns sanitized aggregate data for reporting. It is designed
+for dashboards and internal business intelligence jobs, not for exporting raw
+debug traces or message contents.
+
+```http
+GET /api/v1/analytics
+GET /api/v1/analytics?limit=1000
+```
+
+`limit` controls the maximum recent rows sampled per analytics area. The default
+is `500` and the maximum is `2000`.
+
+## Response Areas
+
+| Area | Contains |
+| --- | --- |
+| `agents` | Answer rate, answered/skipped counts, average confidence, average latency, counts by agent, and skip reasons. |
+| `surveys` | CSAT and NPS summaries, plus counts by survey and channel. |
+| `widget` | Widget activity summary derived from widget event rows. |
+| `feedback` | Helpful/unhelpful customer feedback totals and rates. |
+
+<Note>
+  Analytics responses exclude provider names, model names, token costs, raw
+  debug traces, system prompts, retrieval internals, and customer-private
+  message contents.
+</Note>
+
+## Required Scope
+
+`GET /api/v1/analytics` requires `analytics:read`.
