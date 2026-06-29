@@ -21,6 +21,7 @@ Settings controls workspace behavior, team access, channels, install snippets, s
 | Data | Custom fields, tags, statuses, and priority labels. |
 | Macros | Reusable operator replies and ticket actions. |
 | Surveys | CSAT and NPS survey configuration. |
+| Billing | Plan usage, public API call counts, live API checks, and add-ons. |
 | Security | Widget identity and workspace access controls. |
 
 ## Permission Model
@@ -34,9 +35,27 @@ Examples:
 - Changing company identity requires workspace write access.
 - Reading settings requires authenticated workspace access.
 
+## Usage Visibility
+
+Settings surfaces current plan usage so admins can watch the limits that affect
+support operations:
+
+- AI resolutions.
+- Operator seats.
+- AI agents.
+- API sources.
+- Indexed endpoints.
+- Public API calls by workspace API key.
+- Live API checks from guarded source tests.
+
+Monthly public API and live API check meters reset at the start of each UTC
+month.
+
 ## Safe Configuration Principles
 
 - Keep credentials in the correct secret settings, not in prompts or docs.
 - Use role-based permissions for changes that affect customers.
 - Prefer a narrow role for operators who do not manage setup.
 - Review keys before installing widgets on public pages.
+- Use the API Reference tab for REST API behavior, request examples, and
+  generated endpoint schemas.

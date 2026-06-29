@@ -22,6 +22,24 @@ Widget identity connects a visitor to a stable customer record and conversation 
 | HMAC email | Medium      | Your backend signs the normalized customer email.                                 |
 | JWT        | Higher      | Your backend issues a signed token with verified customer claims.                 |
 
+## How verification is enforced
+
+Woes uses the same model as Intercom: verification protects identified users
+without locking out anonymous ones:
+
+- **Anonymous visitors** (no `identify` call, or `identify` with no email) can
+  always chat as leads. Turning on verification never blocks them.
+- **Identified visitors** — if you pass an identity (an email), it **must** carry
+  a valid HMAC hash or JWT. An identity claim **without** a valid proof is
+  rejected, so a browser user can never impersonate another account.
+- **Strict mode** — turn on **Require verified identity** to block anonymous
+  visitors entirely (everyone must be verified). Leave it off for a public
+  widget that still welcomes leads.
+
+Enable a mode, generate the **identity secret**, and (optionally) toggle strict
+mode from **Settings → Channels → Live chat → Identity verification**. The secret
+is a hex string — keep it on your server only.
+
 ## HMAC Email
 
 In HMAC mode, your backend signs the normalized customer email using the workspace identity secret. The browser sends the email and hash to Woes.

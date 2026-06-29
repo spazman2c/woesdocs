@@ -42,6 +42,31 @@ Surveys collect customer feedback after support interactions. Woes supports both
   </Step>
 </Steps>
 
+## Templates
+
+Woes includes starter templates for common feedback flows:
+
+| Template | Type | Channel | Default timing |
+| --- | --- | --- | --- |
+| Post-resolution CSAT | CSAT | Live chat | When an issue is solved. |
+| Email follow-up | CSAT | Email | After resolution, with a delay. |
+| Email NPS follow-up | NPS | Email | After resolution, with a delay. |
+| Automation-driven | CSAT | Live chat | Sent only by an automation action. |
+
+You can edit the question, follow-up prompt, thank-you message, delay, and
+fatigue controls after creating a survey.
+
+## Timing And Fatigue
+
+| Setting | Purpose |
+| --- | --- |
+| Issue solved | Shows or sends the survey after supported resolution. |
+| Manual | Lets an operator send the survey intentionally. |
+| Automation | Lets a workflow decide when to ask. |
+| Delay | Waits before sending, useful for email follow-ups. |
+| Once per issue | Prevents duplicate requests for the same issue. |
+| Exclude tag | Skips customers or issues carrying a fatigue or VIP tag. |
+
 ## Email NPS
 
 Email NPS surveys send signed links for scores 0 through 10. When a customer clicks a link, Woes verifies the token, validates the score, and records the response.

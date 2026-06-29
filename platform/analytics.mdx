@@ -20,6 +20,21 @@ Analytics helps support leaders understand support volume, AI quality, workforce
 
 Hidden filters do not affect the active dashboard.
 
+## Dashboard-Specific Filters
+
+Filters are intentionally different by dashboard. A filter only appears when it
+matches the data behind the current dashboard:
+
+- **General** and **SLA** use conversation-oriented filters: time, channel,
+  status, and customer/account.
+- **AI Agent** uses time and named-agent filters so teams can compare agent
+  answer rate, skips, confidence, latency, and feedback.
+- **Workforce** uses time, status, and customer/account filters for operator
+  work queues.
+- **Surveys** uses time, channel, and customer/account filters across CSAT and
+  NPS.
+- **Live chat** uses time only because it reports widget events.
+
 ## Time Ranges
 
 Analytics opens in **Real time**, which means today from local midnight to now. Other ranges include Last 7 days, Last 30 days, Last 90 days, All time, and Custom.
@@ -54,3 +69,9 @@ The Surveys dashboard combines:
 - Survey type, channel, customer, score, comment, survey name, and date.
 
 See [Surveys](/settings/surveys) for configuration.
+
+## Usage And API Capacity
+
+Plan usage appears in Settings rather than Analytics. Use **Settings → Billing**
+for monthly public API call counts, live API checks, per-key API usage, plan
+limits, and add-on state.

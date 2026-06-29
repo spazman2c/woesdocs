@@ -34,9 +34,13 @@ Each agent can have its own widget key. The Keys page lists all agent keys, sour
 
 Workspace API keys are table-backed and stored hashed. The full secret is shown once at creation time.
 
-Use workspace API keys with the public REST API under `/api/v1`. Valid calls are
-tracked against the key that authenticated the request, so admins can review API
-usage by integration.
+Use workspace API keys from server-side integrations only. Valid public API
+calls are tracked against the key that authenticated the request, so admins can
+review usage by integration from **Settings → Billing**.
+
+The Keys page shows the key name, prefix, status, created date, last-used date,
+and revoke action. API request examples and endpoint schemas live in the
+[API Reference](/api-reference/overview).
 
 <Warning>
   Treat `woesk_` secrets as private. Do not put them in browser code, docs pages, support messages, screenshots, or client-side snippets.

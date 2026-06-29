@@ -21,6 +21,28 @@ Client records are built from conversations, customer identity, custom fields, t
 | Open work | Current open conversations or issues. |
 | Tags and fields | Workspace-defined customer context. |
 
+## Add a Client
+
+Use **Add client** when you want to create an account record before the first
+support conversation arrives.
+
+<Steps>
+  <Step title="Open Clients">
+    Click **Add client** from the Clients page header.
+  </Step>
+  <Step title="Enter account details">
+    Add the client name, optional primary contact, contact email, and internal
+    notes.
+  </Step>
+  <Step title="Create the record">
+    Woes creates a manual client seed record and opens the new client profile.
+  </Step>
+</Steps>
+
+Manual client records are stored as workspace-scoped customer activity with
+`channel = manual`. They appear in client aggregation, but they do not send a
+customer message or notify the customer.
+
 ## Client Profile
 
 The profile view shows recent activity, conversation history, open work, customer context, and AI rundown tools when enabled.
@@ -36,6 +58,10 @@ See [Client Portal](/platform/client-portal).
 ## Customer Presence
 
 Presence can be updated by the widget while the customer is active on a page with a valid existing conversation credential. Hidden tabs naturally age out.
+
+Presence is used for operator context and client activity, not for
+authentication. Identity still comes from the widget identity mode configured
+for the install.
 
 ## Custom Fields
 

@@ -45,7 +45,9 @@ Inbound email is received through the Resend webhook and written into the shared
 
 Email surveys use signed score links. A customer clicks a score, Woes verifies the token, validates the score range for the survey type, and records the response.
 
-See [Survey Delivery](/api/surveys) and [Survey Settings](/settings/surveys).
+Configure survey type, timing, delay, and follow-up prompts in
+[Survey Settings](/settings/surveys). API route details for survey response
+capture live in the API Reference tab.
 
 <Warning>
   Email delivery depends on verified domain configuration and provider credentials in the application environment. Do not paste provider secrets into docs, macros, or customer replies.

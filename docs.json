@@ -201,7 +201,6 @@
             "group": "Channels",
             "pages": [
               "channels/live-chat",
-              "api/widget",
               "channels/email",
               "channels/discord"
             ]
@@ -229,7 +228,6 @@
               "settings/overview",
               "settings/keys",
               "settings/surveys",
-              "api/surveys",
               "settings/users-permissions",
               "settings/notifications",
               "settings/data-macros"
@@ -246,21 +244,8 @@
           {
             "group": "Reference",
             "pages": [
-              "reference/routes",
               "reference/glossary",
               "reference/troubleshooting"
-            ]
-          },
-          {
-            "group": "REST API guides",
-            "pages": [
-              "api/overview",
-              "api/authentication",
-              "api/keys",
-              "api/conversations",
-              "api/issues",
-              "api/clients",
-              "api/agents"
             ]
           }
         ]
@@ -273,8 +258,26 @@
             "group": "API basics",
             "pages": [
               "api-reference/overview",
+              "api/overview",
               "api/authentication",
-              "api/keys"
+              "api/keys",
+              "reference/routes"
+            ]
+          },
+          {
+            "group": "REST resource guides",
+            "pages": [
+              "api/conversations",
+              "api/issues",
+              "api/clients",
+              "api/agents"
+            ]
+          },
+          {
+            "group": "Widget and survey routes",
+            "pages": [
+              "api/widget",
+              "api/surveys"
             ]
           },
           {
