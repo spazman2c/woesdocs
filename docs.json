@@ -161,7 +161,7 @@
             ]
           },
           {
-            "group": "Endpoint Reference",
+            "group": "Conversation Endpoints",
             "openapi": "openapi.json",
             "pages": [
               "GET /api/v1/conversations",
@@ -169,13 +169,31 @@
               "GET /api/v1/conversations/{conversationId}",
               "PATCH /api/v1/conversations/{conversationId}",
               "GET /api/v1/conversations/{conversationId}/messages",
-              "POST /api/v1/conversations/{conversationId}/messages",
+              "POST /api/v1/conversations/{conversationId}/messages"
+            ]
+          },
+          {
+            "group": "Issue Endpoints",
+            "openapi": "openapi.json",
+            "pages": [
               "GET /api/v1/issues",
               "POST /api/v1/issues",
               "GET /api/v1/issues/{issueId}",
-              "PATCH /api/v1/issues/{issueId}",
+              "PATCH /api/v1/issues/{issueId}"
+            ]
+          },
+          {
+            "group": "Client Endpoints",
+            "openapi": "openapi.json",
+            "pages": [
               "GET /api/v1/clients",
-              "GET /api/v1/clients/{clientId}",
+              "GET /api/v1/clients/{clientId}"
+            ]
+          },
+          {
+            "group": "Agent Endpoints",
+            "openapi": "openapi.json",
+            "pages": [
               "GET /api/v1/agents",
               "GET /api/v1/agents/{agentId}"
             ]
