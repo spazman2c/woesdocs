@@ -278,41 +278,46 @@
             ]
           },
           {
-            "group": "Conversations endpoints",
-            "openapi": "openapi.json",
+            "group": "Endpoint reference",
             "pages": [
-              "GET /api/v1/conversations",
-              "POST /api/v1/conversations",
-              "GET /api/v1/conversations/{conversationId}",
-              "PATCH /api/v1/conversations/{conversationId}",
-              "GET /api/v1/conversations/{conversationId}/messages",
-              "POST /api/v1/conversations/{conversationId}/messages"
-            ]
-          },
-          {
-            "group": "Issues endpoints",
-            "openapi": "openapi.json",
-            "pages": [
-              "GET /api/v1/issues",
-              "POST /api/v1/issues",
-              "GET /api/v1/issues/{issueId}",
-              "PATCH /api/v1/issues/{issueId}"
-            ]
-          },
-          {
-            "group": "Clients endpoints",
-            "openapi": "openapi.json",
-            "pages": [
-              "GET /api/v1/clients",
-              "GET /api/v1/clients/{clientId}"
-            ]
-          },
-          {
-            "group": "Agents endpoints",
-            "openapi": "openapi.json",
-            "pages": [
-              "GET /api/v1/agents",
-              "GET /api/v1/agents/{agentId}"
+              {
+                "group": "Conversations",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/conversations",
+                  "POST /api/v1/conversations",
+                  "GET /api/v1/conversations/{conversationId}",
+                  "PATCH /api/v1/conversations/{conversationId}",
+                  "GET /api/v1/conversations/{conversationId}/messages",
+                  "POST /api/v1/conversations/{conversationId}/messages"
+                ]
+              },
+              {
+                "group": "Issues",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/issues",
+                  "POST /api/v1/issues",
+                  "GET /api/v1/issues/{issueId}",
+                  "PATCH /api/v1/issues/{issueId}"
+                ]
+              },
+              {
+                "group": "Clients",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/clients",
+                  "GET /api/v1/clients/{clientId}"
+                ]
+              },
+              {
+                "group": "Agents",
+                "openapi": "openapi.json",
+                "pages": [
+                  "GET /api/v1/agents",
+                  "GET /api/v1/agents/{agentId}"
+                ]
+              }
             ]
           }
         ]

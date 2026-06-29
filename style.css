@@ -2,27 +2,50 @@
   --woes-orange: #ff7038;
   --woes-orange-soft: rgba(255, 112, 56, 0.14);
   --woes-border: rgba(255, 112, 56, 0.24);
+  --woes-title-dark: #f7f1ea;
+  --woes-copy-dark: #b7aea7;
 }
 
 /* Mintlify loads root-level CSS on the docs site. Keep this layer visual only:
    docs content and generated API behavior should continue to come from MDX and
    openapi.json. */
-aside nav [class*="uppercase"],
-aside nav p[class*="uppercase"],
-aside nav span[class*="uppercase"] {
+.sidebar-group-header,
+:where(nav, [role="navigation"], [class*="sidebar"], [class*="toc"]) [class*="uppercase"],
+:where(nav, [role="navigation"], [class*="sidebar"], [class*="toc"]) p[class*="uppercase"],
+:where(nav, [role="navigation"], [class*="sidebar"], [class*="toc"]) span[class*="uppercase"] {
   color: var(--woes-orange) !important;
   font-weight: 700 !important;
   letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
 }
 
-aside nav a[aria-current="page"],
-aside nav a[data-active="true"] {
+:where(nav, [role="navigation"], [class*="sidebar"]) a[aria-current="page"],
+:where(nav, [role="navigation"], [class*="sidebar"]) a[data-active="true"],
+a[href][aria-current="page"] {
   color: var(--woes-orange) !important;
 }
 
-aside nav a[aria-current="page"] {
+:where(nav, [role="navigation"], [class*="sidebar"]) a[aria-current="page"],
+a[href][aria-current="page"] {
   background: var(--woes-orange-soft) !important;
   box-shadow: inset 2px 0 0 var(--woes-orange);
+}
+
+html[class*="dark"] main h1,
+html[class*="dark"] main h2,
+html[class*="dark"] main h3 {
+  color: var(--woes-title-dark) !important;
+}
+
+html[class*="dark"] main h1 + p,
+html[class*="dark"] main h2 + p,
+html[class*="dark"] main p {
+  color: var(--woes-copy-dark);
+}
+
+html[class*="dark"] main :is(p, span, div):has(+ h1),
+html[class*="dark"] main :is(p, span, div):has(+ h2) {
+  color: var(--woes-orange) !important;
 }
 
 .card,
@@ -35,7 +58,7 @@ code {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  aside nav a {
+  :where(nav, [role="navigation"], [class*="sidebar"]) a {
     transition:
       background-color 160ms ease,
       color 160ms ease,
@@ -43,7 +66,7 @@ code {
       transform 160ms ease;
   }
 
-  aside nav a:hover {
+  :where(nav, [role="navigation"], [class*="sidebar"]) a:hover {
     transform: translateX(2px);
   }
 }
