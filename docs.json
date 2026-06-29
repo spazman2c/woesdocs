@@ -24,6 +24,14 @@
     {
       "source": "/api-conversations",
       "destination": "/api/conversations"
+    },
+    {
+      "source": "/api-issues",
+      "destination": "/api/issues"
+    },
+    {
+      "source": "/api-agents",
+      "destination": "/api/agents"
     }
   ],
   "navbar": {
@@ -33,6 +41,21 @@
         "href": "https://woes.dev"
       }
     ]
+  },
+  "api": {
+    "playground": {
+      "display": "interactive",
+      "proxy": true
+    },
+    "examples": {
+      "languages": ["curl", "node", "python", "javascript"],
+      "defaults": "required",
+      "prefill": true
+    },
+    "params": {
+      "expanded": "all"
+    },
+    "url": "full"
   },
   "navigation": {
     "groups": [
@@ -91,7 +114,30 @@
           "api/overview",
           "api/authentication",
           "api/conversations",
+          "api/issues",
+          "api/clients",
+          "api/agents",
           "api/keys"
+        ]
+      },
+      {
+        "group": "Endpoint Reference",
+        "openapi": "openapi.json",
+        "pages": [
+          "GET /api/v1/conversations",
+          "POST /api/v1/conversations",
+          "GET /api/v1/conversations/{conversationId}",
+          "PATCH /api/v1/conversations/{conversationId}",
+          "GET /api/v1/conversations/{conversationId}/messages",
+          "POST /api/v1/conversations/{conversationId}/messages",
+          "GET /api/v1/issues",
+          "POST /api/v1/issues",
+          "GET /api/v1/issues/{issueId}",
+          "PATCH /api/v1/issues/{issueId}",
+          "GET /api/v1/clients",
+          "GET /api/v1/clients/{clientId}",
+          "GET /api/v1/agents",
+          "GET /api/v1/agents/{agentId}"
         ]
       },
       {

@@ -10,7 +10,10 @@
  *   "trovw_agent_...".
  */
 (function () {
-  var WIDGET_PUBLIC_KEY = "REPLACE_WITH_YOUR_DOCS_WIDGET_KEY";
+  var WIDGET_PUBLIC_KEY = "trovw_08296b40f473455e88e1080dbb44e137";
+
+  if (window.__woesDocsWidgetInstalled) return;
+  window.__woesDocsWidgetInstalled = true;
 
   if (!WIDGET_PUBLIC_KEY || WIDGET_PUBLIC_KEY.indexOf("REPLACE_WITH_") === 0) {
     console.warn(

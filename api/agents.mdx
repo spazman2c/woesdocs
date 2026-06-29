@@ -1,0 +1,105 @@
+---
+title: "Agents"
+description: "Read Woes support agent metadata and widget keys through the REST API."
+---
+
+# Agents
+
+The Agents API exposes read-only metadata for the named AI agents in your
+workspace. Use it to discover agent ids, display names, enabled state, default
+status, source counts, learning status, and the public widget key for install
+automation.
+
+<Note>
+  The REST Agents API does not expose system prompts, runbook instructions,
+  custom guardrails, learned profiles, attached source ids, provider details, or
+  operator-only debug data.
+</Note>
+
+## Agent Object
+
+```json
+{
+  "object": "agent",
+  "id": "872b407a-d359-4479-806a-72307e9c27d0",
+  "name": "Docs agent",
+  "enabled": true,
+  "isDefault": false,
+  "widgetPublicKey": "trovw_agent_872b407ad3594479806a72307e9c27d0",
+  "attachedSourceCount": 3,
+  "learningStatus": "ready",
+  "learnedAt": "2026-06-29T13:00:00.000Z",
+  "createdAt": "2026-06-28T18:00:00.000Z",
+  "updatedAt": "2026-06-29T13:00:00.000Z"
+}
+```
+
+## List Agents
+
+```http
+GET /api/v1/agents
+```
+
+Query parameters:
+
+| Parameter   | Type    | Description                                   |
+| ----------- | ------- | --------------------------------------------- |
+| `limit`     | number  | 1-100 agents. Default: `20`.                  |
+| `search`    | string  | Matches agent id, name, or public widget key. |
+| `enabled`   | boolean | `true` or `false`.                            |
+| `isDefault` | boolean | `true` to return the workspace default agent. |
+
+```bash
+curl "https://woes.dev/api/v1/agents?enabled=true&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+```json
+{
+  "object": "list",
+  "hasMore": false,
+  "agents": [
+    {
+      "object": "agent",
+      "id": "872b407a-d359-4479-806a-72307e9c27d0",
+      "name": "Docs agent",
+      "enabled": true,
+      "isDefault": false,
+      "widgetPublicKey": "trovw_agent_872b407ad3594479806a72307e9c27d0",
+      "attachedSourceCount": 3,
+      "learningStatus": "ready"
+    }
+  ]
+}
+```
+
+## Retrieve Agent
+
+```http
+GET /api/v1/agents/{agentId}
+```
+
+Use the `id` returned by `GET /api/v1/agents`.
+
+```bash
+curl https://woes.dev/api/v1/agents/872b407a-d359-4479-806a-72307e9c27d0 \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+If the agent id is not present in the API key workspace, Woes returns `404`.
+
+## Public Widget Keys
+
+Each agent can have its own public widget key. Public widget keys are safe to
+use in browser install snippets, but they are not REST API credentials and do
+not grant workspace API access.
+
+Keep `woesk_` workspace API keys on your backend. Use `trovw_` or
+`trovw_agent_` widget keys in public widget snippets.
+
+## Required Scopes
+
+| Endpoint                       | Scope         |
+| ------------------------------ | ------------- |
+| `GET /api/v1/agents`           | `agents:read` |
+| `GET /api/v1/agents/{agentId}` | `agents:read` |

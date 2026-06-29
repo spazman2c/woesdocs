@@ -17,10 +17,21 @@ curl https://woes.dev/api/v1/conversations \
   -H "Authorization: Bearer $WOES_API_KEY"
 ```
 
+## Try Requests In Mintlify
+
+The generated **Endpoint Reference** pages include an interactive API
+playground. Paste your own `woesk_` key into the Bearer token field, adjust the
+prefilled example parameters or JSON body, and click **Send** to run the call.
+
+<Note>
+  The playground runs against `https://woes.dev`. Use a test workspace key when
+  creating conversations, messages, or issues from the docs.
+</Note>
+
 ## Quick API Examples
 
-These examples use the Conversations API because it is the first public Woes API
-surface. The API key must be a workspace API key that starts with `woesk_`.
+These examples use active public Woes API resources. The API key must be a
+workspace API key that starts with `woesk_`.
 
 ### List conversations
 
@@ -64,6 +75,56 @@ curl https://woes.dev/api/v1/conversations/{conversationId}/messages \
 See [Conversations](/api/conversations) for every supported conversation
 endpoint, request field, and response shape.
 
+### List issues
+
+```bash
+curl "https://woes.dev/api/v1/issues?statusCategory=new&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+### Create an issue
+
+```bash
+curl https://woes.dev/api/v1/issues \
+  -X POST \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "subject": "OAuth redirect URI mismatch",
+    "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+    "priority": "high",
+    "customer": {
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "company": "Example API Co"
+    },
+    "tags": ["oauth", "production"]
+  }'
+```
+
+See [Issues](/api/issues) for every supported issue endpoint, request field, and
+response shape.
+
+### List clients
+
+```bash
+curl "https://woes.dev/api/v1/clients?health=watch&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+See [Clients](/api/clients) for client aggregate fields, filters, and
+read-only boundaries.
+
+### List agents
+
+```bash
+curl "https://woes.dev/api/v1/agents?enabled=true&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+See [Agents](/api/agents) for public agent metadata, widget keys, and
+read-only boundaries.
+
 ## Security Rules
 
 - Keep `woesk_` keys on your backend.
@@ -73,12 +134,13 @@ endpoint, request field, and response shape.
 
 ## Error Responses
 
-| Status | Code             | Meaning                                 |
-| ------ | ---------------- | --------------------------------------- |
-| `401`  | `unauthorized`   | Missing, unknown, or revoked API key.   |
-| `401`  | `key_expired`    | API key has expired.                    |
-| `429`  | `rate_limited`   | Too many requests for the key.          |
-| `500`  | `internal_error` | The API request could not be completed. |
+| Status | Code                 | Meaning                                 |
+| ------ | -------------------- | --------------------------------------- |
+| `401`  | `unauthorized`       | Missing, unknown, or revoked API key.   |
+| `401`  | `key_expired`        | API key has expired.                    |
+| `403`  | `insufficient_scope` | API key is missing the required scope.  |
+| `429`  | `rate_limited`       | Too many requests for the key.          |
+| `500`  | `internal_error`     | The API request could not be completed. |
 
 ```json
 {

@@ -1,0 +1,2110 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Woes REST API",
+    "summary": "Public REST API for workspace conversations, issues, clients, and agents.",
+    "description": "Use workspace API keys to work with Woes support conversations, messages, issues, client account aggregates, and public agent metadata from server-side integrations.",
+    "version": "2026-06-29"
+  },
+  "servers": [
+    {
+      "url": "https://woes.dev",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "workspaceApiKey": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Conversations",
+      "description": "Create, read, update, and message support conversations."
+    },
+    {
+      "name": "Issues",
+      "description": "Create, read, and update support issues."
+    },
+    {
+      "name": "Clients",
+      "description": "Read client account aggregates derived from workspace conversations."
+    },
+    {
+      "name": "Agents",
+      "description": "Read named support agent metadata and public widget keys."
+    }
+  ],
+  "paths": {
+    "/api/v1/conversations": {
+      "get": {
+        "tags": ["Conversations"],
+        "operationId": "listConversations",
+        "summary": "List conversations",
+        "description": "Lists recent workspace conversations visible to the API key workspace.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConversationStatus"
+          },
+          {
+            "$ref": "#/components/parameters/ConversationChannel"
+          },
+          {
+            "$ref": "#/components/parameters/CustomerId"
+          },
+          {
+            "$ref": "#/components/parameters/ListLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationListResponse"
+                },
+                "examples": {
+                  "openConversations": {
+                    "value": {
+                      "object": "list",
+                      "hasMore": false,
+                      "conversations": [
+                        {
+                          "object": "conversation",
+                          "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
+                          "channel": "api",
+                          "status": "open",
+                          "priority": "medium",
+                          "subject": "Need help with auth",
+                          "preview": "Need help with auth",
+                          "customer": {
+                            "id": "cus_123",
+                            "name": "Ada Lovelace",
+                            "email": "ada@example.com",
+                            "company": "Example API Co",
+                            "identitySource": "headers"
+                          },
+                          "createdAt": "2026-06-28T18:00:00.000Z",
+                          "updatedAt": "2026-06-28T18:00:00.000Z",
+                          "lastMessageAt": "2026-06-28T18:00:00.000Z",
+                          "closedAt": null
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Conversations"],
+        "operationId": "createConversation",
+        "summary": "Create conversation",
+        "description": "Creates an API-origin conversation in the authenticated workspace.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConversationRequest"
+              },
+              "examples": {
+                "createConversation": {
+                  "value": {
+                    "externalId": "ticket_123",
+                    "subject": "Need help with auth",
+                    "customer": {
+                      "id": "cus_123",
+                      "name": "Ada Lovelace",
+                      "email": "ada@example.com",
+                      "company": "Example API Co"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "channel": "api",
+                "externalId": "ticket_123",
+                "priority": "medium",
+                "subject": "Need help with auth",
+                "customer": {
+                  "id": "cus_123",
+                  "name": "Ada Lovelace",
+                  "email": "ada@example.com",
+                  "company": "Example API Co"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conversation created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversationId}": {
+      "get": {
+        "tags": ["Conversations"],
+        "operationId": "getConversation",
+        "summary": "Retrieve conversation",
+        "description": "Retrieves one workspace-scoped conversation. Cross-workspace ids return 404.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConversationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Conversations"],
+        "operationId": "updateConversation",
+        "summary": "Update conversation",
+        "description": "Updates supported public fields on a workspace-scoped conversation.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConversationId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConversationRequest"
+              },
+              "examples": {
+                "solveConversation": {
+                  "value": {
+                    "status": "solved"
+                  }
+                }
+              },
+              "example": {
+                "status": "solved",
+                "priority": "low",
+                "subject": "OAuth auth issue resolved"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conversation updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversationId}/messages": {
+      "get": {
+        "tags": ["Conversations"],
+        "operationId": "listConversationMessages",
+        "summary": "List messages",
+        "description": "Lists ordered messages for a workspace-scoped conversation.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConversationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Conversations"],
+        "operationId": "createConversationMessage",
+        "summary": "Create message",
+        "description": "Appends a user or assistant message to a workspace-scoped conversation.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConversationId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMessageRequest"
+              },
+              "examples": {
+                "createMessage": {
+                  "value": {
+                    "role": "user",
+                    "body": "I am getting a 401 from POST /orders."
+                  }
+                }
+              },
+              "example": {
+                "role": "user",
+                "body": "I am getting a 401 from POST /orders."
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/issues": {
+      "get": {
+        "tags": ["Issues"],
+        "operationId": "listIssues",
+        "summary": "List issues",
+        "description": "Lists recent workspace issues visible to the API key workspace.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IssueStatusCategory"
+          },
+          {
+            "$ref": "#/components/parameters/Priority"
+          },
+          {
+            "$ref": "#/components/parameters/CustomerEmail"
+          },
+          {
+            "$ref": "#/components/parameters/SourceConversationId"
+          },
+          {
+            "$ref": "#/components/parameters/ListLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Issue list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Issues"],
+        "operationId": "createIssue",
+        "summary": "Create issue",
+        "description": "Creates a workspace-scoped support issue.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIssueRequest"
+              },
+              "examples": {
+                "createIssue": {
+                  "value": {
+                    "subject": "OAuth redirect URI mismatch",
+                    "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+                    "priority": "high",
+                    "customer": {
+                      "name": "Ada Lovelace",
+                      "email": "ada@example.com",
+                      "company": "Example API Co"
+                    },
+                    "tags": ["oauth", "production"]
+                  }
+                }
+              },
+              "example": {
+                "subject": "OAuth redirect URI mismatch",
+                "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+                "priority": "high",
+                "statusCategory": "new",
+                "sourceChannel": "api",
+                "customer": {
+                  "name": "Ada Lovelace",
+                  "email": "ada@example.com",
+                  "company": "Example API Co"
+                },
+                "tags": ["oauth", "production"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Issue created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/issues/{issueId}": {
+      "get": {
+        "tags": ["Issues"],
+        "operationId": "getIssue",
+        "summary": "Retrieve issue",
+        "description": "Retrieves one workspace-scoped issue. Cross-workspace ids return 404.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IssueId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Issue found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Issues"],
+        "operationId": "updateIssue",
+        "summary": "Update issue",
+        "description": "Updates supported public fields on a workspace-scoped issue.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IssueId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIssueRequest"
+              },
+              "examples": {
+                "closeIssue": {
+                  "value": {
+                    "statusCategory": "closed",
+                    "tags": ["oauth", "resolved"]
+                  }
+                }
+              },
+              "example": {
+                "statusCategory": "closed",
+                "priority": "low",
+                "tags": ["oauth", "resolved"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issue updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/clients": {
+      "get": {
+        "tags": ["Clients"],
+        "operationId": "listClients",
+        "summary": "List clients",
+        "description": "Lists client account aggregates derived from conversations in the API key workspace.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClientSearch"
+          },
+          {
+            "$ref": "#/components/parameters/ClientHealth"
+          },
+          {
+            "$ref": "#/components/parameters/ListLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientListResponse"
+                },
+                "examples": {
+                  "clients": {
+                    "value": {
+                      "object": "list",
+                      "hasMore": false,
+                      "truncated": false,
+                      "clients": [
+                        {
+                          "object": "client",
+                          "id": "example-api-co",
+                          "name": "Example API Co",
+                          "health": "watch",
+                          "metrics": {
+                            "conversations": 4,
+                            "openConversations": 1,
+                            "messages": 38,
+                            "verifiedContacts": 2,
+                            "visits": 6
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/clients/{clientId}": {
+      "get": {
+        "tags": ["Clients"],
+        "operationId": "getClient",
+        "summary": "Retrieve client",
+        "description": "Retrieves one client account aggregate from the API key workspace. Missing or cross-workspace ids return 404.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ClientId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/agents": {
+      "get": {
+        "tags": ["Agents"],
+        "operationId": "listAgents",
+        "summary": "List agents",
+        "description": "Lists public metadata for named support agents in the API key workspace. Prompt/config internals and learned profiles are not returned.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentSearch"
+          },
+          {
+            "$ref": "#/components/parameters/AgentEnabled"
+          },
+          {
+            "$ref": "#/components/parameters/AgentIsDefault"
+          },
+          {
+            "$ref": "#/components/parameters/ListLimit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentListResponse"
+                },
+                "examples": {
+                  "agents": {
+                    "value": {
+                      "object": "list",
+                      "hasMore": false,
+                      "agents": [
+                        {
+                          "object": "agent",
+                          "id": "872b407a-d359-4479-806a-72307e9c27d0",
+                          "name": "Docs agent",
+                          "enabled": true,
+                          "isDefault": false,
+                          "widgetPublicKey": "trovw_agent_872b407ad3594479806a72307e9c27d0",
+                          "attachedSourceCount": 3,
+                          "learningStatus": "ready",
+                          "learnedAt": "2026-06-29T13:00:00.000Z",
+                          "createdAt": "2026-06-28T18:00:00.000Z",
+                          "updatedAt": "2026-06-29T13:00:00.000Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/agents/{agentId}": {
+      "get": {
+        "tags": ["Agents"],
+        "operationId": "getAgent",
+        "summary": "Retrieve agent",
+        "description": "Retrieves one public agent metadata object from the API key workspace. Missing or cross-workspace ids return 404.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "workspaceApiKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Workspace API key that starts with woesk_. Paste your own key into the docs playground; never expose it in browser code.",
+        "x-default": "woesk_your_api_key_here"
+      }
+    },
+    "parameters": {
+      "ConversationId": {
+        "name": "conversationId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Conversation id.",
+        "example": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33"
+      },
+      "IssueId": {
+        "name": "issueId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Issue id.",
+        "example": "issue_123"
+      },
+      "ListLimit": {
+        "name": "limit",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        },
+        "description": "Number of records to return.",
+        "example": 10
+      },
+      "ConversationStatus": {
+        "name": "status",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/ConversationStatus"
+        },
+        "description": "Conversation status filter.",
+        "example": "open"
+      },
+      "ConversationChannel": {
+        "name": "channel",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/ConversationChannel"
+        },
+        "description": "Conversation channel filter.",
+        "example": "api"
+      },
+      "CustomerId": {
+        "name": "customerId",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "description": "Customer id filter.",
+        "example": "cus_123"
+      },
+      "IssueStatusCategory": {
+        "name": "statusCategory",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/IssueStatusCategory"
+        },
+        "description": "Issue status category filter.",
+        "example": "new"
+      },
+      "Priority": {
+        "name": "priority",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "description": "Priority label filter.",
+        "example": "high"
+      },
+      "CustomerEmail": {
+        "name": "customerEmail",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 320
+        },
+        "description": "Customer email filter.",
+        "example": "ada@example.com"
+      },
+      "SourceConversationId": {
+        "name": "sourceConversationId",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "description": "Linked source conversation id filter.",
+        "example": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33"
+      },
+      "ClientId": {
+        "name": "clientId",
+        "in": "path",
+        "required": true,
+        "description": "Client id returned by the Clients API.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "example-api-co"
+      },
+      "ClientHealth": {
+        "name": "health",
+        "in": "query",
+        "required": false,
+        "description": "Filter clients by computed health label.",
+        "schema": {
+          "$ref": "#/components/schemas/ClientHealth"
+        },
+        "example": "watch"
+      },
+      "ClientSearch": {
+        "name": "search",
+        "in": "query",
+        "required": false,
+        "description": "Search by client id, name, channel, or contact.",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "example": "example"
+      },
+      "AgentId": {
+        "name": "agentId",
+        "in": "path",
+        "required": true,
+        "description": "Agent id returned by the Agents API.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "872b407a-d359-4479-806a-72307e9c27d0"
+      },
+      "AgentSearch": {
+        "name": "search",
+        "in": "query",
+        "required": false,
+        "description": "Search by agent id, name, or public widget key.",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "example": "docs"
+      },
+      "AgentEnabled": {
+        "name": "enabled",
+        "in": "query",
+        "required": false,
+        "description": "Filter agents by enabled state.",
+        "schema": {
+          "type": "boolean"
+        },
+        "example": true
+      },
+      "AgentIsDefault": {
+        "name": "isDefault",
+        "in": "query",
+        "required": false,
+        "description": "Filter to default or non-default agents.",
+        "schema": {
+          "type": "boolean"
+        },
+        "example": false
+      }
+    },
+    "responses": {
+      "InvalidRequest": {
+        "description": "Invalid request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "invalidRequest": {
+                "value": {
+                  "code": "invalid_request",
+                  "error": "Request body is invalid."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing, unknown, revoked, or expired API key.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "unauthorized": {
+                "value": {
+                  "code": "unauthorized",
+                  "error": "A valid workspace API key is required."
+                }
+              }
+            }
+          }
+        }
+      },
+      "InsufficientScope": {
+        "description": "API key does not include the required scope.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "insufficientScope": {
+                "value": {
+                  "code": "insufficient_scope",
+                  "error": "This API key is missing the required scope."
+                }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Record not found in the API key workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "notFound": {
+                "value": {
+                  "code": "not_found",
+                  "error": "Record not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Record conflicts with an existing workspace record.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "conflict": {
+                "value": {
+                  "code": "conflict",
+                  "error": "A record with this identifier already exists."
+                }
+              }
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Too many API requests.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "rateLimited": {
+                "value": {
+                  "code": "rate_limited",
+                  "error": "Too many API requests. Slow down and try again shortly."
+                }
+              }
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Unexpected API failure.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "internalError": {
+                "value": {
+                  "code": "internal_error",
+                  "error": "The API request could not be completed."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ConversationChannel": {
+        "type": "string",
+        "enum": ["api", "live-chat", "email", "discord"]
+      },
+      "ConversationStatus": {
+        "type": "string",
+        "enum": ["open", "waiting", "solved"]
+      },
+      "IssueStatusCategory": {
+        "type": "string",
+        "enum": ["new", "on_you", "on_customer", "on_hold", "closed"]
+      },
+      "Customer": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "identitySource": {
+            "type": "string"
+          }
+        }
+      },
+      "IssueCustomer": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 160
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "channel",
+          "status",
+          "priority",
+          "subject",
+          "preview",
+          "customer",
+          "createdAt",
+          "updatedAt",
+          "lastMessageAt",
+          "closedAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "conversation"
+          },
+          "id": {
+            "type": "string"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/ConversationChannel"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConversationStatus"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closedAt": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          }
+        }
+      },
+      "ConversationListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object", "hasMore", "conversations"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "conversations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Conversation"
+            }
+          }
+        }
+      },
+      "ConversationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["conversation"],
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/Conversation"
+          }
+        }
+      },
+      "CreateConversationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["customer", "subject"],
+        "properties": {
+          "channel": {
+            "$ref": "#/components/schemas/ConversationChannel",
+            "default": "api"
+          },
+          "customer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Customer"
+              }
+            ],
+            "required": ["id"]
+          },
+          "externalId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "priority": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "default": "medium"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "example": {
+          "channel": "api",
+          "externalId": "ticket_123",
+          "priority": "medium",
+          "subject": "Need help with auth",
+          "customer": {
+            "id": "cus_123",
+            "name": "Ada Lovelace",
+            "email": "ada@example.com",
+            "company": "Example API Co"
+          }
+        }
+      },
+      "UpdateConversationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "priority": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConversationStatus"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "minProperties": 1,
+        "example": {
+          "status": "solved",
+          "priority": "low",
+          "subject": "OAuth auth issue resolved"
+        }
+      },
+      "Message": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "conversationId",
+          "role",
+          "body",
+          "deliveryStatus",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "message"
+          },
+          "id": {
+            "type": "string"
+          },
+          "conversationId": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user", "assistant"]
+          },
+          "body": {
+            "type": "string"
+          },
+          "deliveryStatus": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MessageListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object", "messages"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/Message"
+          }
+        }
+      },
+      "CreateMessageRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["body"],
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user", "assistant"],
+            "default": "user"
+          }
+        },
+        "example": {
+          "role": "user",
+          "body": "I am getting a 401 from POST /orders."
+        }
+      },
+      "IssueSource": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channel", "conversationId"],
+        "properties": {
+          "channel": {
+            "type": ["string", "null"]
+          },
+          "conversationId": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "Issue": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "subject",
+          "preview",
+          "description",
+          "statusCategory",
+          "priority",
+          "tags",
+          "customer",
+          "source",
+          "createdAt",
+          "updatedAt",
+          "lastActivityAt",
+          "closedAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "issue"
+          },
+          "id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "statusCategory": {
+            "$ref": "#/components/schemas/IssueStatusCategory"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "customer": {
+            "$ref": "#/components/schemas/IssueCustomer"
+          },
+          "source": {
+            "$ref": "#/components/schemas/IssueSource"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastActivityAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closedAt": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          }
+        }
+      },
+      "IssueListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object", "hasMore", "issues"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Issue"
+            }
+          }
+        }
+      },
+      "IssueResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["issue"],
+        "properties": {
+          "issue": {
+            "$ref": "#/components/schemas/Issue"
+          }
+        }
+      },
+      "CreateIssueRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject"],
+        "properties": {
+          "customer": {
+            "$ref": "#/components/schemas/IssueCustomer"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "priority": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "default": "medium"
+          },
+          "sourceChannel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "default": "api"
+          },
+          "sourceConversationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "statusCategory": {
+            "$ref": "#/components/schemas/IssueStatusCategory",
+            "default": "new"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "tags": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "default": []
+          }
+        },
+        "example": {
+          "subject": "OAuth redirect URI mismatch",
+          "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+          "priority": "high",
+          "statusCategory": "new",
+          "sourceChannel": "api",
+          "customer": {
+            "name": "Ada Lovelace",
+            "email": "ada@example.com",
+            "company": "Example API Co"
+          },
+          "tags": ["oauth", "production"]
+        }
+      },
+      "UpdateIssueRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "customer": {
+            "$ref": "#/components/schemas/IssueCustomer"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 8000
+          },
+          "priority": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "statusCategory": {
+            "$ref": "#/components/schemas/IssueStatusCategory"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "tags": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            }
+          }
+        },
+        "minProperties": 1,
+        "example": {
+          "statusCategory": "closed",
+          "priority": "low",
+          "tags": ["oauth", "resolved"]
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "error"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientHealth": {
+        "type": "string",
+        "enum": ["attention", "healthy", "watch"]
+      },
+      "ClientHealthScore": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "score",
+          "activity",
+          "conversations",
+          "resolutions",
+          "reasons"
+        ],
+        "properties": {
+          "label": {
+            "$ref": "#/components/schemas/ClientHealth"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "activity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "conversations": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "resolutions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ClientMetrics": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversations",
+          "openConversations",
+          "messages",
+          "verifiedContacts",
+          "visits"
+        ],
+        "properties": {
+          "conversations": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "openConversations": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "messages": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "verifiedContacts": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "visits": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ClientChannel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channel", "count"],
+        "properties": {
+          "channel": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ClientContact": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "email",
+          "identitySource",
+          "lastMessageAt",
+          "online",
+          "visits"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": ["string", "null"],
+            "format": "email"
+          },
+          "identitySource": {
+            "type": "string"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "visits": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ClientConversationSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "channel",
+          "subject",
+          "preview",
+          "status",
+          "lastMessageAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConversationStatus"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClientTask": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "subject",
+          "preview",
+          "status",
+          "priority",
+          "lastMessageAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConversationStatus"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Client": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "name",
+          "health",
+          "healthScore",
+          "metrics",
+          "channels",
+          "contacts",
+          "recentConversations",
+          "tasks",
+          "firstContactAt",
+          "lastMessageAt",
+          "latestConversationId"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "client"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "health": {
+            "$ref": "#/components/schemas/ClientHealth"
+          },
+          "healthScore": {
+            "$ref": "#/components/schemas/ClientHealthScore"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/ClientMetrics"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientChannel"
+            }
+          },
+          "contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientContact"
+            }
+          },
+          "recentConversations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientConversationSummary"
+            }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientTask"
+            }
+          },
+          "firstContactAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "latestConversationId": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object", "hasMore", "truncated", "clients"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Client"
+            }
+          }
+        }
+      },
+      "ClientResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["client", "truncated"],
+        "properties": {
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AgentLearningStatus": {
+        "type": "string",
+        "enum": ["idle", "pending", "ready", "failed"]
+      },
+      "Agent": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "name",
+          "enabled",
+          "isDefault",
+          "widgetPublicKey",
+          "attachedSourceCount",
+          "learningStatus",
+          "learnedAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "agent"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "widgetPublicKey": {
+            "type": ["string", "null"],
+            "description": "Public widget key for this agent. This is not a REST API credential."
+          },
+          "attachedSourceCount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of API context sources attached to the agent."
+          },
+          "learningStatus": {
+            "$ref": "#/components/schemas/AgentLearningStatus"
+          },
+          "learnedAt": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "Public agent metadata. Prompt/config internals, learned profiles, attached source ids, provider details, and operator-only debug data are intentionally omitted."
+      },
+      "AgentListResponse": {
+        "type": "object",
+        "required": ["object", "hasMore", "agents"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "list"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "agents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Agent"
+            }
+          }
+        }
+      },
+      "AgentResponse": {
+        "type": "object",
+        "required": ["agent"],
+        "properties": {
+          "agent": {
+            "$ref": "#/components/schemas/Agent"
+          }
+        }
+      }
+    }
+  }
+}

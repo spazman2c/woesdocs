@@ -1,0 +1,219 @@
+---
+title: "Issues"
+description: "Create, read, and update Woes support issues through the REST API."
+---
+
+# Issues
+
+The Issues API lets server-side integrations create and manage support issues in
+the same workspace-scoped issue model used by the Woes operator app and client
+portal.
+
+<Note>
+  The REST Issues API does not expose internal notes, raw metadata, workspace
+  ids, operator-only debug fields, or provider details.
+</Note>
+
+## Issue Object
+
+```json
+{
+  "object": "issue",
+  "id": "7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2",
+  "subject": "OAuth redirect URI mismatch",
+  "preview": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+  "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+  "statusCategory": "new",
+  "priority": "high",
+  "tags": ["oauth", "production"],
+  "customer": {
+    "name": "Ada Lovelace",
+    "email": "ada@example.com",
+    "company": "Example API Co"
+  },
+  "source": {
+    "channel": "api",
+    "conversationId": null
+  },
+  "createdAt": "2026-06-29T13:00:00.000Z",
+  "updatedAt": "2026-06-29T13:00:00.000Z",
+  "lastActivityAt": "2026-06-29T13:00:00.000Z",
+  "closedAt": null
+}
+```
+
+## List Issues
+
+```http
+GET /api/v1/issues
+```
+
+Query parameters:
+
+| Parameter              | Type   | Description                                                                      |
+| ---------------------- | ------ | -------------------------------------------------------------------------------- |
+| `limit`                | number | 1-100 issues. Default: `20`.                                                     |
+| `statusCategory`       | string | `new`, `on_you`, `on_customer`, `on_hold`, or `closed`.                          |
+| `priority`             | string | Priority label, such as `medium`, `high`, or a custom workspace priority string. |
+| `customerEmail`        | string | Customer email stored on the issue.                                              |
+| `sourceConversationId` | string | Conversation id linked to the issue.                                             |
+
+```bash
+curl "https://woes.dev/api/v1/issues?statusCategory=new&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+```json
+{
+  "object": "list",
+  "hasMore": false,
+  "issues": [
+    {
+      "object": "issue",
+      "id": "7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2",
+      "subject": "OAuth redirect URI mismatch",
+      "preview": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+      "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+      "statusCategory": "new",
+      "priority": "high",
+      "tags": ["oauth", "production"],
+      "customer": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "Example API Co"
+      },
+      "source": {
+        "channel": "api",
+        "conversationId": null
+      },
+      "createdAt": "2026-06-29T13:00:00.000Z",
+      "updatedAt": "2026-06-29T13:00:00.000Z",
+      "lastActivityAt": "2026-06-29T13:00:00.000Z",
+      "closedAt": null
+    }
+  ]
+}
+```
+
+## Create Issue
+
+```http
+POST /api/v1/issues
+```
+
+Request body:
+
+| Field                  | Type   | Required | Description                                                          |
+| ---------------------- | ------ | -------- | -------------------------------------------------------------------- |
+| `subject`              | string | Yes      | Issue title, up to 180 characters.                                   |
+| `description`          | string | No       | Issue details, up to 8,000 characters.                               |
+| `priority`             | string | No       | Defaults to `medium`; 1-32 characters.                               |
+| `statusCategory`       | string | No       | Defaults to `new`.                                                   |
+| `tags`                 | array  | No       | Up to 25 tag labels; duplicates are removed case-insensitively.      |
+| `customer.name`        | string | No       | Customer display name.                                               |
+| `customer.email`       | string | No       | Customer email address.                                              |
+| `customer.company`     | string | No       | Customer company or account name.                                    |
+| `sourceConversationId` | string | No       | Existing conversation id to link; must belong to the same workspace. |
+| `sourceChannel`        | string | No       | Defaults to `api` when no linked conversation is supplied.           |
+
+```bash
+curl https://woes.dev/api/v1/issues \
+  -X POST \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "subject": "OAuth redirect URI mismatch",
+    "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+    "priority": "high",
+    "customer": {
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "company": "Example API Co"
+    },
+    "tags": ["oauth", "production"]
+  }'
+```
+
+Response: `201 Created`
+
+```json
+{
+  "issue": {
+    "object": "issue",
+    "id": "7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2",
+    "subject": "OAuth redirect URI mismatch",
+    "preview": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+    "description": "Customer reports a redirect_uri mismatch on the production OAuth app.",
+    "statusCategory": "new",
+    "priority": "high",
+    "tags": ["oauth", "production"],
+    "customer": {
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "company": "Example API Co"
+    },
+    "source": {
+      "channel": "api",
+      "conversationId": null
+    },
+    "createdAt": "2026-06-29T13:00:00.000Z",
+    "updatedAt": "2026-06-29T13:00:00.000Z",
+    "lastActivityAt": "2026-06-29T13:00:00.000Z",
+    "closedAt": null
+  }
+}
+```
+
+## Retrieve Issue
+
+```http
+GET /api/v1/issues/{issueId}
+```
+
+```bash
+curl https://woes.dev/api/v1/issues/7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2 \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+## Update Issue
+
+```http
+PATCH /api/v1/issues/{issueId}
+```
+
+Supported fields:
+
+| Field            | Type   | Description                                              |
+| ---------------- | ------ | -------------------------------------------------------- |
+| `subject`        | string | Updated issue title.                                     |
+| `description`    | string | Updated issue description.                               |
+| `priority`       | string | 1-32 character priority label.                           |
+| `statusCategory` | string | `new`, `on_you`, `on_customer`, `on_hold`, or `closed`.  |
+| `tags`           | array  | Replacement tag list.                                    |
+| `customer`       | object | Replacement customer name, email, and/or company fields. |
+
+```bash
+curl https://woes.dev/api/v1/issues/7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2 \
+  -X PATCH \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "statusCategory": "closed",
+    "tags": ["oauth", "resolved"]
+  }'
+```
+
+## Tenant Boundary
+
+Every Issues API call is scoped to the workspace attached to the API key. If an
+issue id or source conversation id belongs to another workspace, Woes returns
+`404` instead of revealing that the record exists.
+
+## Required Scopes
+
+| Endpoint                         | Scope          |
+| -------------------------------- | -------------- |
+| `GET /api/v1/issues`             | `issues:read`  |
+| `POST /api/v1/issues`            | `issues:write` |
+| `GET /api/v1/issues/{issueId}`   | `issues:read`  |
+| `PATCH /api/v1/issues/{issueId}` | `issues:write` |

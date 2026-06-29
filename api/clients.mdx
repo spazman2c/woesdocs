@@ -1,0 +1,152 @@
+---
+title: "Clients"
+description: "Read Woes client account aggregates through the REST API."
+---
+
+# Clients
+
+The Clients API exposes the same account/client aggregate used by the Woes
+Clients page. Client records are derived from workspace conversations, contacts,
+channels, and recent activity. They are read-only in the REST API for now.
+
+<Note>
+  The REST Clients API does not expose workspace ids, raw conversation metadata,
+  custom field internals, raw widget presence pages, provider details, or
+  operator-only debug data.
+</Note>
+
+## Client Object
+
+```json
+{
+  "object": "client",
+  "id": "example-api-co",
+  "name": "Example API Co",
+  "health": "watch",
+  "healthScore": {
+    "label": "watch",
+    "score": 72,
+    "activity": 85,
+    "conversations": 66,
+    "resolutions": 70,
+    "reasons": ["1/4 conversations still open.", "75% resolution rate."]
+  },
+  "metrics": {
+    "conversations": 4,
+    "openConversations": 1,
+    "messages": 38,
+    "verifiedContacts": 2,
+    "visits": 6
+  },
+  "channels": [
+    { "channel": "live-chat", "count": 3 },
+    { "channel": "email", "count": 1 }
+  ],
+  "contacts": [
+    {
+      "id": "cus_123",
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "identitySource": "headers",
+      "lastMessageAt": "2026-06-29T13:00:00.000Z",
+      "online": false,
+      "visits": 4
+    }
+  ],
+  "recentConversations": [
+    {
+      "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
+      "channel": "live-chat",
+      "subject": "OAuth redirect URI mismatch",
+      "preview": "Customer reports a redirect_uri mismatch.",
+      "status": "open",
+      "lastMessageAt": "2026-06-29T13:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33",
+      "subject": "OAuth redirect URI mismatch",
+      "preview": "Customer reports a redirect_uri mismatch.",
+      "status": "open",
+      "priority": "High",
+      "lastMessageAt": "2026-06-29T13:00:00.000Z"
+    }
+  ],
+  "firstContactAt": "2026-06-20T16:00:00.000Z",
+  "lastMessageAt": "2026-06-29T13:00:00.000Z",
+  "latestConversationId": "6f6b6f9a-1b6a-4e42-9f71-1b9a3f3d2a33"
+}
+```
+
+## List Clients
+
+```http
+GET /api/v1/clients
+```
+
+Query parameters:
+
+| Parameter | Type   | Description                                     |
+| --------- | ------ | ----------------------------------------------- |
+| `limit`   | number | 1-100 clients. Default: `20`.                   |
+| `search`  | string | Matches client id, name, channels, or contacts. |
+| `health`  | string | `healthy`, `watch`, or `attention`.             |
+
+```bash
+curl "https://woes.dev/api/v1/clients?health=watch&limit=10" \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+```json
+{
+  "object": "list",
+  "hasMore": false,
+  "truncated": false,
+  "clients": [
+    {
+      "object": "client",
+      "id": "example-api-co",
+      "name": "Example API Co",
+      "health": "watch",
+      "metrics": {
+        "conversations": 4,
+        "openConversations": 1,
+        "messages": 38,
+        "verifiedContacts": 2,
+        "visits": 6
+      }
+    }
+  ]
+}
+```
+
+## Retrieve Client
+
+```http
+GET /api/v1/clients/{clientId}
+```
+
+Client ids are normalized from the customer company/account name on
+conversations. Use the `id` returned by `GET /api/v1/clients`.
+
+```bash
+curl https://woes.dev/api/v1/clients/example-api-co \
+  -H "Authorization: Bearer $WOES_API_KEY"
+```
+
+If the client id is not present in the API key workspace, Woes returns `404`.
+
+## Aggregation Window
+
+Client records are built from the most recent workspace conversations. The
+response includes `truncated: true` when the workspace has more conversations
+than the current aggregation window, so integrations know older client activity
+may not be represented in the response.
+
+## Required Scopes
+
+| Endpoint                         | Scope          |
+| -------------------------------- | -------------- |
+| `GET /api/v1/clients`            | `clients:read` |
+| `GET /api/v1/clients/{clientId}` | `clients:read` |
