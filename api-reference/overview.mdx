@@ -1,0 +1,75 @@
+---
+title: "API Reference"
+description: "Use the Woes REST API and generated endpoint reference."
+---
+
+# API Reference
+
+Use the Woes API to read and manage workspace support data from server-side
+integrations. The public REST API uses `woesk_` workspace API keys and returns
+workspace-scoped conversations, issues, client aggregates, and agent metadata.
+
+<CardGroup cols={2}>
+  <Card title="REST API guide" icon="book-open" href="/api/overview">
+    Start with base URLs, authentication, scopes, response conventions, and
+    safe integration patterns.
+  </Card>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Create workspace API keys, send Bearer tokens, and understand API key
+    errors.
+  </Card>
+  <Card title="Conversations" icon="messages" href="/api/conversations">
+    Create support conversations, update status and priority, and append
+    messages.
+  </Card>
+  <Card title="Issues" icon="circle-alert" href="/api/issues">
+    Create, filter, read, and update customer support issues.
+  </Card>
+  <Card title="Clients" icon="building-2" href="/api/clients">
+    Read client/account aggregates, contacts, health, and recent activity.
+  </Card>
+  <Card title="Agents" icon="bot" href="/api/agents">
+    Read agent metadata and public widget keys for install automation.
+  </Card>
+</CardGroup>
+
+## Interactive Endpoint Reference
+
+The endpoint pages in this API Reference tab are generated from `openapi.json`
+and include interactive request builders. Use them when you need exact request
+parameters, body schemas, response examples, and test calls.
+
+<Steps>
+  <Step title="Create a workspace API key">
+    Open Woes **Settings -> Keys**, create a workspace API key, and copy the
+    full `woesk_` secret once.
+  </Step>
+  <Step title="Open an endpoint page">
+    Choose an endpoint in the **Endpoint Reference** section of this tab.
+  </Step>
+  <Step title="Paste your Bearer token">
+    Add your API key to the authorization field in the playground.
+  </Step>
+  <Step title="Send the request">
+    Review the example parameters or body before running a request against
+    `https://woes.dev`.
+  </Step>
+</Steps>
+
+<Warning>
+  API keys are server-side secrets. Do not place `woesk_` keys in browser
+  snippets, frontend apps, customer-visible docs, or mobile clients.
+</Warning>
+
+## Active Resources
+
+| Resource      | Status      | Guide                         |
+| ------------- | ----------- | ----------------------------- |
+| Conversations | Active      | [Conversations](/api/conversations) |
+| Issues        | Active      | [Issues](/api/issues)         |
+| Clients       | Active      | [Clients](/api/clients)       |
+| Agents        | Active      | [Agents](/api/agents)         |
+| Widget routes | Active      | [Widget API](/api/widget)     |
+| Surveys       | Active      | [Surveys API](/api/surveys)   |
+| Sources       | Planned     | Use [API Context](/context/sources) for ingestion workflows. |
+| Analytics     | Planned     | Use [Analytics](/platform/analytics) for the product view. |

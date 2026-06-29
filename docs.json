@@ -15,7 +15,7 @@
   "redirects": [
     {
       "source": "/api-reference",
-      "destination": "/api/overview"
+      "destination": "/api-reference/overview"
     },
     {
       "source": "/api-authentication",
@@ -58,104 +58,135 @@
     "url": "full"
   },
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Start Here",
-        "pages": [
-          "index",
-          "quickstart/overview",
-          "quickstart/add-context",
-          "quickstart/install-widget",
-          "quickstart/invite-team"
+        "tab": "Docs",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Start Here",
+            "pages": [
+              "index",
+              "quickstart/overview",
+              "quickstart/add-context",
+              "quickstart/install-widget",
+              "quickstart/invite-team"
+            ]
+          },
+          {
+            "group": "Core Platform",
+            "pages": [
+              "platform/inbox",
+              "platform/issues",
+              "platform/clients",
+              "platform/client-portal",
+              "platform/automations",
+              "platform/analytics"
+            ]
+          },
+          {
+            "group": "Channels",
+            "pages": [
+              "channels/live-chat",
+              "channels/email",
+              "channels/discord"
+            ]
+          },
+          {
+            "group": "API Context",
+            "pages": [
+              "context/sources",
+              "context/auth-testing",
+              "context/github"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "agents/overview",
+              "agents/create-agents",
+              "agents/context-learning",
+              "agents/routing-widget"
+            ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "settings/overview",
+              "settings/keys",
+              "settings/surveys",
+              "settings/users-permissions",
+              "settings/notifications",
+              "settings/data-macros"
+            ]
+          },
+          {
+            "group": "Security",
+            "pages": [
+              "security/widget-identity",
+              "security/data-privacy",
+              "security/tenant-isolation"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/routes",
+              "reference/glossary",
+              "reference/troubleshooting"
+            ]
+          }
         ]
       },
       {
-        "group": "Core Platform",
-        "pages": [
-          "platform/inbox",
-          "platform/issues",
-          "platform/clients",
-          "platform/client-portal",
-          "platform/automations",
-          "platform/analytics"
-        ]
-      },
-      {
-        "group": "Channels",
-        "pages": ["channels/live-chat", "channels/email", "channels/discord"]
-      },
-      {
-        "group": "API Context",
-        "pages": ["context/sources", "context/auth-testing", "context/github"]
-      },
-      {
-        "group": "Agents",
-        "pages": [
-          "agents/overview",
-          "agents/create-agents",
-          "agents/context-learning",
-          "agents/routing-widget"
-        ]
-      },
-      {
-        "group": "Settings",
-        "pages": [
-          "settings/overview",
-          "settings/keys",
-          "settings/surveys",
-          "settings/users-permissions",
-          "settings/notifications",
-          "settings/data-macros"
-        ]
-      },
-      {
-        "group": "REST API",
-        "pages": [
-          "api/overview",
-          "api/authentication",
-          "api/conversations",
-          "api/issues",
-          "api/clients",
-          "api/agents",
-          "api/keys"
-        ]
-      },
-      {
-        "group": "Endpoint Reference",
-        "openapi": "openapi.json",
-        "pages": [
-          "GET /api/v1/conversations",
-          "POST /api/v1/conversations",
-          "GET /api/v1/conversations/{conversationId}",
-          "PATCH /api/v1/conversations/{conversationId}",
-          "GET /api/v1/conversations/{conversationId}/messages",
-          "POST /api/v1/conversations/{conversationId}/messages",
-          "GET /api/v1/issues",
-          "POST /api/v1/issues",
-          "GET /api/v1/issues/{issueId}",
-          "PATCH /api/v1/issues/{issueId}",
-          "GET /api/v1/clients",
-          "GET /api/v1/clients/{clientId}",
-          "GET /api/v1/agents",
-          "GET /api/v1/agents/{agentId}"
-        ]
-      },
-      {
-        "group": "Widget API & Security",
-        "pages": [
-          "api/widget",
-          "api/surveys",
-          "security/widget-identity",
-          "security/data-privacy",
-          "security/tenant-isolation"
-        ]
-      },
-      {
-        "group": "Reference",
-        "pages": [
-          "reference/routes",
-          "reference/glossary",
-          "reference/troubleshooting"
+        "tab": "API Reference",
+        "icon": "square-terminal",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api/overview",
+              "api/authentication",
+              "api/keys"
+            ]
+          },
+          {
+            "group": "REST API Guides",
+            "pages": [
+              "api/conversations",
+              "api/issues",
+              "api/clients",
+              "api/agents"
+            ]
+          },
+          {
+            "group": "Endpoint Reference",
+            "openapi": "openapi.json",
+            "pages": [
+              "GET /api/v1/conversations",
+              "POST /api/v1/conversations",
+              "GET /api/v1/conversations/{conversationId}",
+              "PATCH /api/v1/conversations/{conversationId}",
+              "GET /api/v1/conversations/{conversationId}/messages",
+              "POST /api/v1/conversations/{conversationId}/messages",
+              "GET /api/v1/issues",
+              "POST /api/v1/issues",
+              "GET /api/v1/issues/{issueId}",
+              "PATCH /api/v1/issues/{issueId}",
+              "GET /api/v1/clients",
+              "GET /api/v1/clients/{clientId}",
+              "GET /api/v1/agents",
+              "GET /api/v1/agents/{agentId}"
+            ]
+          },
+          {
+            "group": "Widget & Surveys",
+            "pages": [
+              "api/widget",
+              "api/surveys"
+            ]
+          }
         ]
       }
     ]
