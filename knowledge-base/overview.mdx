@@ -1,0 +1,58 @@
+---
+title: "Knowledge Base Overview"
+description: "Build the API context layer Woes agents use to answer developer questions."
+---
+
+# Knowledge Base Overview
+
+The Woes knowledge base is the source of truth for grounded AI support. It is
+not just a collection of articles; it is an API context layer built from docs,
+specs, repositories, examples, auth rules, schemas, and endpoint-level
+Markdown.
+
+## What You Can Add
+
+| Source | Use it for |
+| --- | --- |
+| OpenAPI or Swagger | REST endpoint paths, methods, schemas, auth, and examples. |
+| Postman | Collection folders, requests, examples, and auth hints. |
+| Documentation sites | Human-written guides, concepts, setup flows, and troubleshooting. |
+| Markdown or pasted text | Runbooks, known issues, policy notes, and launch docs. |
+| GraphQL, AsyncAPI, SOAP, gRPC | Non-REST API surfaces and protocol-specific docs. |
+| GitHub repositories | READMEs, SDK examples, docs folders, and code-adjacent context. |
+
+## Source Lifecycle
+
+<Steps>
+  <Step title="Add a source">
+    Use [Add API Context](/quickstart/add-context) or [Sources](/context/sources) to submit a URL, spec, repository, or pasted content.
+  </Step>
+  <Step title="Watch ingestion">
+    Woes scans the source, extracts usable content, builds Markdown, chunks it for retrieval, and publishes searchable context.
+  </Step>
+  <Step title="Attach it to agents">
+    Use [Agents](/agents/overview) to decide which agents can answer from the source.
+  </Step>
+  <Step title="Test answers">
+    Ask realistic customer questions and verify the agent uses the right evidence.
+  </Step>
+  <Step title="Maintain coverage">
+    Rescan sources when docs change and review [Knowledge Base Gaps](/knowledge-base/gaps).
+  </Step>
+</Steps>
+
+## What Makes Good Context
+
+- Specific endpoint descriptions.
+- Authentication rules and examples.
+- Request and response examples.
+- Error codes and troubleshooting details.
+- SDK examples with language names.
+- Product concepts customers commonly ask about.
+- Versioning and deprecation notes.
+
+## Safety Rules
+
+Do not use the knowledge base to store raw customer secrets, private tokens, or
+operator-only credentials. Source auth credentials used for testing are stored
+separately from source content and should never be copied into public docs.

@@ -1,0 +1,46 @@
+---
+title: "Chat Widget Overview"
+description: "Install, route, customize, and operate the Woes customer chat widget."
+---
+
+# Chat Widget Overview
+
+The Woes chat widget brings grounded developer support into your product,
+documentation, or customer portal. It can route visitors to a workspace default
+agent or to a specific agent using an agent widget key.
+
+## Widget Responsibilities
+
+| Area | What it does |
+| --- | --- |
+| Launcher | Gives customers a way to open support from a page. |
+| Chat | Sends messages to Woes and displays AI or operator replies. |
+| Identity | Associates the browser session with anonymous or verified customer identity. |
+| Routing | Uses the widget key to find the workspace or agent. |
+| Surveys | Shows CSAT or NPS prompts after supported resolution events. |
+| Events | Records customer-safe widget activity for analytics. |
+
+## Install Paths
+
+| Site type | Recommended guide |
+| --- | --- |
+| Product app | [Install the Widget](/quickstart/install-widget) |
+| Mintlify docs | [Install the Widget in Mintlify](/quickstart/install-widget-mintlify) |
+| Agent-specific docs or product pages | [Agent Routing and Widget Keys](/agents/routing-widget) |
+| Verified customer areas | [Widget Identity](/security/widget-identity) |
+
+## Key Decisions
+
+- Use a workspace widget key for one default support experience.
+- Use agent widget keys when each product, docs area, or customer segment needs
+  different context.
+- Use verified identity before showing account-specific history.
+- Keep REST API keys out of browser code.
+- Test the widget from a private browser window after every install change.
+
+## What Customers Experience
+
+Customers can start a new conversation, continue an existing conversation,
+receive AI or human replies, see delivery states, and answer surveys when
+configured. Operators see the same conversation in Inbox with channel, customer,
+agent, and issue context.

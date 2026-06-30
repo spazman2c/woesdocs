@@ -1,0 +1,25 @@
+---
+title: "Mintlify Widget Install"
+description: "Install the Woes chat widget on a Mintlify documentation site."
+---
+
+# Mintlify Widget Install
+
+Use the Mintlify widget integration when customers should be able to ask Woes
+questions directly from your docs site.
+
+## Setup Path
+
+1. Copy a workspace or agent widget key from Woes.
+2. Add a root-level `woes-widget.js` file to the Mintlify docs repository.
+3. Load `https://woes.dev/widget.js` with the public widget key.
+4. Push the docs repository so Mintlify deploys the change.
+5. Open the public docs site and send a test message.
+
+See [Install the Widget in Mintlify](/quickstart/install-widget-mintlify) for
+the full snippet and troubleshooting checklist.
+
+## Key Choice
+
+Use a workspace widget key for one default support experience. Use an agent
+widget key when the docs site should route to a docs-specific agent.

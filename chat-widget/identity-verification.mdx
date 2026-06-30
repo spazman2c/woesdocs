@@ -1,0 +1,28 @@
+---
+title: "Widget Identity Verification"
+description: "Choose anonymous, display-only, HMAC, or JWT identity for the Woes chat widget."
+---
+
+# Widget Identity Verification
+
+Widget identity determines whether Woes treats a visitor as anonymous,
+display-only, or verified. Choose the lowest trust mode that still supports the
+customer experience you want.
+
+## Identity Modes
+
+| Mode | Use it when |
+| --- | --- |
+| Anonymous | Public docs, marketing pages, or lead support. |
+| Display-only identify | You want better operator context but do not need trusted account history. |
+| HMAC email | Your backend can sign the customer's normalized email. |
+| JWT | Your backend can issue short-lived signed identity tokens. |
+
+## Recommended Path
+
+1. Start anonymous for public docs.
+2. Add display identity for signed-in product pages.
+3. Use HMAC or JWT before showing account-specific history.
+4. Keep signing secrets only on your backend.
+
+Read the full security guide in [Widget Identity](/security/widget-identity).

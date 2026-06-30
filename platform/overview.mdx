@@ -1,0 +1,58 @@
+---
+title: "Platform Overview"
+description: "Understand the Woes workspace surfaces and how they fit together."
+---
+
+# Platform Overview
+
+The Woes platform is organized around the work a developer-support team does
+every day: answering conversations, tracking issues, managing customers,
+teaching AI agents, and measuring quality.
+
+## Core Areas
+
+| Area | Use it for |
+| --- | --- |
+| Inbox | Triage live chat, email, and Discord conversations. |
+| Issues | Track bugs, requests, blockers, and follow-up work. |
+| Clients | Review customer and account context. |
+| Knowledge base | Ingest API docs, repositories, specs, and source context. |
+| Agents | Configure grounded AI support behavior and routing. |
+| Analytics | Measure channel, agent, survey, usage, and customer activity. |
+| Settings | Manage keys, users, permissions, assignment, surveys, notifications, and data definitions. |
+
+## Recommended Admin Path
+
+<Steps>
+  <Step title="Set workspace data">
+    Configure tags, statuses, priorities, custom fields, and macros in [Data, Tags, Statuses, and Macros](/settings/data-macros).
+  </Step>
+  <Step title="Invite users">
+    Add operators and admins through [Users and Permissions](/settings/users-permissions).
+  </Step>
+  <Step title="Create keys">
+    Review widget keys and workspace API keys in [Keys](/settings/keys).
+  </Step>
+  <Step title="Define routing">
+    Use [Assignment](/settings/assignment) to decide how work enters queues.
+  </Step>
+  <Step title="Review reporting">
+    Use [Analytics](/platform/analytics) and usage visibility to check capacity and quality.
+  </Step>
+</Steps>
+
+## Configuration Boundaries
+
+- Workspace settings are permission-gated by section.
+- Widget public keys are safe for browser installs but do not grant account access.
+- REST API keys are private server-side credentials and should never be placed in client-side code.
+- API credentials used for live testing stay separate from source content and are not returned in plaintext.
+- Provider routing and model internals are not exposed as customer-facing settings.
+
+## Daily Operator Rhythm
+
+1. Open Inbox and clear urgent or assigned conversations.
+2. Take over AI-handled conversations when the customer needs a human.
+3. Convert durable work into issues.
+4. Update tags, priorities, and notes before closing work.
+5. Review analytics and knowledge-base gaps at the end of the day or week.

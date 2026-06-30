@@ -1,0 +1,58 @@
+---
+title: "Agent Quality Loop"
+description: "Improve AI agent answers with evidence, feedback, and knowledge-base coverage."
+---
+
+# Agent Quality Loop
+
+Woes agents are designed to answer from workspace-scoped evidence. The quality
+loop is the process of checking what the agent used, correcting weak answers,
+and improving the knowledge base so future replies get better.
+
+## What To Review
+
+| Signal | What it tells you |
+| --- | --- |
+| Confidence | Whether the agent believed it had enough context to answer. |
+| Citations | Which sources and chunks shaped the answer. |
+| Handoffs | Where the agent decided a human should take over. |
+| Feedback | Operator or customer signals that an answer was useful or weak. |
+| Skips | Questions the agent could not answer from current context. |
+
+## Improvement Workflow
+
+<Steps>
+  <Step title="Review low-confidence conversations">
+    Look for missing endpoints, unclear auth rules, stale examples, or ambiguous product language.
+  </Step>
+  <Step title="Fix the source">
+    Update the external docs, upload better reference text, or add a repository with examples.
+  </Step>
+  <Step title="Rescan context">
+    Re-ingest the source from [Sources](/context/sources) so the retrieval layer has the latest material.
+  </Step>
+  <Step title="Re-run learning">
+    Run [Context Learning](/agents/context-learning) when source coverage or agent routing changed materially.
+  </Step>
+  <Step title="Measure again">
+    Use [Analytics](/platform/analytics) to watch answer rate, handoffs, feedback, and survey outcomes.
+  </Step>
+</Steps>
+
+## Good Agent Behavior
+
+- Answer only from available workspace context.
+- Ask a focused clarifying question when details are missing.
+- Hand off to an operator when the question is account-specific, unsafe, or outside the knowledge base.
+- Cite relevant source material when available.
+- Avoid inventing endpoints, request fields, auth rules, schemas, limits, or production behavior.
+
+## Common Fixes
+
+| Problem | Fix |
+| --- | --- |
+| Agent knows the endpoint but not auth | Add auth examples and configure source auth testing. |
+| Agent answers from the wrong product | Use agent-specific widget keys and source attachments. |
+| Agent gives vague SDK answers | Ingest SDK examples or a GitHub repository with sample code. |
+| Agent hands off too often | Improve source coverage and review confidence settings. |
+| Agent answers too confidently | Tighten guardrails and review retrieval evidence. |

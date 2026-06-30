@@ -1,0 +1,55 @@
+---
+title: "Knowledge Base Gaps"
+description: "Find and fix missing context that causes weak answers, handoffs, or repeated support work."
+---
+
+# Knowledge Base Gaps
+
+Knowledge-base gaps are the places where customers ask questions but Woes does
+not have enough trustworthy context to answer. Fixing gaps improves agent
+quality, reduces handoffs, and makes operator work more repeatable.
+
+## Gap Signals
+
+| Signal | Meaning |
+| --- | --- |
+| Repeated handoffs | Customers ask something the agent cannot safely answer. |
+| Low-confidence replies | The agent found related context but not enough evidence. |
+| Operator corrections | A human had to replace or rewrite the answer. |
+| Survey complaints | Customers indicate the answer did not solve their problem. |
+| Issue clusters | Many issues reference the same endpoint, auth flow, or product area. |
+
+## Fix Workflow
+
+<Steps>
+  <Step title="Identify the missing answer">
+    Start from a conversation, issue, survey response, or analytics trend.
+  </Step>
+  <Step title="Find the source of truth">
+    Prefer product docs, API specs, SDK examples, or internal runbooks over memory.
+  </Step>
+  <Step title="Add or update source content">
+    Improve the original docs when possible, then rescan the source in Woes.
+  </Step>
+  <Step title="Test the same question">
+    Ask the agent the original customer question and verify the answer is specific and grounded.
+  </Step>
+  <Step title="Close the loop">
+    Add tags or issue links so future analytics show whether the gap is improving.
+  </Step>
+</Steps>
+
+## Common Gap Types
+
+| Gap | Better source material |
+| --- | --- |
+| Auth confusion | Token examples, scopes, headers, and common 401/403 causes. |
+| Missing request fields | Request schema, required field table, and valid enum values. |
+| Webhook uncertainty | Event names, delivery rules, retry behavior, and payload examples. |
+| SDK mismatch | Current SDK examples and migration notes. |
+| Account-specific answers | Verified customer identity, operator notes, or portal context rather than public docs. |
+
+## What Not To Do
+
+Do not lower confidence thresholds just to make the agent answer more often.
+Better coverage should come from better context, not looser safety behavior.

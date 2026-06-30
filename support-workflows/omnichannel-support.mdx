@@ -1,0 +1,65 @@
+---
+title: "Omnichannel Support"
+description: "Run live chat, email, and Discord support from one Woes workspace."
+---
+
+# Omnichannel Support
+
+Woes treats live chat, email, and Discord as channels on one support model. A
+conversation can come from any supported channel, but operators still triage it
+from the same inbox, convert it into issues, attach customer context, and use AI
+agent evidence from the same knowledge base.
+
+## How Channels Work Together
+
+| Channel | Best for | Where operators work |
+| --- | --- | --- |
+| Live chat | In-product support, docs support, fast developer questions. | [Inbox](/platform/inbox) |
+| Email | Longer support threads, account handoffs, NPS or CSAT survey delivery. | [Inbox](/platform/inbox) |
+| Discord | Community and developer-server questions that need workspace visibility. | [Inbox](/platform/inbox) |
+
+Every supported channel can share:
+
+- Conversation status, priority, assignee, tags, and notes.
+- Customer and account context.
+- AI handling state and operator takeover.
+- Issue creation for work that must be tracked outside the conversation.
+- Analytics and survey reporting.
+
+## Recommended Workflow
+
+<Steps>
+  <Step title="Connect channels">
+    Start with the [chat widget](/quickstart/install-widget), then add [email](/channels/email) and [Discord](/channels/discord) if those are active support surfaces.
+  </Step>
+  <Step title="Route work">
+    Use [assignment settings](/settings/assignment), tags, statuses, and priorities to keep the inbox predictable.
+  </Step>
+  <Step title="Let agents answer when grounded">
+    Attach the right knowledge sources to each agent and let Woes answer only when context is strong enough.
+  </Step>
+  <Step title="Escalate durable work into issues">
+    Convert bugs, requests, customer blockers, and follow-up tasks into [Issues](/platform/issues).
+  </Step>
+  <Step title="Measure the loop">
+    Use [Analytics](/platform/analytics) and [Surveys](/settings/surveys) to see which channels resolve quickly and where customers still need help.
+  </Step>
+</Steps>
+
+## Operating Principles
+
+- Keep the customer in one thread whenever possible.
+- Use internal notes for operator-only context.
+- Create issues when work needs ownership beyond a chat reply.
+- Use tags and custom fields consistently so analytics stay useful.
+- Review low-confidence agent replies and improve the knowledge base.
+
+## What Woes Does Not Do Automatically
+
+Woes does not merge unrelated people across channels just because their message
+content is similar. Customer identity should come from stable account data,
+email addresses, verified widget identity, or portal access.
+
+Woes also does not expose provider/model internals to customers. AI routing is a
+platform concern; operators should focus on answer quality, source coverage, and
+handoff behavior.

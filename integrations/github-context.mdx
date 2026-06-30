@@ -1,0 +1,33 @@
+---
+title: "GitHub Context"
+description: "Use GitHub repositories as source context for Woes agents."
+---
+
+# GitHub Context
+
+GitHub context lets Woes read documentation-adjacent repository content such as
+READMEs, docs folders, examples, and SDK guides. This helps agents answer from
+the same material developers use when implementing your API.
+
+## Good Repository Content
+
+- README setup instructions.
+- SDK examples.
+- Docs folders.
+- Migration guides.
+- Troubleshooting notes.
+- Public API examples.
+
+## Setup Path
+
+1. Review [GitHub Context](/context/github).
+2. Connect GitHub in Woes.
+3. Choose the repository that contains useful docs or examples.
+4. Ingest the repository as a source.
+5. Attach the source to the right agent.
+
+## Security Notes
+
+Do not ingest repositories that contain secrets, private customer data, or
+operator-only credentials. Keep source auth credentials separate from source
+content.

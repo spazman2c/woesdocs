@@ -1,0 +1,51 @@
+---
+title: "Customer Portal Access Control"
+description: "Control who can view customer portal issues and account information."
+---
+
+# Customer Portal Access Control
+
+The customer portal gives customers a focused place to view issue status and
+account-facing support work. Access should be tied to trusted customer identity,
+not just a public link.
+
+## Access Model
+
+| Layer | Purpose |
+| --- | --- |
+| Workspace settings | Decide whether the portal is enabled and what experience is available. |
+| Customer identity | Connect a visitor to an account, email, or customer profile. |
+| Portal session | Lets the customer view allowed portal content. |
+| Issue visibility | Controls which issues are shown to customers. |
+
+## Recommended Setup
+
+<Steps>
+  <Step title="Enable the portal">
+    Review [Client Portal](/platform/client-portal) settings before inviting customers.
+  </Step>
+  <Step title="Decide what customers can see">
+    Choose whether customers should see open issues, resolved issues, account-level history, or only invited items.
+  </Step>
+  <Step title="Use stable identity">
+    Prefer signed-in product identity, verified email, or portal magic-link flows.
+  </Step>
+  <Step title="Test as a customer">
+    Open the portal with a test customer account and verify no unrelated account data appears.
+  </Step>
+</Steps>
+
+## Good Defaults
+
+- Start with narrow issue visibility.
+- Keep internal notes private.
+- Do not expose operator-only debug traces.
+- Use clear public issue statuses.
+- Review portal access whenever client account ownership changes.
+
+## Related Pages
+
+- [Client Portal](/platform/client-portal)
+- [Clients](/platform/clients)
+- [Data Privacy](/security/data-privacy)
+- [Tenant Isolation](/security/tenant-isolation)

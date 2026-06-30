@@ -1,0 +1,36 @@
+---
+title: "Developer Overview"
+description: "Find the developer surfaces for Woes REST APIs, widget runtime behavior, route families, and public boundaries."
+---
+
+# Developer Overview
+
+Developer documentation is split into two parts:
+
+- Product guides in the Docs tab explain how to install, configure, and operate
+  Woes.
+- The [API Reference](/api-reference/overview) contains REST resources,
+  authentication, scopes, examples, and interactive endpoint testing.
+
+## Developer Surfaces
+
+| Surface | Use it for |
+| --- | --- |
+| Public REST API | Server-side integrations for conversations, issues, clients, agents, sources, usage, and analytics. |
+| Widget loader | Browser install for live chat and customer messaging. |
+| Widget JavaScript API | Opening, hiding, theming, identifying, and pre-filling the widget. |
+| Route map | Understanding public, widget, and authenticated workspace route families. |
+| Workspace API keys | Private server-side credentials for the public REST API. |
+
+## Where To Go
+
+- [API Reference](/api-reference/overview) for REST endpoint docs.
+- [Authentication](/api/authentication) for bearer token usage.
+- [API Keys](/api/keys) for scopes and key handling.
+- [Widget JavaScript API](/chat-widget/javascript-api) for browser commands.
+- [Route Map](/reference/routes) for route-family boundaries.
+
+## Boundaries
+
+Do not mix widget public keys with REST API keys. Widget keys identify a public
+widget install. REST API keys authenticate private server-side API calls.

@@ -97,18 +97,39 @@
             "href": "/quickstart/overview"
           },
           {
-            "label": "Inbox",
-            "href": "/platform/inbox"
+            "label": "Support Workflows",
+            "href": "/support-workflows/omnichannel-support"
           },
           {
-            "label": "Agents",
-            "href": "/agents/overview"
+            "label": "Chat Widget",
+            "href": "/chat-widget/overview"
           }
         ]
       },
       {
-        "header": "API",
+        "header": "Knowledge",
         "items": [
+          {
+            "label": "Knowledge Base",
+            "href": "/knowledge-base/overview"
+          },
+          {
+            "label": "AI Agents",
+            "href": "/agents/overview"
+          },
+          {
+            "label": "Analytics",
+            "href": "/platform/analytics"
+          }
+        ]
+      },
+      {
+        "header": "Developer",
+        "items": [
+          {
+            "label": "Developer Overview",
+            "href": "/developer/overview"
+          },
           {
             "label": "API Reference",
             "href": "/api-reference/overview"
@@ -116,10 +137,6 @@
           {
             "label": "Authentication",
             "href": "/api/authentication"
-          },
-          {
-            "label": "Conversations",
-            "href": "/api/conversations"
           }
         ]
       },
@@ -182,62 +199,118 @@
         "icon": "book-open",
         "groups": [
           {
-            "group": "Start here",
+            "group": "Getting started",
             "pages": [
               "index",
               "quickstart/overview",
               "quickstart/add-context",
-              "quickstart/install-widget",
-              "quickstart/install-widget-mintlify",
               "quickstart/invite-team"
             ]
           },
           {
-            "group": "Core platform",
+            "group": "Support workflows",
             "pages": [
+              "support-workflows/omnichannel-support",
               "platform/inbox",
               "platform/issues",
-              "platform/clients",
-              "platform/client-portal",
               "platform/automations",
-              "platform/analytics"
-            ]
-          },
-          {
-            "group": "Channels",
-            "pages": [
-              "channels/live-chat",
+              "settings/assignment",
+              "settings/surveys",
               "channels/email",
               "channels/discord"
             ]
           },
           {
-            "group": "API context",
+            "group": "Platform",
             "pages": [
-              "context/sources",
-              "context/auth-testing",
-              "context/github"
+              "platform/overview",
+              "settings/overview",
+              "settings/keys",
+              "settings/users-permissions",
+              "settings/data-macros",
+              "settings/notifications",
+              "reference/keyboard-shortcuts",
+              "reference/troubleshooting"
             ]
           },
           {
-            "group": "Agents",
+            "group": "AI agents",
             "pages": [
               "agents/overview",
               "agents/create-agents",
               "agents/context-learning",
-              "agents/routing-widget"
+              "agents/routing-widget",
+              "agents/quality-loop"
             ]
           },
           {
-            "group": "Settings",
+            "group": "Knowledge base",
             "pages": [
-              "settings/overview",
-              "settings/assignment",
-              "settings/keys",
-              "settings/surveys",
-              "settings/users-permissions",
-              "settings/notifications",
-              "settings/data-macros"
+              "knowledge-base/overview",
+              "context/sources",
+              "context/auth-testing",
+              "context/github",
+              "knowledge-base/gaps"
+            ]
+          },
+          {
+            "group": "Customer portal",
+            "pages": [
+              "platform/client-portal",
+              "customer-portal/access-control"
+            ]
+          },
+          {
+            "group": "Chat widget",
+            "pages": [
+              "chat-widget/overview",
+              "channels/live-chat",
+              "quickstart/install-widget",
+              "quickstart/install-widget-mintlify",
+              "chat-widget/javascript-api",
+              "chat-widget/identity-verification"
+            ]
+          },
+          {
+            "group": "Account intelligence",
+            "pages": [
+              "account-intelligence/overview",
+              "platform/clients",
+              "account-intelligence/presence"
+            ]
+          },
+          {
+            "group": "Product intelligence",
+            "pages": [
+              "product-intelligence/overview",
+              "product-intelligence/feature-requests",
+              "product-intelligence/closing-loop"
+            ]
+          },
+          {
+            "group": "Reporting & analytics",
+            "pages": [
+              "platform/analytics",
+              "reporting/usage-capacity",
+              "reporting/surveys-performance"
+            ]
+          },
+          {
+            "group": "Broadcasts",
+            "pages": [
+              "broadcasts/overview",
+              "broadcasts/create-broadcast",
+              "broadcasts/analytics"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/overview",
+              "integrations/email",
+              "integrations/discord",
+              "integrations/github-context",
+              "integrations/mintlify-widget"
             ]
           },
           {
@@ -249,11 +322,12 @@
             ]
           },
           {
-            "group": "Reference",
+            "group": "Developer",
             "pages": [
-              "reference/keyboard-shortcuts",
+              "developer/overview",
+              "developer/rest-api",
               "reference/glossary",
-              "reference/troubleshooting"
+              "developer/route-boundaries"
             ]
           }
         ]

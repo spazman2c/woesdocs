@@ -1,0 +1,64 @@
+---
+title: "Widget JavaScript API"
+description: "Control the Woes widget from your browser application."
+---
+
+# Widget JavaScript API
+
+The Woes loader exposes a queued browser API at `window.Woes`. Calls can be made
+after the install snippet is present; the loader queues commands until the
+widget runtime is ready.
+
+## Common Commands
+
+| Command | Use it for |
+| --- | --- |
+| `window.Woes("show")` | Open the widget. |
+| `window.Woes("hide")` | Close the widget. |
+| `window.Woes("hideChatBubble")` | Hide the launcher bubble. |
+| `window.Woes("showChatBubble")` | Show the launcher bubble. |
+| `window.Woes("setTheme", "dark")` | Set the widget theme to dark mode. |
+| `window.Woes("setTheme", "light")` | Set the widget theme to light mode. |
+| `window.Woes("showNewMessage", text)` | Open the widget with a draft message. |
+| `window.Woes("setNewConversationFields", fields)` | Prefill metadata for the next conversation. |
+
+## Identify a Customer
+
+Use `identify` when your application knows who the visitor is.
+
+```js
+window.Woes("identify", {
+  email: "ada@example.com",
+  name: "Ada Lovelace",
+  company: "Example API Co",
+  id: "user_123",
+});
+```
+
+Unsigned identity is useful for display and routing, but it is not proof of
+identity. For trusted history or account-specific context, use
+[Widget Identity](/security/widget-identity).
+
+## Prefill Conversation Metadata
+
+Use metadata fields to help operators understand the customer's current page or
+workflow.
+
+```js
+window.Woes("setNewConversationFields", {
+  plan: "growth",
+  product_area: "webhooks",
+  current_path: window.location.pathname,
+});
+```
+
+Do not send secrets, payment details, access tokens, or private customer data in
+client-side metadata.
+
+## Testing Checklist
+
+1. Load the page in a private browser window.
+2. Run `window.Woes("show")` from the browser console.
+3. Send a test message.
+4. Confirm the conversation appears in Woes Inbox.
+5. Confirm identity and metadata are shown only as intended.

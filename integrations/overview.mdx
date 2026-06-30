@@ -1,0 +1,44 @@
+---
+title: "Integrations Overview"
+description: "Connect Woes to the channels, docs, repositories, and APIs your support team already uses."
+---
+
+# Integrations Overview
+
+Integrations bring customer conversations, API context, and support signals into
+Woes. Start with the surfaces where your customers already ask questions and
+where your API truth already lives.
+
+## Integration Categories
+
+| Category | Woes surface |
+| --- | --- |
+| Chat | [Live Chat](/channels/live-chat) and [Mintlify widget install](/quickstart/install-widget-mintlify). |
+| Email | [Email](/channels/email) support and survey delivery. |
+| Community | [Discord](/channels/discord) conversations in the Woes inbox. |
+| Codebase | [GitHub Context](/context/github) for docs and SDK examples. |
+| Public API | [API Reference](/api-reference/overview) for server-side integrations. |
+
+## Setup Order
+
+<Steps>
+  <Step title="Connect customer channels">
+    Install live chat first, then add email or Discord based on where customers already contact support.
+  </Step>
+  <Step title="Connect source context">
+    Add docs, specs, repositories, and examples so agents can answer from real context.
+  </Step>
+  <Step title="Create keys carefully">
+    Use widget public keys in browsers and private REST API keys only from server-side systems.
+  </Step>
+  <Step title="Test the whole loop">
+    Send a customer message, verify it reaches Inbox, check the agent evidence, and confirm analytics update.
+  </Step>
+</Steps>
+
+## Security Rules
+
+- Keep REST API keys out of client-side apps.
+- Keep source auth credentials separate from source content.
+- Use verified widget identity for account-specific history.
+- Review tenant boundaries before connecting customer data.

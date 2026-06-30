@@ -1,0 +1,28 @@
+---
+title: "Route Boundaries"
+description: "Understand public REST, widget, and authenticated workspace route families."
+---
+
+# Route Boundaries
+
+Woes has several route families with different trust boundaries. Keeping them
+separate helps teams avoid leaking private credentials or exposing operator-only
+data.
+
+## Route Families
+
+| Family | Who calls it | Credential |
+| --- | --- | --- |
+| Public REST API | Your server-side integrations. | Workspace API key. |
+| Widget routes | Customer browsers with a widget install. | Widget public key and conversation secret where needed. |
+| Account routes | Authenticated Woes operators and admins. | User session. |
+| Webhooks | External providers. | Provider-specific verification. |
+
+## Rules
+
+- Never use REST API keys in the browser.
+- Never treat a widget public key as an account credential.
+- Keep source auth secrets separate from source content.
+- Do not expose operator-only debug data to customers.
+
+See the complete [Route Map](/reference/routes).
