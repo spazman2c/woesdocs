@@ -1,0 +1,153 @@
+---
+title: "iOS Swift SDK"
+description: "Add native Woes live chat to a SwiftUI or UIKit iOS app."
+---
+
+# iOS Swift SDK
+
+The Woes iOS SDK gives your customers a native live-chat experience in SwiftUI
+or UIKit. It uses the same public widget API as the web widget, so messages
+still route to the configured workspace or agent widget key and appear in the
+Woes Inbox.
+
+## What the SDK does
+
+| Capability | Details |
+| --- | --- |
+| Native UI | Ships a SwiftUI `WoesLiveChatView` and UIKit `WoesLiveChatViewController`. |
+| Widget routing | Uses a workspace key (`trovw_...`) or agent key (`trovw_agent_...`). |
+| Conversation continuity | Stores the conversation key and history secret per widget key. |
+| AI and handoff | Sends messages through Woes so the selected AI agent or operator can reply. |
+| Identity verification | Accepts server-generated HMAC email hashes or JWT proofs. |
+| Surveys | Submits configured CSAT surveys through the public widget API. |
+
+## Requirements
+
+- iOS 15 or later
+- Swift 5.9 or later
+- A Woes live chat module public key from **Settings -> Channels -> Live chat**
+
+## Install with Swift Package Manager
+
+In Xcode, open **File -> Add Package Dependencies...** and add the repository
+that contains Woes. Select the `WoesLiveChat` package under `sdk/ios`.
+
+For local testing, add the local package path:
+
+```text
+/path/to/woes/sdk/ios
+```
+
+## SwiftUI quick start
+
+```swift
+import SwiftUI
+import WoesLiveChat
+
+struct SupportScreen: View {
+    var body: some View {
+        WoesLiveChatView(
+            configuration: WoesConfiguration(
+                publicKey: "trovw_agent_xxx",
+                title: "Acme Support",
+                identity: WoesIdentity(
+                    email: "ada@example.com",
+                    name: "Ada Lovelace",
+                    emailHash: "<server-generated-hmac>"
+                ),
+                customFields: [
+                    "plan": .string("pro"),
+                    "build": .number(42)
+                ]
+            )
+        )
+    }
+}
+```
+
+Mount the view wherever you want the support experience to appear. The SDK loads
+the widget configuration, restores any previous conversation for that public
+key, sends messages, and polls for AI or operator replies.
+
+## UIKit quick start
+
+```swift
+import UIKit
+import WoesLiveChat
+
+let controller = WoesLiveChatViewController(
+    configuration: WoesConfiguration(
+        publicKey: "trovw_agent_xxx",
+        title: "Acme Support"
+    )
+)
+
+present(controller, animated: true)
+```
+
+## Identity verification
+
+If your workspace requires verified widget identity, generate the proof on your
+server and pass it to the SDK:
+
+```swift
+WoesIdentity(
+    email: "ada@example.com",
+    name: "Ada Lovelace",
+    emailHash: "<server-generated-hmac>"
+)
+```
+
+Do not compute HMACs or store widget identity secrets in your iOS app. Use your
+backend to generate either:
+
+- `emailHash` for HMAC email mode
+- `jwt` for JWT identity mode
+
+If identity verification is disabled, `email`, `name`, and `company` can still
+help operators recognize the customer, but verified identity is required for
+trusted account-specific context.
+
+## Custom fields
+
+Use `customFields` for safe, operator-visible context that should be attached to
+the next widget message:
+
+```swift
+WoesConfiguration(
+    publicKey: "trovw_agent_xxx",
+    customFields: [
+        "plan": .string("enterprise"),
+        "trial": .bool(false)
+    ]
+)
+```
+
+The widget API sanitizes these fields server-side and drops secret-like keys.
+
+## Headless mode
+
+Use `WoesLiveChatViewModel` or `WoesAPIClient` if you want to build a custom
+interface:
+
+```swift
+let configuration = WoesConfiguration(publicKey: "trovw_agent_xxx")
+let viewModel = WoesLiveChatViewModel(configuration: configuration)
+
+await viewModel.start()
+await viewModel.send("How do I create an API key?")
+```
+
+## API boundaries
+
+The SDK uses only public widget routes:
+
+- `GET /api/widget/config`
+- `GET /api/widget/messages`
+- `POST /api/widget/messages`
+- `POST /api/widget/presence`
+- `GET /api/widget/feedback`
+- `POST /api/widget/csat`
+
+It never uses REST API keys, Supabase credentials, workspace secrets, operator
+debug traces, or provider/model internals.

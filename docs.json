@@ -273,6 +273,7 @@
                   "channels/live-chat",
                   "quickstart/install-widget",
                   "quickstart/install-widget-mintlify",
+                  "chat-widget/ios-sdk",
                   "chat-widget/javascript-api",
                   "chat-widget/identity-verification"
                 ],

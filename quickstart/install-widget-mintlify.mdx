@@ -20,11 +20,46 @@ You need:
 
 - Access to your Mintlify docs repository.
 - A Woes workspace or agent widget key from **Settings → Keys**.
-- The production widget endpoint: `https://woes.dev/api/widget/messages`.
+- The production widget loader: `https://woes.dev/widget.js`.
 
 Use a workspace widget key when every docs visitor should route to the default
 agent. Use an agent widget key when your docs site should route visitors to a
 specific docs-focused agent.
+
+## AI Agent Install Prompt
+
+If you want Codex, Cursor, Claude Code, or another coding agent to install the
+widget for you, copy this prompt and run it from your Mintlify docs repository.
+
+<button className="woes-agent-prompt-copy" data-woes-copy-agent-prompt="mintlify-widget">
+  Copy Prompt for the Agent
+</button>
+
+<textarea className="woes-agent-prompt-source" data-woes-agent-prompt="mintlify-widget" readOnly>
+Install the Woes live chat widget in this Mintlify docs repository.
+
+Goal:
+- Add the Woes widget to every docs page.
+- Use the production loader: https://woes.dev/widget.js.
+- Use a public widget key only. Never use or ask for a Woes REST API key, Supabase key, workspace secret, or identity verification secret.
+
+Workflow:
+1. Inspect the repository structure and find the Mintlify root that contains docs.json or mint.json.
+2. Check whether a root-level widget file already exists, such as woes-widget.js.
+3. If it exists, update it carefully. If it does not exist, create woes-widget.js in the Mintlify content root.
+4. The file should install the widget once, guard against duplicate injection, and append this script:
+
+   var script = document.createElement("script");
+   script.src = "https://woes.dev/widget.js";
+   script.setAttribute("data-public-key", "YOUR_WIDGET_PUBLIC_KEY");
+   document.head.appendChild(script);
+
+5. If this Mintlify setup uses a different custom script mechanism, follow the existing project pattern instead of creating a duplicate loader.
+6. Do not change unrelated navigation, OpenAPI files, theme settings, or content.
+7. Run the narrowest available docs validation, such as JSON parsing for docs.json and any existing lint/build command.
+8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw_... or trovw_agent_....
+9. Replace YOUR_WIDGET_PUBLIC_KEY with the key I provide, then show me the changed files and validation results.
+</textarea>
 
 ## Recommended Install
 
@@ -39,10 +74,8 @@ For example, create `woes-widget.js`:
   window.__woesDocsWidgetInstalled = true;
 
   var script = document.createElement("script");
-  script.async = true;
   script.src = "https://woes.dev/widget.js";
   script.setAttribute("data-public-key", "YOUR_WIDGET_PUBLIC_KEY");
-  script.setAttribute("data-api", "https://woes.dev/api/widget/messages");
 
   document.head.appendChild(script);
 })();
@@ -52,7 +85,7 @@ Replace `YOUR_WIDGET_PUBLIC_KEY` with the key copied from Woes.
 
 <Tip>
   The Woes docs site uses this same pattern with its own public widget key:
-  `woesw_7caa9909810e4d67a5b7fc5f47f4213b`.
+  `trovw_agent_0569335271704cd594b3900a5448cc43`.
 </Tip>
 
 ## Deploy the Change
@@ -75,11 +108,9 @@ snippet Woes provides in **Settings → Install**:
 
 ```html
 <script
-  async
   src="https://woes.dev/widget.js"
-  data-public-key="YOUR_WIDGET_PUBLIC_KEY"
-  data-api="https://woes.dev/api/widget/messages"
-></script>
+  data-public-key="YOUR_WIDGET_PUBLIC_KEY">
+</script>
 ```
 
 The JavaScript-file approach is usually easier to maintain because it keeps the

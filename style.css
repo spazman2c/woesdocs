@@ -112,6 +112,42 @@ code {
   border-color: rgba(255, 112, 56, 0.18);
 }
 
+.woes-agent-prompt-copy {
+  align-items: center;
+  background: var(--woes-orange);
+  border: 1px solid rgba(255, 112, 56, 0.72);
+  border-radius: 8px;
+  color: #171310;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.94rem;
+  font-weight: 750;
+  gap: 0.5rem;
+  line-height: 1;
+  margin: 0.75rem 0 1rem;
+  padding: 0.85rem 1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.woes-agent-prompt-copy:hover {
+  background: #ff875c;
+  border-color: #ffb08f;
+  transform: translateY(-1px);
+}
+
+.woes-agent-prompt-source {
+  height: 1px;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: auto;
+  width: 1px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root),
   ::view-transition-new(root) {
