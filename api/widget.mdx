@@ -5,9 +5,7 @@ description: "Install and control the public Woes live chat widget runtime."
 
 # Widget Runtime
 
-The widget runtime powers customer-facing live chat. It uses widget public keys
-plus route-level controls rather than broad table access. Widget routes are not
-`/api/v1` REST API endpoints and do not accept `woesk_` workspace API keys.
+The widget runtime powers customer-facing live chat. It uses widget public keys plus route-level controls rather than broad table access. Widget routes are not `/api/v1` REST API endpoints and do not accept `woesk_` workspace API keys.
 
 ## Install Snippet
 
@@ -20,48 +18,38 @@ Use the install snippet from **Settings → Install** or **Settings → Keys**.
 </script>
 ```
 
-The public key can be a workspace widget key or an agent widget key. Agent keys
-route the conversation to that agent's attached context.
+The public key can be a workspace widget key or an agent widget key. Agent keys route the conversation to that agent's attached context.
 
 ## Loader Behavior
 
-`https://woes.dev/widget.js` is a small host-page loader. It fetches
-customer-safe widget configuration, records the install origin for operator
-verification, and mounts the real Woes product widget inside an isolated iframe
-at `/embed/widget`.
+`https://woes.dev/widget.js` is a small host-page loader. It fetches customer-safe widget configuration, records the install origin for operator verification, and mounts the real Woes product widget inside an isolated iframe at `/embed/widget`.
 
-The iframe resizes between launcher, teaser, and open-panel footprints so the
-host page does not need to reserve a fixed container. The loader forwards
-`window.Woes(...)` commands into the iframe once it is ready.
+The iframe resizes between launcher, teaser, and open-panel footprints so the host page does not need to reserve a fixed container. The loader forwards `window.Woes(...)` commands into the iframe once it is ready, and the iframe queues early commands until the inner widget API is installed. Early `identify` calls made during widget boot are not dropped.
 
-The config route returns presentation fields only: colors, logo URLs, welcome
-copy, quick links, position, radius, theme, identity-required state, and enabled
-state. It does not return workspace settings, secrets, operator data, or API key
-material.
+The config route returns presentation fields only: colors, logo URLs, welcome copy, quick links, position, radius, theme, identity-required state, and enabled state. It does not return workspace settings, secrets, operator data, or API key material.
 
 ## JavaScript API
 
-The widget exposes a queued `window.Woes(command, payload)` API. Calls made after
-the snippet is added are queued until the widget runtime is ready.
+The widget exposes a queued `window.Woes(command, payload)` API. Calls made after the snippet is added are queued until the widget runtime is ready.
 
-| Command                       | Payload               | Result                                                               |
-| ----------------------------- | --------------------- | -------------------------------------------------------------------- |
-| `show`                        | none                  | Opens the messenger.                                                 |
-| `hide`                        | none                  | Closes the messenger.                                                |
-| `open`                        | none                  | Alias for `show`.                                                    |
-| `close`                       | none                  | Alias for `hide`.                                                    |
-| `onShow`                      | callback or `null`    | Runs a callback when the messenger opens. Pass `null` to remove it.  |
-| `onHide`                      | callback or `null`    | Runs a callback when the messenger closes. Pass `null` to remove it. |
-| `hideChatBubble`              | none                  | Hides the launcher bubble.                                           |
-| `showChatBubble`              | none                  | Shows the launcher bubble again.                                     |
-| `setTheme`                    | `"dark"` or `"light"` | Sets the widget theme.                                               |
-| `onChangeUnreadMessagesCount` | callback or `null`    | Receives unread-count changes.                                       |
-| `identify`                    | identity object       | Connects the visitor to a customer identity.                         |
-| `setNewConversationFields`    | object                | Adds metadata to the next new conversation.                          |
-| `showNewMessage`              | string                | Opens the messenger with a draft message.                            |
-| `showTicketForm`              | form key              | Opens a specific ticket form.                                        |
-| `setTicketFormFields`         | object                | Prefills ticket form fields.                                         |
-| `setVisibleTicketForms`       | array or `null`       | Restricts visible ticket forms. Pass `null` to reset.                |
+| Command | Payload | Result |
+| --- | --- | --- |
+| `show` | none | Opens the messenger. |
+| `hide` | none | Closes the messenger. |
+| `open` | none | Alias for `show`. |
+| `close` | none | Alias for `hide`. |
+| `onShow` | callback or `null` | Runs a callback when the messenger opens. Pass `null` to remove it. |
+| `onHide` | callback or `null` | Runs a callback when the messenger closes. Pass `null` to remove it. |
+| `hideChatBubble` | none | Hides the launcher bubble. |
+| `showChatBubble` | none | Shows the launcher bubble again. |
+| `setTheme` | `"dark"` or `"light"` | Sets the widget theme. |
+| `onChangeUnreadMessagesCount` | callback or `null` | Receives unread-count changes. |
+| `identify` | identity object | Connects the visitor to a customer identity. |
+| `setNewConversationFields` | object | Adds metadata to the next new conversation. |
+| `showNewMessage` | string | Opens the messenger with a draft message. |
+| `showTicketForm` | form key | Opens a specific ticket form. |
+| `setTicketFormFields` | object | Prefills ticket form fields. |
+| `setVisibleTicketForms` | array or `null` | Restricts visible ticket forms. Pass `null` to reset. |
 
 ```js
 window.Woes("show");
@@ -77,12 +65,7 @@ window.Woes("onChangeUnreadMessagesCount", (count) => {
 For unsigned installs, send the customer details you already know.
 
 <Warning>
-  Unsigned `identify` fields are display and routing metadata, not
-  authentication. Any browser user can alter them. Use HMAC or JWT identity
-  verification before showing account-specific history or trusting
-  account/customer ids. In HMAC mode, only the normalized email is verified;
-  `name`, `company`, and `id` remain display metadata. Use JWT when
-  account/contact ids must be verified.
+  Unsigned `identify` fields are display and routing metadata, not authentication. Any browser user can alter them. Use HMAC or JWT identity verification before showing account-specific history or trusting account/customer ids. In HMAC mode, only the normalized email is verified; `name`, `company`, and `id` remain display metadata. Use JWT when account/contact ids must be verified.
 </Warning>
 
 ```js
@@ -94,9 +77,7 @@ window.Woes("identify", {
 });
 ```
 
-For verified installs, pass either an HMAC email proof or a JWT minted by your
-backend. See [Widget Identity](/security/widget-identity) for the full security
-model.
+For verified installs, pass either an HMAC email proof or a JWT minted by your backend. See [Widget Identity](/security/widget-identity) for the full security model.
 
 ```js
 window.Woes("identify", {
@@ -114,8 +95,7 @@ window.Woes("identify", {
 
 ## Conversation Metadata
 
-Use conversation fields to attach page, product, account, or plan context to the
-next new conversation.
+Use conversation fields to attach page, product, account, or plan context to the next new conversation.
 
 ```js
 window.Woes("setNewConversationFields", {
@@ -129,18 +109,13 @@ window.Woes("showNewMessage", "I hit a 401 on POST /orders.");
 
 ## Conversation Continuity
 
-A widget public key only resolves the workspace or agent. Continuing or reading
-an existing widget conversation also requires the opaque `conversationSecret`
-returned when the conversation is created.
+A widget public key only resolves the workspace or agent. Continuing or reading an existing widget conversation also requires the opaque `conversationSecret` returned when the conversation is created.
 
-Store the secret per widget key in the browser, do not send it to analytics or
-logs, and prefer the `x-widget-conversation-secret` header for history requests.
-Public key plus conversation id alone must not be treated as authorization.
+Store the secret per widget key in the browser, do not send it to analytics or logs, and prefer the `x-widget-conversation-secret` header for history requests. Public key plus conversation id alone must not be treated as authorization.
 
 ## Ticket Forms
 
-Ticket form commands let you open a specific form and control the customer-facing
-form choices.
+Ticket form commands let you open a specific form and control the customer-facing form choices.
 
 ```js
 window.Woes("showTicketForm", "bug_report");
@@ -176,15 +151,14 @@ Widget responses must not include:
 
 ## Common Widget Routes
 
-| Route family           | Purpose                                                       |
-| ---------------------- | ------------------------------------------------------------- |
-| `/api/widget/config`   | Public widget presentation config for a workspace or agent key. |
-| `/api/widget/messages` | Customer message flow and conversation history.               |
-| `/api/widget/events`   | Widget impressions, opens, closes, and engagement events.     |
-| `/api/widget/presence` | Customer presence heartbeat.                                  |
-| `/api/widget/csat`     | Compatibility route for CSAT and NPS widget survey responses. |
+| Route family | Purpose |
+| --- | --- |
+| `/api/widget/config` | Public widget presentation config for a workspace or agent key. |
+| `/api/widget/messages` | Customer message flow and conversation history. |
+| `/api/widget/events` | Widget impressions, opens, closes, and engagement events. |
+| `/api/widget/presence` | Customer presence heartbeat. |
+| `/api/widget/csat` | Compatibility route for CSAT and NPS widget survey responses. |
 
 <Note>
-  The `/api/widget/csat` route name is kept for compatibility, but it can record
-  typed survey responses when the survey is configured as CSAT or NPS.
+  The `/api/widget/csat` route name is kept for compatibility, but it can record typed survey responses when the survey is configured as CSAT or NPS.
 </Note>

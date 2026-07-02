@@ -5,10 +5,7 @@ description: "Choose anonymous, display-only, HMAC, or JWT identity for the Woes
 
 # Widget Identity Verification
 
-Widget identity determines whether Woes treats a visitor as anonymous,
-display-only, or verified. It is configured per agent widget key from
-**Settings → Security**, so each site can use the agent and trust model that
-matches that install.
+Widget identity determines whether Woes treats a visitor as anonymous, display-only, or verified. It is configured per agent widget key from **Settings → Security**, so each site can use the agent and trust model that matches that install.
 
 ## Identity Modes
 
@@ -29,8 +26,20 @@ matches that install.
 6. Keep signing secrets only on your backend.
 
 <Tip>
-  Use a different agent widget key and identity secret for each site when the
-  agent behavior, data access, or customer trust level differs.
+  Use a different agent widget key and identity secret for each site when the agent behavior, data access, or customer trust level differs.
 </Tip>
+
+## Verified Identity Install Shape
+
+Verified identity has two pieces: a public widget key in the browser and a private signing secret on your server.
+
+| Value | Where it belongs | Notes |
+| --- | --- | --- |
+| `WOES_AGENT_WIDGET_PUBLIC_KEY` | Browser-safe app config | Used as `data-public-key` on `https://woes.dev/widget.js`. |
+| `WOES_WIDGET_IDENTITY_SECRET` | Server-only app config | Copy it from **Settings → Security** for the selected agent widget key. Never ship it to browsers. |
+
+Create an authenticated, no-store backend endpoint, such as `/api/woes-identity`, that returns the signed identity proof for the current logged-in user. Browser code should fetch that endpoint after login/session load, when `widget.js` loads, on window focus, and when the page becomes visible again.
+
+Calling `window.Woes("identify", ...)` more than once for the same current user is safe. Retrying prevents boot-order races from leaving a logged-in customer anonymous.
 
 Read the full security guide in [Widget Identity](/security/widget-identity).
