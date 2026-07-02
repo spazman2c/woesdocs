@@ -371,6 +371,7 @@
                 "expanded": false,
                 "pages": [
                   "reference/routes",
+                  "api/mcp",
                   "api/widget",
                   "api/surveys"
                 ]
