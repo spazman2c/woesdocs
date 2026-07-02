@@ -26,7 +26,7 @@ The public key can be a workspace widget key or an agent widget key. Agent keys 
 
 The iframe resizes between launcher, teaser, and open-panel footprints so the host page does not need to reserve a fixed container. The loader forwards `window.Woes(...)` commands into the iframe once it is ready, and the iframe queues early commands until the inner widget API is installed. Early `identify` calls made during widget boot are not dropped.
 
-The config route returns presentation fields only: colors, logo URLs, welcome copy, quick links, position, radius, theme, identity-required state, enabled surveys, published updates settings, business-hours fields, and enabled state. It does not return workspace settings, secrets, operator data, or API key material.
+The config route returns presentation fields only: colors, logo URLs, welcome copy, quick links, pre-chat question labels, position, radius, theme, identity-required state, enabled surveys, published updates settings, business-hours fields, and enabled state. It does not return workspace settings, secrets, operator data, or API key material.
 
 ## JavaScript API
 
@@ -92,6 +92,12 @@ window.Woes("identify", {
   jwt: identity.jwt,
 });
 ```
+
+## Pre-chat Questions
+
+Pre-chat questions are configured in **Settings → Channels → Live chat** and delivered through the widget config route. The widget asks them before the first message in a new conversation. Required questions are enforced by the public message route, so a custom script cannot bypass them.
+
+If the page identifies a visitor with `window.Woes("identify", ...)`, configured name, email, and company questions can be auto-filled from that identity. Verified identity modes should be used before trusting those fields for account-specific routing.
 
 ## Conversation Metadata
 
