@@ -1,0 +1,211 @@
+---
+title: "MCP Server"
+sidebarTitle: "MCP Server"
+description: "Connect AI tools and internal assistants to Woes through the remote Model Context Protocol endpoint."
+icon: "plug-zap"
+---
+
+# MCP Server
+
+Woes exposes a remote Model Context Protocol (MCP) server so AI tools, internal assistants, and automation runners can inspect and work with your support workspace through the same public API controls you already use for REST integrations.
+
+The MCP endpoint is intentionally a thin adapter over the Woes REST API. Tool calls reuse workspace API keys, scopes, rate limits, usage tracking, tenant isolation, response redaction, and public API side-effect boundaries.
+
+## Endpoint
+
+```txt
+https://woes.dev/api/mcp
+```
+
+Transport: JSON-RPC over HTTP.
+
+Authentication: `Authorization: Bearer <woesk_...>`.
+
+<Warning>
+  MCP clients should use server-side workspace API keys only. Do not place a `woesk_` key in browser JavaScript, customer-visible docs, mobile apps, or widget snippets.
+</Warning>
+
+## What You Can Use It For
+
+Use the Woes MCP server when an AI assistant or internal tool needs safe access to workspace support data.
+
+| Workflow | Useful tools |
+| --- | --- |
+| Daily support brief | `woes_list_conversations`, `woes_list_issues`, `woes_get_usage`, `woes_get_analytics` |
+| Customer escalation | `woes_list_clients`, `woes_list_conversations`, `woes_create_issue` |
+| API context audit | `woes_list_sources`, `woes_get_source`, `woes_list_agents` |
+| Customer or CRM sync | `woes_create_client`, `woes_list_clients`, `woes_list_conversations` |
+| Incident triage | `woes_create_conversation`, `woes_create_message`, `woes_create_issue` |
+| Agent rollout checks | `woes_list_agents`, `woes_list_sources`, `woes_get_analytics` |
+
+## Configure An MCP Client
+
+MCP client configuration varies by tool, but the important pieces are the remote URL and the Authorization header.
+
+```json
+{
+  "mcpServers": {
+    "woes": {
+      "url": "https://woes.dev/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${WOES_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Create the API key in **Settings, then Keys**. Use the smallest scope set that matches the tool you are connecting.
+
+<Note>
+  Some MCP clients support remote HTTP servers directly. Others require a small local proxy that forwards JSON-RPC requests to `https://woes.dev/api/mcp` with the Authorization header. Use your client's current remote-server instructions when adding the URL.
+</Note>
+
+## Required API Key Scopes
+
+| Tool | Required scope |
+| --- | --- |
+| `woes_list_conversations` | `conversations:read` |
+| `woes_create_conversation` | `conversations:write` |
+| `woes_list_messages` | `conversations:read` |
+| `woes_create_message` | `conversations:write` |
+| `woes_list_issues` | `issues:read` |
+| `woes_create_issue` | `issues:write` |
+| `woes_list_clients` | `clients:read` |
+| `woes_create_client` | `clients:write` |
+| `woes_list_agents` | `agents:read` |
+| `woes_list_sources` | `sources:read` |
+| `woes_get_source` | `sources:read` |
+| `woes_get_usage` | `usage:read` |
+| `woes_get_analytics` | `analytics:read` |
+
+Leaving a workspace API key unrestricted allows every public API action available to the MCP server, but scoped keys are safer for AI tools.
+
+## Tool Catalog
+
+### Conversations
+
+`woes_list_conversations` lists recent conversations across live chat, email, Discord, and API-origin channels.
+
+Supported filters: `status`, `channel`, `customerId`, and `limit`.
+
+`woes_create_conversation` creates an API-origin conversation for a customer or external workflow.
+
+Required input: `customer.id` and `subject`.
+
+`woes_list_messages` lists ordered public messages for one conversation.
+
+Required input: `conversationId`.
+
+`woes_create_message` appends a `user` or `assistant` message to an existing conversation without invoking the Woes support agent.
+
+Required input: `conversationId` and `body`.
+
+### Issues
+
+`woes_list_issues` lists workspace issues with optional `statusCategory`, `priority`, `customerEmail`, `sourceConversationId`, and `limit` filters.
+
+`woes_create_issue` creates a workspace issue with a subject, optional description, customer context, tags, priority, status category, and optional source conversation link.
+
+### Clients
+
+`woes_list_clients` lists client account aggregates with optional `search`, `health`, and `limit` filters.
+
+`woes_create_client` creates a manual client/account seed so an account is visible before a normal channel conversation exists.
+
+### Agents And Sources
+
+`woes_list_agents` lists public agent metadata, including enabled state, source count, learning status, and widget key metadata.
+
+`woes_list_sources` lists API context sources by status or type.
+
+`woes_get_source` reads one source with public, redacted endpoint and document details.
+
+### Usage And Analytics
+
+`woes_get_usage` returns current-month usage meters and per-key API usage.
+
+`woes_get_analytics` returns sanitized aggregate analytics for agents, surveys, widgets, and customer feedback.
+
+## Manual JSON-RPC Examples
+
+You can test the MCP server without a full MCP client by posting JSON-RPC requests.
+
+### Initialize
+
+```bash
+curl https://woes.dev/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-06-18",
+      "clientInfo": { "name": "example", "version": "1.0.0" },
+      "capabilities": {}
+    }
+  }'
+```
+
+### List Tools
+
+```bash
+curl https://woes.dev/api/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list"
+  }'
+```
+
+### Call A Tool
+
+```bash
+curl https://woes.dev/api/mcp \
+  -H "Authorization: Bearer $WOES_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {
+      "name": "woes_list_conversations",
+      "arguments": {
+        "status": "open",
+        "limit": 10
+      }
+    }
+  }'
+```
+
+Tool results are returned as MCP text content containing formatted JSON from the underlying Woes API route.
+
+## Security Model
+
+The MCP server follows the same public API boundary as `/api/v1`.
+
+- It authenticates with workspace API keys using the `woesk_` prefix.
+- It respects key scopes and returns authorization errors when a tool needs a scope the key does not have.
+- It rate-limits and tracks valid calls by workspace API key.
+- It does not expose raw API keys, workspace ids, service-role details, provider internals, system prompts, agent configs, operator-only debug traces, or cross-workspace data.
+- It does not invoke the live chat widget identity flow, run the support agent, deliver Discord or email messages, or execute channel automation side effects.
+
+## Troubleshooting
+
+| Error | What to check |
+| --- | --- |
+| `Authentication required. Pass Authorization: Bearer <woesk_...>.` | The MCP client is not sending the Authorization header for tool calls. |
+| `insufficient_scope` | Add the required scope in **Settings, then Keys** or create a narrower key for the specific workflow. |
+| `invalid_request` | Check the tool input schema. Required ids must be valid UUIDs where noted. |
+| `rate_limited` | Wait for the key's public API rate limit window to reset or use a key with the right allowance. |
+| Empty lists | Confirm the API key belongs to the workspace you expect and that matching records exist. |
+
+## Recommended Patterns
+
+Use read-only keys for assistants that summarize, search, or report. Add write scopes only for tools that need to create conversations, messages, issues, or client seed records.
+
+For production automation, keep one key per integration. That gives admins clear per-key usage and an easy revoke path if a client, server, or workflow is compromised.
+
+For local testing, create a disposable scoped key, run the MCP client, then revoke the key from **Settings, then Keys** when you are done.

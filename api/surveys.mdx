@@ -5,16 +5,25 @@ description: "Understand customer-facing widget and email survey response routes
 
 # Survey Delivery
 
-Survey delivery routes collect customer feedback from widget prompts and signed
-email links. These routes are customer-facing response surfaces, not `/api/v1`
-REST API endpoints authenticated with `woesk_` workspace API keys.
+Survey delivery routes collect customer feedback from widget prompts and signed email links. These routes are customer-facing response surfaces, not `/api/v1` REST API endpoints authenticated with `woesk_` workspace API keys.
+
+## Feedback Surfaces
+
+| Surface | Route | Caller | Credential |
+| --- | --- | --- | --- |
+| Widget prompt lookup | `GET /api/widget/feedback` | Customer browser. | Widget public key and current conversation context. |
+| Widget CSAT or NPS response | `POST /api/widget/csat` | Customer browser. | Widget public key and conversation secret. |
+| Email survey send | `POST /api/account/surveys/email` | Authenticated Woes operator or automation. | Woes account session. |
+| Email survey response | `GET /api/surveys/email-response` | Customer clicking a survey email link. | Signed, expiring survey token. |
 
 ## Widget Survey Responses
 
-Widget survey responses post through the compatibility widget survey route. The active survey definition determines whether the score must be:
+Widget survey responses use the active survey definition for the workspace. The survey definition determines whether the score must be:
 
 - CSAT: 1 to 5.
 - NPS: 0 to 10.
+
+Widget survey routes are scoped to the current widget conversation. They should be called by the installed widget or SDK, not by a server-side REST API integration.
 
 ## Email Survey Responses
 
@@ -23,20 +32,18 @@ Email surveys use signed links generated when Woes sends the survey email.
 Flow:
 
 1. An operator or automation sends an enabled email survey.
-2. Woes generates a signed token containing workspace, conversation, survey, and expiration.
+2. Woes generates a signed token containing workspace, conversation, survey, score, and expiration data.
 3. The email includes one-click score links.
 4. The customer clicks a score.
-5. Woes verifies the token and score range.
+5. Woes verifies the token, expiration, workspace, conversation, survey, and score range.
 6. The response is inserted into `support_survey_responses`.
 
-## Active Routes
+## API Boundary
 
-| Route | Purpose |
-| --- | --- |
-| `/api/account/surveys/email` | Authenticated operator route to send an email survey. |
-| `/api/surveys/email-response` | Public signed response capture route. |
-| `/api/widget/csat` | Public widget survey response route. |
+Use the widget routes for customer browser feedback and the account route for authenticated operator-driven survey sends. Use `/api/v1` only for documented server-side integration endpoints.
 
 <Warning>
-  Email response links are intended for the recipient. Do not expose signed survey links in public docs, tickets, or screenshots.
+  Email response links are intended for the recipient. Do not expose signed survey links in public docs, tickets, screenshots, or logs.
 </Warning>
+
+See [Widget Routes](/api/widget-routes) and [Route Boundaries](/developer/route-boundaries) for the broader security model.

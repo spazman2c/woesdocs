@@ -213,6 +213,7 @@
                   "platform/inbox",
                   "platform/issues",
                   "platform/automations",
+                  "platform/team-chat",
                   "settings/assignment",
                   "settings/surveys",
                   "channels/email",
@@ -371,7 +372,9 @@
                 "expanded": false,
                 "pages": [
                   "reference/routes",
+                  "api/mcp",
                   "api/widget",
+                  "api/widget-routes",
                   "api/surveys"
                 ]
               },

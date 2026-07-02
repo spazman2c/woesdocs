@@ -5,9 +5,32 @@ description: "Control the Woes widget from your browser application."
 
 # Widget JavaScript API
 
-The Woes loader exposes a queued browser API at `window.Woes`. Calls can be made
-after the install snippet is present; the loader queues commands until the
-widget runtime is ready.
+The Woes loader exposes a queued browser API at `window.Woes`. Calls can be made after the install snippet is present; the loader queues commands until the widget runtime is ready. The embedded iframe also queues early commands until the inner widget API is installed, so early `identify` calls made during widget boot are not dropped.
+
+## Create The Queue Early
+
+If your app may identify a user before `https://woes.dev/widget.js` has loaded, create the command queue first.
+
+```html
+<script>
+  window.Woes =
+    window.Woes ||
+    function () {
+      (window.Woes.q = window.Woes.q || []).push(
+        Array.prototype.slice.call(arguments),
+      );
+    };
+</script>
+```
+
+Then load the widget script with your public widget key.
+
+```html
+<script
+  src="https://woes.dev/widget.js"
+  data-public-key="YOUR_WIDGET_PUBLIC_KEY">
+</script>
+```
 
 ## Common Commands
 
@@ -15,14 +38,23 @@ widget runtime is ready.
 | --- | --- |
 | `window.Woes("show")` | Open the widget. |
 | `window.Woes("hide")` | Close the widget. |
+| `window.Woes("open")` | Alias for `show`. |
+| `window.Woes("close")` | Alias for `hide`. |
+| `window.Woes("onShow", callback)` | Run a callback when the widget opens. Pass `null` to remove it. |
+| `window.Woes("onHide", callback)` | Run a callback when the widget closes. Pass `null` to remove it. |
 | `window.Woes("hideChatBubble")` | Hide the launcher bubble. |
 | `window.Woes("showChatBubble")` | Show the launcher bubble. |
 | `window.Woes("setTheme", "dark")` | Set the widget theme to dark mode. |
 | `window.Woes("setTheme", "light")` | Set the widget theme to light mode. |
+| `window.Woes("onChangeUnreadMessagesCount", callback)` | Receive unread-count changes. |
+| `window.Woes("identify", identity)` | Connect the visitor to display or verified identity. |
 | `window.Woes("showNewMessage", text)` | Open the widget with a draft message. |
 | `window.Woes("setNewConversationFields", fields)` | Prefill metadata for the next conversation. |
+| `window.Woes("showTicketForm", formKey)` | Open a specific ticket form. |
+| `window.Woes("setTicketFormFields", fields)` | Prefill ticket form fields. |
+| `window.Woes("setVisibleTicketForms", formsOrNull)` | Restrict visible ticket forms, or reset with `null`. |
 
-## Identify a Customer
+## Identify A Customer
 
 Use `identify` when your application knows who the visitor is.
 
@@ -35,14 +67,46 @@ window.Woes("identify", {
 });
 ```
 
-Unsigned identity is useful for display and routing, but it is not proof of
-identity. For trusted history or account-specific context, use
-[Widget Identity](/security/widget-identity).
+Unsigned identity is useful for display and routing, but it is not proof of identity. Any browser user can alter unsigned fields. For trusted history or account-specific context, use [Widget Identity](/security/widget-identity).
+
+## Verified Identity Pattern
+
+For verified installs, your backend should expose an authenticated, no-store endpoint that returns the signed identity proof for the current logged-in user. Fetch it after login/session load, when `widget.js` loads, on window focus, and when the page becomes visible again.
+
+Calling `identify` more than once for the same current user is safe. Do not suppress retries for the same HMAC or JWT before Woes has accepted it.
+
+```js
+async function identifyWithWoes() {
+  const response = await fetch("/api/woes-identity", {
+    credentials: "same-origin",
+    cache: "no-store",
+  });
+
+  if (response.status === 401) return; // anonymous visitor
+  if (!response.ok) return;
+
+  const identity = await response.json();
+  window.Woes("identify", {
+    id: identity.id,
+    email: identity.email,
+    email_hash: identity.email_hash,
+    name: identity.name,
+    company: identity.company,
+  });
+}
+
+identifyWithWoes();
+window.addEventListener("focus", identifyWithWoes);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") identifyWithWoes();
+});
+```
+
+For JWT mode, send `{ jwt: identity.jwt }` instead. See [Widget Identity](/security/widget-identity) for the server-side HMAC/JWT contract.
 
 ## Prefill Conversation Metadata
 
-Use metadata fields to help operators understand the customer's current page or
-workflow.
+Use metadata fields to help operators understand the customer's current page or workflow.
 
 ```js
 window.Woes("setNewConversationFields", {
@@ -52,13 +116,20 @@ window.Woes("setNewConversationFields", {
 });
 ```
 
-Do not send secrets, payment details, access tokens, or private customer data in
-client-side metadata.
+Do not send secrets, payment details, access tokens, or private customer data in client-side metadata.
 
 ## Testing Checklist
 
 1. Load the page in a private browser window.
 2. Run `window.Woes("show")` from the browser console.
-3. Send a test message.
-4. Confirm the conversation appears in Woes Inbox.
-5. Confirm identity and metadata are shown only as intended.
+3. If identity is enabled, confirm your identity endpoint returns `Cache-Control: no-store` and no private secret.
+4. Send a test message.
+5. Confirm the conversation appears in Woes Inbox.
+6. Confirm verified users appear with email/name and `identity_source` of `widget-token`.
+7. Confirm identity and metadata are shown only as intended.
+
+## Related Pages
+
+- [Widget Routes](/api/widget-routes)
+- [Widget Runtime](/api/widget)
+- [Widget Identity](/security/widget-identity)

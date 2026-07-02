@@ -26,7 +26,7 @@ The public key can be a workspace widget key or an agent widget key. Agent keys 
 
 The iframe resizes between launcher, teaser, and open-panel footprints so the host page does not need to reserve a fixed container. The loader forwards `window.Woes(...)` commands into the iframe once it is ready, and the iframe queues early commands until the inner widget API is installed. Early `identify` calls made during widget boot are not dropped.
 
-The config route returns presentation fields only: colors, logo URLs, welcome copy, quick links, pre-chat question labels, position, radius, theme, identity-required state, and enabled state. It does not return workspace settings, secrets, operator data, or API key material.
+The config route returns presentation fields only: colors, logo URLs, welcome copy, quick links, pre-chat question labels, position, radius, theme, identity-required state, enabled surveys, published updates settings, business-hours fields, and enabled state. It does not return workspace settings, secrets, operator data, or API key material.
 
 ## JavaScript API
 
@@ -77,19 +77,19 @@ window.Woes("identify", {
 });
 ```
 
-For verified installs, pass either an HMAC email proof or a JWT minted by your backend. See [Widget Identity](/security/widget-identity) for the full security model.
+For verified installs, pass either an HMAC email proof or a JWT minted by your backend. Verified identity should be fetched from an authenticated, no-store backend endpoint and retried after login/session load, widget load, focus, and visibility changes. See [Widget Identity](/security/widget-identity) for the full security model.
 
 ```js
 window.Woes("identify", {
-  email: "ada@example.com",
-  name: "Ada Lovelace",
-  company: "Example API Co",
-  id: "user_123",
-  email_hash: "SERVER_GENERATED_HMAC",
+  id: identity.id,
+  email: identity.email,
+  email_hash: identity.email_hash,
+  name: identity.name,
+  company: identity.company,
 });
 
 window.Woes("identify", {
-  jwt: "SERVER_GENERATED_WIDGET_IDENTITY_JWT",
+  jwt: identity.jwt,
 });
 ```
 
@@ -143,7 +143,8 @@ window.Woes("setVisibleTicketForms", null);
 - Return customer-safe message history.
 - Emit widget events such as launcher view and widget open.
 - Update customer presence for active visitors.
-- Submit CSAT or NPS widget survey responses.
+- Submit CSAT or NPS survey responses.
+- Show published updates and track verified-reader read state.
 
 ## Public Boundaries
 
@@ -160,11 +161,17 @@ Widget responses must not include:
 | Route family | Purpose |
 | --- | --- |
 | `/api/widget/config` | Public widget presentation config for a workspace or agent key. |
+| `/api/widget/identity` | HMAC/JWT identity proof verification. |
 | `/api/widget/messages` | Customer message flow and conversation history. |
 | `/api/widget/events` | Widget impressions, opens, closes, and engagement events. |
 | `/api/widget/presence` | Customer presence heartbeat. |
+| `/api/widget/feedback` | Customer-safe message feedback state for a verified widget conversation. |
 | `/api/widget/csat` | Compatibility route for CSAT and NPS widget survey responses. |
+| `/api/widget/updates` | Published widget updates. |
+| `/api/widget/updates/read` | Verified-reader update read state. |
 
 <Note>
   The `/api/widget/csat` route name is kept for compatibility, but it can record typed survey responses when the survey is configured as CSAT or NPS.
 </Note>
+
+Use [Widget Routes](/api/widget-routes) for route-by-route request requirements and boundary details.

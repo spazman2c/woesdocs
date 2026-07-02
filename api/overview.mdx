@@ -6,49 +6,49 @@ description: "Use the Woes REST API to work with support conversations, issues, 
 
 # REST API Overview
 
-The Woes REST API lets server-side integrations work with workspace support
-data using `woesk_` workspace API keys. The API is designed for backend jobs,
-internal tools, customer portals, ingestion pipelines, reporting jobs, and
-workflow systems that need to create, read, or inspect Woes workspace records
-without using the operator UI.
+The Woes REST API lets server-side integrations work with workspace support data using `woesk_` workspace API keys. The API is designed for backend jobs, internal tools, customer portals, ingestion pipelines, reporting jobs, and workflow systems that need to create, read, or inspect Woes workspace records without using the operator UI.
 
 <CardGroup cols={2}>
   <Card title="API Reference" icon="code" href="/api-reference/overview">
-    Generated OpenAPI reference for every active REST endpoint, including
-    request bodies, responses, auth, and examples. Open the API Reference tab
-    for the generated endpoint pages.
+    Generated OpenAPI reference for every active REST endpoint, including request bodies, responses, auth, and examples. Open the API Reference tab for the generated endpoint pages.
   </Card>
+
   <Card title="Authentication" icon="key" href="/api/authentication">
-    Learn how workspace API keys work, where to create them, and how to pass
-    Bearer tokens.
+    Learn how workspace API keys work, where to create them, and how to pass Bearer tokens.
   </Card>
+
+  <Card title="MCP Server" icon="plug-zap" href="/api/mcp">
+    Connect AI tools and internal assistants to Woes through the remote Model Context Protocol endpoint.
+  </Card>
+
   <Card title="Conversations" icon="messages" href="/api/conversations">
-    Guide page for creating conversations and adding customer or assistant
-    messages.
+    Guide page for creating conversations and adding customer or assistant messages.
   </Card>
+
   <Card title="Issues" icon="circle-alert" href="/api/issues">
     Guide page for creating, reading, filtering, and updating support issues.
   </Card>
+
   <Card title="Clients" icon="building-2" href="/api/clients">
-    Guide page for reading client account aggregates, contacts, channel mix,
-    health, and recent support activity.
+    Guide page for reading client account aggregates, contacts, channel mix, health, and recent support activity.
   </Card>
+
   <Card title="Agents" icon="bot" href="/api/agents">
-    Guide page for reading named agent metadata, source counts, learning status,
-    and public widget keys.
+    Guide page for reading named agent metadata, source counts, learning status, and public widget keys.
   </Card>
+
   <Card title="Sources" icon="database" href="/api/sources">
-    Create, inspect, publish, delete, and rescan API context sources from your
-    backend.
+    Create, inspect, publish, delete, and rescan API context sources from your backend.
   </Card>
+
   <Card title="Definitions" icon="tags" href="/api/definitions">
-    Read workspace tags, statuses, priorities, and custom field definitions for
-    sync jobs and external tools.
+    Read workspace tags, statuses, priorities, and custom field definitions for sync jobs and external tools.
   </Card>
+
   <Card title="Usage" icon="activity" href="/api/usage">
-    Read current-month public API calls, live API checks, source counts, agent
-    counts, and per-key usage.
+    Read current-month public API calls, live API checks, source counts, agent counts, and per-key usage.
   </Card>
+
   <Card title="Analytics" icon="chart-line" href="/api/analytics">
     Export sanitized agent, survey, widget, and customer-feedback aggregates.
   </Card>
@@ -56,18 +56,18 @@ without using the operator UI.
 
 ## Current Status
 
-| Area                      | Status                                                                |
-| ------------------------- | --------------------------------------------------------------------- |
-| Conversations API         | Active for listing, creating, reading, updating, and adding messages. |
-| Issues API                | Active for listing, creating, reading, and updating issues.           |
-| Clients API               | Active for listing, creating seed records, and reading aggregates.    |
-| Agents API                | Active for listing and reading public agent metadata.                 |
-| Sources API               | Active for listing, creating, reading, updating, deleting, and rescan.|
-| Definitions API           | Active for tags, statuses, priorities, and custom fields.             |
-| Usage API                 | Active for current-month usage and per-key API usage.                 |
-| Analytics API             | Active for sanitized aggregate exports.                               |
-| Workspace API keys        | Active for REST API authentication.                                   |
-| Public API usage tracking | Active for valid `woesk_` calls, counted by workspace key.            |
+| Area | Status |
+| --- | --- |
+| Conversations API | Active for listing, creating, reading, updating, and adding messages. |
+| Issues API | Active for listing, creating, reading, and updating issues. |
+| Clients API | Active for listing, creating seed records, and reading aggregates. |
+| Agents API | Active for listing and reading public agent metadata. |
+| Sources API | Active for listing, creating, reading, updating, deleting, and rescan. |
+| Definitions API | Active for tags, statuses, priorities, and custom fields. |
+| Usage API | Active for current-month usage and per-key API usage. |
+| Analytics API | Active for sanitized aggregate exports. |
+| Workspace API keys | Active for REST API authentication. |
+| Public API usage tracking | Active for valid `woesk_` calls, counted by workspace key. |
 
 ## Base URL
 
@@ -88,9 +88,7 @@ Create keys in **Settings → Keys**. Full secrets are shown once and then store
 
 ## Test Calls In The Docs
 
-Open any page in the **Endpoint Reference** group to test an API request from
-the docs. Each endpoint page has an interactive playground with example
-parameters and request bodies already filled in.
+Open any page in the **Endpoint Reference** group to test an API request from the docs. Each endpoint page has an interactive playground with example parameters and request bodies already filled in.
 
 1. Create a disposable scoped test key in **Settings → Keys**.
 2. Paste that `woesk_` key into the Bearer token field.
@@ -98,72 +96,59 @@ parameters and request bodies already filled in.
 4. Click **Send** to run the request against `https://woes.dev`.
 
 <Warning>
-  Use a disposable, scoped test key in the docs playground. Do not paste a
-  production integration key. Playground requests run against `https://woes.dev`
-  and may transit the docs runtime when proxying is enabled. For production
-  keys, run `curl` or SDK calls from your own backend and revoke playground test
-  keys after use.
+  Use a disposable, scoped test key in the docs playground. Do not paste a production integration key. Playground requests run against `https://woes.dev` and may transit the docs runtime when proxying is enabled. For production keys, run `curl` or SDK calls from your own backend and revoke playground test keys after use.
 </Warning>
 
 <Note>
-  Valid public API calls are tracked against the workspace API key that
-  authenticated the request. Admins can review per-key usage from
-  **Settings → Billing** and manage keys from **Settings → Keys**.
+  Valid public API calls are tracked against the workspace API key that authenticated the request. Admins can review per-key usage from **Settings → Billing** and manage keys from **Settings → Keys**.
 </Note>
 
 ## Active Resources
 
-| Resource      | Endpoints |
-| ------------- | --------- |
+| Resource | Endpoints |
+| --- | --- |
 | Conversations | `GET /conversations`, `POST /conversations`, `GET /conversations/{conversationId}`, `PATCH /conversations/{conversationId}` |
-| Messages      | `GET /conversations/{conversationId}/messages`, `POST /conversations/{conversationId}/messages` |
-| Issues        | `GET /issues`, `POST /issues`, `GET /issues/{issueId}`, `PATCH /issues/{issueId}` |
-| Clients       | `GET /clients`, `POST /clients`, `GET /clients/{clientId}` |
-| Agents        | `GET /agents`, `GET /agents/{agentId}` |
-| Sources       | `GET /sources`, `POST /sources`, `GET /sources/{sourceId}`, `PATCH /sources/{sourceId}`, `DELETE /sources/{sourceId}`, `POST /sources/{sourceId}/rescan` |
-| Definitions   | `GET /tags`, `GET /statuses`, `GET /priorities`, `GET /custom-fields` |
-| Usage         | `GET /usage`, `GET /usage/api-keys` |
-| Analytics     | `GET /analytics` |
+| Messages | `GET /conversations/{conversationId}/messages`, `POST /conversations/{conversationId}/messages` |
+| Issues | `GET /issues`, `POST /issues`, `GET /issues/{issueId}`, `PATCH /issues/{issueId}` |
+| Clients | `GET /clients`, `POST /clients`, `GET /clients/{clientId}` |
+| Agents | `GET /agents`, `GET /agents/{agentId}` |
+| Sources | `GET /sources`, `POST /sources`, `GET /sources/{sourceId}`, `PATCH /sources/{sourceId}`, `DELETE /sources/{sourceId}`, `POST /sources/{sourceId}/rescan` |
+| Definitions | `GET /tags`, `GET /statuses`, `GET /priorities`, `GET /custom-fields` |
+| Usage | `GET /usage`, `GET /usage/api-keys` |
+| Analytics | `GET /analytics` |
 
 <Tip>
-  Use the generated Endpoint Reference for exact request and response schemas.
-  Use these REST API guide pages for workflow notes, tenant boundaries, and safe
-  integration patterns.
+  Use the generated Endpoint Reference for exact request and response schemas. Use these REST API guide pages for workflow notes, tenant boundaries, and safe integration patterns.
 </Tip>
 
 ## Scopes
 
 Workspace API keys can be unrestricted or scoped. Scoped keys use resource/action pairs:
 
-| Scope                 | Allows                                    |
-| --------------------- | ----------------------------------------- |
-| `agents:read`         | List and read public agent metadata.      |
-| `analytics:read`      | Read sanitized analytics aggregates.      |
-| `clients:read`        | List and read client account aggregates.  |
-| `clients:write`       | Create manual client/account seed records.|
-| `conversations:read`  | List and read conversations and messages. |
+| Scope | Allows |
+| --- | --- |
+| `agents:read` | List and read public agent metadata. |
+| `analytics:read` | Read sanitized analytics aggregates. |
+| `clients:read` | List and read client account aggregates. |
+| `clients:write` | Create manual client/account seed records. |
+| `conversations:read` | List and read conversations and messages. |
 | `conversations:write` | Create/update conversations and messages. |
-| `definitions:read`    | Read tags, statuses, priorities, and custom fields. |
-| `issues:read`         | List and read issues.                     |
-| `issues:write`        | Create and update issues.                 |
-| `sources:read`        | List and read API context sources.        |
-| `sources:write`       | Create, update, delete, and rescan sources. |
-| `usage:read`          | Read usage meters and per-key API usage.  |
+| `definitions:read` | Read tags, statuses, priorities, and custom fields. |
+| `issues:read` | List and read issues. |
+| `issues:write` | Create and update issues. |
+| `sources:read` | List and read API context sources. |
+| `sources:write` | Create, update, delete, and rescan sources. |
+| `usage:read` | Read usage meters and per-key API usage. |
 
-Only these exact scopes can be created today. Leaving the scope list empty
-creates an unrestricted key.
+Only these exact scopes can be created today. Leaving the scope list empty creates an unrestricted key.
 
 <Warning>
-  REST API keys are server-side secrets. Do not place `woesk_` keys in browser
-  code, widget snippets, mobile apps, or customer-visible pages.
+  REST API keys are server-side secrets. Do not place `woesk_` keys in browser code, widget snippets, mobile apps, or customer-visible pages.
 </Warning>
 
 ## Response Conventions
 
-Successful list responses use an `object: "list"` envelope and include
-`hasMore` when more matching records exist beyond the requested limit. Object
-responses are wrapped by resource name, such as `{ "conversation": { ... } }`
-or `{ "issue": { ... } }`.
+Successful list responses use an `object: "list"` envelope and include `hasMore` when more matching records exist beyond the requested limit. Object responses are wrapped by resource name, such as `{ "conversation": { ... } }` or `{ "issue": { ... } }`.
 
 Error responses use a stable `code` plus a human-readable `error` message:
 
@@ -174,15 +159,10 @@ Error responses use a stable `code` plus a human-readable `error` message:
 }
 ```
 
-Cross-workspace ids return `404` instead of revealing that a record exists in a
-different workspace.
+Cross-workspace ids return `404` instead of revealing that a record exists in a different workspace.
 
 ## Side-Effect Boundary
 
-The REST API mutates workspace support records only. It does not invoke the
-live-chat widget identity flow, run the support agent, deliver Discord or email
-messages, or execute channel-specific automation side effects. Use channel or
-widget routes for customer messaging behavior.
+The REST API mutates workspace support records only. It does not invoke the live-chat widget identity flow, run the support agent, deliver Discord or email messages, or execute channel-specific automation side effects. Use channel or widget routes for customer messaging behavior.
 
-An `assistant` message created through the REST API is an externally supplied
-message, not a Woes agent run.
+An `assistant` message created through the REST API is an externally supplied message, not a Woes agent run.

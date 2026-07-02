@@ -1,6 +1,6 @@
 ---
 title: "Automations"
-description: "Create workflow automations for routing, tagging, assignment, SLA, surveys, notes, and replies."
+description: "Create workflow automations with supported trigger, logic, condition, delay, routing, survey, note, notification, SLA, snooze, and archive nodes."
 ---
 
 # Automations
@@ -30,39 +30,58 @@ An automation contains:
 - Version and publish state.
 - Logs and test results.
 
-## Common Kickoff Events
+## Trigger Nodes
 
-- Issue created.
-- New live chat conversation.
-- Inbound Discord message.
-- Customer replied.
-- Tag added.
-- Conversation archived.
-- CSAT completed.
-- SLA breached.
+Trigger nodes are the only starting point for an automation. Woes only exposes trigger events that are fired by the runtime.
 
-## Supported Actions
-
-| Action | Result |
+| Trigger | When it runs |
 | --- | --- |
-| Assign | Sets an operator or team assignment. |
-| Set status | Moves the conversation or issue lifecycle. |
-| Set priority | Updates the priority label. |
-| Add tag | Applies a managed issue tag or normalized conversation label, depending on the target. |
-| Add note | Writes an operator-only automation note. |
-| Set SLA | Applies a support target. |
-| Snooze | Moves the item into a waiting state until a future time. |
-| Send CSAT survey | Requests customer satisfaction feedback. |
-| Auto-reply | Inserts a delivered assistant message when configured. |
+| Issue created | A new issue or support conversation is created. |
+| New live chat conversation | A visitor starts a new live chat conversation. |
+| Customer replied | A customer sends a new message on an existing issue or conversation. |
+| New Discord message | A Discord message is routed into the Woes inbox. |
+| Issue status changed | Status changes to open, waiting, or solved. |
+| Issue solved / reopened / snoozed / archived | The matching lifecycle action happens in the inbox. |
+| Priority changed / issue assigned / tag added | The matching operator-side field changes. |
+| SLA breached / no first response | The automation scheduler detects the SLA event. |
+| CSAT completed / NPS completed | A customer submits the matching survey response. |
+
+## Logic Nodes
+
+| Node | Use it for |
+| --- | --- |
+| If condition | Branch on fields from the issue or conversation. |
+| AI condition | Branch on detected customer intent or AI outcome. |
+| Delay | Wait minutes, hours, or days before continuing. Delay can use elapsed time or support-hours timing. |
+
+Supported condition fields are priority, status, channel, assignee, tag, customer email, message text, message mentions workspace, survey type, survey score, CSAT score, AI topic, and AI outcome.
+
+AI topic values are `api-question`, `human-request`, `off-topic`, `greeting`, `closing`, and `abusive`. AI outcome values are `answered`, `handed-off`, and `resolved`.
+
+## Action Nodes
+
+| Action | Result | Required configuration |
+| --- | --- | --- |
+| Hand to AI agent | Assigns the conversation to the Woes AI assistant. | None. |
+| Human handoff | Stops AI ownership and leaves the issue for an operator. | None. |
+| Assign team | Routes the issue to a team. | Team name. |
+| Set status | Moves lifecycle state. | Status value. |
+| Set priority | Updates priority. | Priority value. |
+| Add tag | Applies a normalized issue tag. | Tag value. |
+| Auto-reply | Inserts a delivered assistant message when the AI has not already answered. | Reply body. |
+| Notify | Records an operator notification in automation notes. | Recipient target; message is optional. |
+| Send CSAT survey | Requests customer satisfaction feedback. | Optional automation survey selection. |
+| Send NPS survey | Requests recommendation feedback. | Optional automation survey selection. |
+| Set SLA target | Applies a first response, next response, or resolution target. | SLA target. |
+| Add internal note | Writes an operator-only note. | Note body. |
+| Snooze issue | Moves the item into waiting until a future time. | Snooze duration. |
+| Archive issue | Moves the conversation out of the active inbox. | None. |
 
 ## Assignment And Routing
 
-Automations can assign individual issues to an AI agent, account owner, specific
-user, or team. Use [Assignment](/settings/assignment) when you need persistent
-team routing rules with skills, capacity, schedules, or route previews.
+Automations can assign individual issues to an AI agent, account owner, specific user, or team. Use [Assignment](/settings/assignment) when you need persistent team routing rules with skills, capacity, schedules, or route previews.
 
-Use the **only when unassigned** option when an automation should avoid
-overwriting a human triage decision.
+Use the **only when unassigned** option when an automation should avoid overwriting a human triage decision.
 
 ## Testing Automations
 
