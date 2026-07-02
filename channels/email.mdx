@@ -37,9 +37,29 @@ Email support uses the same conversation model as live chat and Discord. Inbound
   </Step>
 </Steps>
 
+## DNS Records To Expect
+
+Woes shows the exact DNS values for your domain, but the records usually fall
+into these groups:
+
+| Area | Record | Purpose |
+| --- | --- | --- |
+| Domain verification | TXT DKIM record | Proves the sending domain belongs to your workspace. |
+| Sending | MX and TXT SPF records | Lets Resend send mail for the domain and handle delivery signals. |
+| DMARC | TXT record | Defines domain policy for receiving mail providers. |
+| Receiving | MX record | Routes inbound support mail to Woes. |
+| Tracking | CNAME record | Enables branded link and open tracking when enabled. |
+
+Use a subdomain such as `support.example.com` when the root domain already has
+MX records for Google Workspace, Microsoft 365, or another inbox provider.
+
 ## Inbound Email
 
 Inbound email is received through the Resend webhook and written into the shared `support_conversations` and `support_messages` model with `channel = email`.
+
+After DNS verifies, send a real email to the configured support address and
+confirm it appears in **Inbox** as an email conversation. Then reply from Woes
+and confirm the customer receives the response from the expected sender.
 
 ## Survey Emails
 

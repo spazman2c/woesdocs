@@ -77,6 +77,47 @@ AI topic values are `api-question`, `human-request`, `off-topic`, `greeting`, `c
 | Snooze issue | Moves the item into waiting until a future time. | Snooze duration. |
 | Archive issue | Moves the conversation out of the active inbox. | None. |
 
+## Common Recipes
+
+Use these as starting points, then adjust conditions for your workspace.
+
+### Route New API Questions To AI
+
+| Step | Node |
+| --- | --- |
+| 1 | Trigger: **Issue created** or **New live chat conversation** |
+| 2 | If condition: `channel` is `live chat` and `message text` mentions an API topic |
+| 3 | Action: **Hand to AI agent** |
+| 4 | Action: **Set priority** to `Medium` |
+
+### Escalate Missing Context
+
+| Step | Node |
+| --- | --- |
+| 1 | Trigger: **Customer replied** |
+| 2 | AI condition: `AI outcome` is `handed-off` |
+| 3 | Action: **Add tag** such as `needs-context` |
+| 4 | Action: **Human handoff** |
+| 5 | Action: **Notify** the owning team |
+
+### Collect CSAT After Resolution
+
+| Step | Node |
+| --- | --- |
+| 1 | Trigger: **Issue solved** |
+| 2 | Delay: wait until the customer has had time to read the resolution |
+| 3 | If condition: issue does not already have the survey exclusion tag |
+| 4 | Action: **Send CSAT survey** |
+
+### Reopen When A Customer Replies
+
+| Step | Node |
+| --- | --- |
+| 1 | Trigger: **Customer replied** |
+| 2 | If condition: `status` is `solved` or `archived` |
+| 3 | Action: **Set status** to `Open` |
+| 4 | Action: **Assign team** or **Notify** |
+
 ## Assignment And Routing
 
 Automations can assign individual issues to an AI agent, account owner, specific user, or team. Use [Assignment](/settings/assignment) when you need persistent team routing rules with skills, capacity, schedules, or route previews.

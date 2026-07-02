@@ -104,6 +104,42 @@ document.addEventListener("visibilitychange", () => {
 
 For JWT mode, send `{ jwt: identity.jwt }` instead. See [Widget Identity](/security/widget-identity) for the server-side HMAC/JWT contract.
 
+For verified installs, call `identify` with the server-generated HMAC email hash
+or JWT before the visitor sends their first message.
+
+```js
+window.Woes("identify", {
+  email: identity.email,
+  name: identity.name,
+  company: identity.company,
+  id: identity.id,
+  email_hash: identity.email_hash,
+});
+
+window.Woes("identify", {
+  jwt: identity.jwt,
+});
+```
+
+If your application may call `identify` before `widget.js` finishes loading,
+create the queued API first.
+
+```html
+<script>
+  window.Woes =
+    window.Woes ||
+    function () {
+      (window.Woes.q = window.Woes.q || []).push(
+        Array.prototype.slice.call(arguments),
+      );
+    };
+</script>
+```
+
+Woes verifies HMAC/JWT proofs against the exact widget key installed on the
+page. In **Settings → Security**, select that agent and use **Test an identity
+proof** to confirm the backend output before testing a live chat.
+
 ## Prefill Conversation Metadata
 
 Use metadata fields to help operators understand the customer's current page or workflow.

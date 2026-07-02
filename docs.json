@@ -4,9 +4,9 @@
   "name": "Woes",
   "description": "Customer-facing documentation and REST API reference for Woes, the API-native developer support platform.",
   "colors": {
-    "primary": "#FF7038",
-    "light": "#FF7038",
-    "dark": "#FF7038"
+    "primary": "#B83A12",
+    "light": "#E05A22",
+    "dark": "#E05A22"
   },
   "icons": {
     "library": "lucide"
@@ -202,6 +202,8 @@
                   "index",
                   "quickstart/overview",
                   "quickstart/add-context",
+                  "agents/create-agents",
+                  "quickstart/install-widget",
                   "quickstart/invite-team"
                 ],
                 "expanded": false
@@ -376,6 +378,20 @@
                   "api/widget",
                   "api/widget-routes",
                   "api/surveys"
+                ]
+              },
+              {
+                "group": "Resource guides",
+                "expanded": false,
+                "pages": [
+                  "api/conversations",
+                  "api/issues",
+                  "api/clients",
+                  "api/agents",
+                  "api/sources",
+                  "api/definitions",
+                  "api/usage",
+                  "api/analytics"
                 ]
               },
               {

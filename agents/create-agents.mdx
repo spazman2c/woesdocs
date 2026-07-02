@@ -7,6 +7,19 @@ description: "Create agents, attach context, configure behavior, and manage agen
 
 Use **Agents** to create specialized support agents for different products, docs areas, customer segments, or API domains.
 
+## When To Create More Than One Agent
+
+Use one default agent when every customer should receive the same product and
+API support. Create additional agents when the answer should depend on a
+different context set, site, product line, or audience.
+
+| Pattern | Example |
+| --- | --- |
+| Docs agent | Routes docs visitors to public API documentation and SDK examples. |
+| Product agent | Routes signed-in app users to product-specific help and account-safe flows. |
+| Segment agent | Routes enterprise customers to higher-touch runbooks and escalation rules. |
+| API area agent | Routes billing, webhook, or data-platform questions to focused sources. |
+
 ## Create an Agent
 
 <Steps>
@@ -27,6 +40,21 @@ Use **Agents** to create specialized support agents for different products, docs
   </Step>
 </Steps>
 
+## Test Before Routing Customers
+
+Use questions that match real support traffic:
+
+| Test | What to check |
+| --- | --- |
+| Known endpoint | The agent cites the attached source and gives the right method, path, fields, and auth requirement. |
+| Missing context | The agent clarifies or hands off instead of inventing an endpoint. |
+| Product mismatch | The agent does not answer from another product's source. |
+| Human request | The agent routes cleanly to an operator. |
+
+If a question fails, first check the **Context** tab for missing or unattached
+sources. Then tune behavior or guardrails only after the right source material
+is attached.
+
 ## Agent Sections
 
 | Section | Use it for |
@@ -46,6 +74,10 @@ Each agent can have its own widget public key. Use this when you want a differen
 
 Find all agent keys in **Settings → Keys**.
 
+When you install an agent widget key, that key controls the widget copy,
+attached context, identity verification settings, and routing for that site.
+If two sites need different behavior, give each one a different agent key.
+
 ## Billing And Capacity
 
 Agent capacity is plan-aware. The active plan includes a fixed number of agents
@@ -59,7 +91,6 @@ capacity.
 ## Bring Your Own AI
 
 Agent creation and source attachment are separate from model-provider billing.
-If the workspace is on the [Bring Your Own AI](/settings/bring-your-own-ai)
-plan and has an active provider, saved agents use the same grounding and
-confidence rules while model execution routes through the customer's provider
-key.
+If the workspace uses [Bring Your Own AI](/settings/bring-your-own-ai), saved
+agents keep the same grounding, confidence, clarification, and handoff rules.
+Only server-side model execution changes.

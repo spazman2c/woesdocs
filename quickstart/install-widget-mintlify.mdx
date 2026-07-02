@@ -35,7 +35,7 @@ If you want Codex, Cursor, Claude Code, or another coding agent to install the w
   Goal:
 
   * Add the Woes widget to every docs page.
-  * Use the production loader: [https://woes.dev/widget.js](https://woes.dev/widget.js).
+  * Use the production loader: https://woes.dev/widget.js.
   * Use a public widget key only. Never use or ask for a Woes REST API key, Supabase key, workspace secret, or identity verification secret.
 
   Workflow:
@@ -49,8 +49,8 @@ If you want Codex, Cursor, Claude Code, or another coding agent to install the w
   4. The file should install the widget once, guard against duplicate injection, create the Woes command queue before loading the script, and append this script:
 
      var script = document.createElement("script");
-     script.src = "[https://woes.dev/widget.js](https://woes.dev/widget.js)";
-     script.setAttribute("data-public-key", "YOUR\_WIDGET\_PUBLIC\_KEY");
+     script.src = "https://woes.dev/widget.js";
+     script.setAttribute("data-public-key", "YOUR_WIDGET_PUBLIC_KEY");
      document.head.appendChild(script);
 
   5. If this Mintlify setup uses a different custom script mechanism, follow the existing project pattern instead of creating a duplicate loader.
@@ -61,7 +61,7 @@ If you want Codex, Cursor, Claude Code, or another coding agent to install the w
 
   8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw\_..., trovw\_agent\_..., or woesw\_....
 
-  9. Replace YOUR\_WIDGET\_PUBLIC\_KEY with the key I provide, then show me the changed files and validation results.
+  9. Replace YOUR_WIDGET_PUBLIC_KEY with the key I provide, then show me the changed files and validation results.
 </textarea>
 
 ## Recommended Install
@@ -111,7 +111,7 @@ Mintlify will rebuild the docs site from the pushed commit. After the deploy fin
 
 ## Direct Snippet
 
-If your Mintlify setup supports adding a raw script directly, use the same snippet Woes provides in **Settings → Install**:
+If your Mintlify setup supports adding a raw script directly, use the same snippet Woes provides in **Settings → Channels → Live chat**:
 
 ```html
 <script

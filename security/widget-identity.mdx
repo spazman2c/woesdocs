@@ -51,6 +51,34 @@ The browser should fetch that endpoint and call `window.Woes("identify", ...)`:
 
 Calling `identify` repeatedly for the same current user is safe. Do not suppress retries for the same HMAC or JWT before Woes has accepted it; retries prevent boot-order races from leaving a logged-in customer anonymous.
 
+<Warning>
+  The script tag and the identity proof must use the same selected agent widget
+  key. A valid HMAC or JWT for one agent does not verify a visitor on another
+  agent's widget key.
+</Warning>
+
+The identity secret is private signing material. Keep it on your server only.
+Do not paste it into client JavaScript, mobile apps, documentation, or AI
+coding prompts.
+
+## Verify an Install
+
+Use **Settings → Security** to confirm both halves of the integration:
+
+1. Select the agent widget key installed on the site.
+2. Open the site page where the widget script is installed.
+3. In Woes, click **Refresh** in **Install check**. The site origin should appear
+   with a recent `last seen` time.
+4. Generate a real identity proof from your application backend.
+5. Paste the customer email and `email_hash` for HMAC mode, or paste the JWT for
+   JWT mode, into **Test an identity proof**.
+6. Click **Verify proof** before testing a live chat message.
+
+If the proof fails, check that the backend uses the identity secret from the
+same selected agent, that the browser snippet uses that agent's public widget
+key, and that the email is normalized with `trim().toLowerCase()` before
+signing.
+
 ## HMAC Email
 
 In HMAC mode, your backend signs the normalized customer email using the selected agent widget's identity secret. The browser sends the email and hash to Woes.
@@ -99,6 +127,10 @@ window.Woes("identify", {
   company: identity.company,
 });
 ```
+
+Call `identify` after your backend returns the proof and before the visitor sends
+their first message. The widget asks Woes to verify the proof before it treats
+the visitor as verified.
 
 ## JWT
 
@@ -149,6 +181,9 @@ JWT identity tokens must use `HS256`, include an `email` claim, and set `aud` to
 - Treat `401` from the identity endpoint as anonymous mode unless strict verified identity is required.
 - Call `window.Woes("identify", identity)` every time a valid signed identity is returned.
 - Verify a logged-in test visitor sends a message and appears in Woes with their email/name and `identity_source` of `widget-token`.
+
+The `aud` claim must exactly match the `data-public-key` in the installed widget
+script.
 
 ## Copy Prompt for AI Install
 

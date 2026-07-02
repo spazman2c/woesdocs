@@ -7,6 +7,20 @@ description: "A practical path to get a Woes workspace ready for API-native deve
 
 Use this guide to move from an empty workspace to a support-ready Woes setup.
 
+## Before You Start
+
+Have these ready:
+
+- One source of truth for your API support context: docs URL, OpenAPI file,
+  Postman documenter link, GitHub repository, or Markdown runbook.
+- A few real customer questions your team receives today.
+- Access to the site where the live chat widget will be installed.
+- An operator account with permission to manage Context, Agents, Channels, and
+  Settings.
+
+Most teams can complete the first working setup in 15 to 30 minutes. Start with
+one strong context source, test the agent, then add channels and automation.
+
 ## Setup Checklist
 
 <Steps>
@@ -14,13 +28,18 @@ Use this guide to move from an empty workspace to a support-ready Woes setup.
     Confirm the workspace name, support URL, timezone, and company details in **Settings**.
   </Step>
   <Step title="Add source context">
-    Add at least one source in **Context**. Woes works best when the source includes endpoint paths, auth rules, examples, request bodies, response shapes, and error cases.
+    Add at least one source in **Context**. Woes works best when the source
+    includes endpoint paths, auth rules, examples, request bodies, response
+    shapes, and error cases.
   </Step>
   <Step title="Create or tune an agent">
-    Use **Agents** to attach source context to an agent. Each agent can have its own context, behavior, guardrails, and widget key.
+    Use **Agents** to attach source context to an agent. Each agent can have its
+    own context, behavior, guardrails, and widget key.
   </Step>
   <Step title="Install a customer channel">
     Install the live chat widget, connect an email domain, or connect Discord.
+    Live chat is the fastest first channel because you can test it immediately
+    from your own site.
   </Step>
   <Step title="Invite operators">
     Add team members in **Settings → Users** and assign the right role.
@@ -29,6 +48,20 @@ Use this guide to move from an empty workspace to a support-ready Woes setup.
     Use **Analytics** after the first conversations to inspect answer rate, skip reasons, confidence, surveys, and feedback.
   </Step>
 </Steps>
+
+## A Good First Test
+
+After the first source and agent are ready, ask the agent three questions:
+
+| Question type | Example | What success looks like |
+| --- | --- | --- |
+| Exact endpoint | "How do I create a customer?" | The agent names the right endpoint, method, required fields, and auth expectations. |
+| Troubleshooting | "Why am I getting a 401?" | The agent explains the relevant auth rule and asks for missing details instead of guessing. |
+| Out-of-scope | "Can you change my billing plan?" | The agent hands off or clarifies because the answer depends on account-specific data. |
+
+If the answer is weak, open the source detail in **Context** and check whether
+the missing endpoint, schema, or behavior was actually indexed. Fixing source
+coverage usually improves the agent faster than rewriting prompts.
 
 ## Workspace Surfaces
 

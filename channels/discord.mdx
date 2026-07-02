@@ -40,6 +40,23 @@ Discord support routes server messages into Woes using the same conversation and
 
 Woes maps Discord messages to conversations using server and channel/thread context. Forum posts and threads can map to the same support conversation where supported.
 
+## Production Checklist
+
+Before relying on Discord in production:
+
+- Confirm the bot is invited to the right server.
+- Select only the channels Woes should ingest.
+- Make sure the bot has permission to read messages, send replies, and read
+  thread/forum activity where needed.
+- Run only one gateway worker for the same bot token and workspace deployment.
+- Verify the bot token is stored in server-side environment variables, not in
+  docs, client code, or screenshots.
+- Send one test message and confirm exactly one Woes conversation is created.
+
+If Discord reports repeated reconnects or token resets, stop the worker,
+confirm there are no duplicate deployments using the same token, rotate the
+token, and restart a single production worker.
+
 ## Operator Workflow
 
 Operators handle Discord messages from Inbox just like other channels. They can take over from AI, reply, add notes, tag the conversation, or convert it into an issue.

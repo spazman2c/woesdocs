@@ -7,6 +7,17 @@ description: "Connect GitHub repositories as API context sources for docs, SDK e
 
 GitHub repositories can be used as context sources. This is useful when your API support knowledge lives near code, SDK examples, docs folders, sample apps, or README files.
 
+## Before You Connect
+
+GitHub import requires the Woes server to have GitHub OAuth configured. If the
+import window says GitHub is not configured, an admin needs to set the GitHub
+client id, client secret, and token encryption secret in the production
+environment before users can authorize repositories.
+
+You also need access to the GitHub account or organization that owns the
+repository. Woes can only list repositories that GitHub grants to the
+authorized connection.
+
 ## Setup Flow
 
 <Steps>
@@ -15,6 +26,10 @@ GitHub repositories can be used as context sources. This is useful when your API
   </Step>
   <Step title="Choose a repository">
     Pick the owner, repository, and branch that should be scanned.
+  </Step>
+  <Step title="Filter if needed">
+    Search the repository list when you have access to many repos. Private
+    repositories display with a lock icon.
   </Step>
   <Step title="Create the source">
     Woes creates a `github` source with repository metadata.
@@ -36,6 +51,17 @@ GitHub repositories can be used as context sources. This is useful when your API
 - Error-handling guides.
 - Authentication examples.
 - Webhook examples.
+
+## What Woes Scans
+
+Repository ingestion prioritizes documentation-oriented files such as Markdown,
+MDX, docs folders, README files, examples, and SDK usage notes. It is designed
+to build support context, not to index arbitrary private application code as a
+customer-facing answer source.
+
+After import, open the created source in **Context** to review the scanned files,
+source status, and any partial-ingestion warnings before attaching it to an
+agent.
 
 ## Security Notes
 

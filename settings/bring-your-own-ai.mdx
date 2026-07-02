@@ -1,6 +1,6 @@
 ---
 title: "Bring Your Own AI"
-description: "Connect customer-owned OpenAI, Anthropic, or Google model keys for Woes support agents."
+description: "Connect customer-owned AI provider keys for Woes support agents."
 ---
 
 # Bring Your Own AI
@@ -19,45 +19,33 @@ admins back to [Billing](/settings/billing).
 
 ## Supported Providers
 
-Woes supports a curated provider list:
+Woes supports a curated provider list in the app. The available providers and
+models may change as Woes updates its server-side routing and reliability
+controls.
 
-| Provider | Where to get a key |
-| --- | --- |
-| OpenAI | `platform.openai.com` |
-| Claude (Anthropic) | `console.anthropic.com` |
-| Google (Gemini) | `aistudio.google.com` |
-
-Each provider entry can have one stored key. A workspace can connect multiple
-providers, but only one provider is active for support-agent routing at a time.
+Each provider entry can have one stored key. A workspace can connect more than
+one provider, but only one provider is active for support-agent routing at a
+time.
 
 ## Frontier Model Selection
 
-Woes exposes a curated list of frontier model ids for each provider. The model
-picker prevents unsupported free-form model strings from being routed at
-runtime.
+Woes exposes a curated model picker for the active provider. The picker prevents
+unsupported free-form model strings from being routed at runtime.
 
 If a stored or submitted model id is empty, stale, or unsupported, Woes falls
-back to the default model for that provider.
-
-Current default models:
-
-| Provider | Default model |
-| --- | --- |
-| Claude (Anthropic) | Claude Opus 4.8 |
-| OpenAI | GPT-5.5 |
-| Google (Gemini) | Gemini 3.1 Pro |
+back to the provider default configured by the platform.
 
 ## Setup Flow
 
 <Steps>
   <Step title="Switch to the plan">
-    Open **Settings -> Billing** and switch to **Bring Your Own AI**.
+    Open **Settings → Billing** and switch to **Bring Your Own AI**.
   </Step>
   <Step title="Open Bring Your Own AI">
-    After the plan is active, open **Settings -> Bring Your Own AI**.
+    After the plan is active, open **Settings → Bring Your Own AI**.
   </Step>
   <Step title="Choose a provider">
-    Select OpenAI, Claude, or Google.
+    Select one of the supported providers shown in the app.
   </Step>
   <Step title="Paste the provider key">
     Paste the provider API key from the provider console. Woes never shows the
@@ -79,7 +67,7 @@ When a workspace is on the Bring Your Own AI plan and has not connected a
 provider, Woes can guide admins through a focused setup wizard. The wizard:
 
 - Explains the plan and provider routing behavior.
-- Walks through OpenAI, Claude, and Google key setup.
+- Walks through provider-key setup.
 - Verifies connected keys.
 - Activates the first connected provider by default.
 - Lets admins skip setup for the current session.
@@ -138,4 +126,3 @@ the customer's provider account according to that provider's pricing.
 
 Review [Billing](/settings/billing) for plan status, subscription management,
 and workspace capacity.
-

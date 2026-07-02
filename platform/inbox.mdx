@@ -44,6 +44,19 @@ When the AI is actively handling a conversation, the normal operator composer is
   </Step>
 </Steps>
 
+## AI Handling States
+
+| State | What operators can do | What customers see |
+| --- | --- | --- |
+| AI handling | Review evidence, confidence, and trace summary; take over when needed. | The assistant replies when it has enough grounded context. |
+| Operator owned | Reply normally, add notes, assign, tag, convert to issue, or close. | Human operator replies through the active channel. |
+| Closed | Reopen, archive, or start a follow-up workflow. | The widget shows the closed state and lets the customer start a new conversation when enabled. |
+| Handoff needed | Take over, tag missing context, or create follow-up work. | The assistant avoids guessing and routes the conversation to support. |
+
+Customer-visible replies, operator-only notes, AI trace details, and internal
+confidence data stay separate. Do not copy trace output into a customer reply
+unless you intentionally rewrite it as a safe support answer.
+
 ## Active Viewing
 
 Inbox shows who is viewing a conversation in real time. Avatars appear in the conversation header and queue rows so operators can avoid duplicate work.
