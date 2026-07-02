@@ -8,7 +8,7 @@ description: "Add the Woes live chat widget to a Mintlify documentation site."
 Mintlify can load custom JavaScript from your docs repository. Use that to add the Woes widget once, then let it appear across every page in your documentation site.
 
 <Note>
-  The widget uses a public widget key such as `trovw_...` or `trovw_agent_...`. Do not use a `woesk_` REST API key in browser code.
+  The widget uses a browser-safe public widget key such as `trovw_...`, `trovw_agent_...`, or `woesw_...`. Do not use a `woesk_` REST API key, workspace secret, or widget identity secret in browser code.
 </Note>
 
 ## Before You Start
@@ -59,7 +59,7 @@ If you want Codex, Cursor, Claude Code, or another coding agent to install the w
 
   7. Run the narrowest available docs validation, such as JSON parsing for docs.json and any existing lint/build command.
 
-  8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw\_... or trovw\_agent\_....
+  8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw\_..., trovw\_agent\_..., or woesw\_....
 
   9. Replace YOUR\_WIDGET\_PUBLIC\_KEY with the key I provide, then show me the changed files and validation results.
 </textarea>
@@ -91,10 +91,10 @@ For example, create `woes-widget.js`:
 })();
 ```
 
-Replace `YOUR_WIDGET_PUBLIC_KEY` with the key copied from Woes.
+Replace `YOUR_WIDGET_PUBLIC_KEY` with the public widget key copied from your own Woes workspace or agent.
 
 <Tip>
-  The Woes docs site uses this same pattern with its own public widget key: `trovw_agent_07f3655b89074d4cb7763725fcfafc64`.
+  Public widget keys are designed to be embedded in browser pages. They identify the widget workspace or agent, but they are not REST API keys and do not prove visitor identity.
 </Tip>
 
 ## Deploy The Change
