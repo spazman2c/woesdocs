@@ -6,14 +6,11 @@ description: "A customer-facing map of Woes API, widget, webhook, and authentica
 
 # Route Map
 
-This page is a high-level route map inside the API Reference tab. It is not a
-complete public API contract. Use the generated endpoint pages for exact
-`/api/v1` schemas and runnable examples.
+This page is a high-level route map inside the API Reference tab. It is not a complete public API contract. Use the generated endpoint pages for exact `/api/v1` schemas and runnable examples, and use [Widget Routes](/api/widget-routes) for public widget route boundaries.
 
 ## Public REST API
 
-These routes use `Authorization: Bearer <woesk_...>` workspace API keys and are
-documented in the generated API Reference.
+These routes use `Authorization: Bearer <woesk_...>` workspace API keys and are documented in the generated API Reference.
 
 | Route family | Purpose |
 | --- | --- |
@@ -39,27 +36,37 @@ documented in the generated API Reference.
 
 ## Widget And Customer Routes
 
-These routes are customer-facing or webhook-facing. They do not accept `woesk_`
-workspace API keys.
+These routes are customer-facing, SDK-facing, or webhook-facing. They do not accept `woesk_` workspace API keys.
 
 | Route family | Purpose |
 | --- | --- |
-| `/api/widget/messages` | Customer widget conversation flow. |
-| `/api/widget/events` | Widget event tracking. |
-| `/api/widget/presence` | Customer presence heartbeat. |
-| `/api/widget/csat` | Widget survey responses. |
+| `/api/widget/config` | Public widget presentation config for a workspace or agent key. |
+| `/api/widget/identity` | HMAC/JWT identity proof verification for a widget key. |
+| `/api/widget/messages` | Customer widget conversation creation, message send, and history. |
+| `/api/widget/events` | Widget impression, open, close, and engagement tracking. |
+| `/api/widget/presence` | Customer presence heartbeat for an existing widget conversation. |
+| `/api/widget/feedback` | Message feedback state for a verified widget conversation. |
+| `/api/widget/csat` | Widget CSAT or NPS survey responses. |
+| `/api/widget/updates` | Published widget updates and optional verified-reader read state. |
+| `/api/widget/updates/read` | Mark widget updates read for a verified reader. |
+| `/api/client-portal/auth/request-code` | Request a customer portal magic code. |
+| `/api/client-portal/auth/verify-code` | Verify a customer portal magic code and start a portal session. |
+| `/api/client-portal/auth/logout` | End a customer portal session. |
+| `/api/client-portal/issues` | Customer-safe portal issue list and creation for valid portal sessions. |
+| `/api/client-portal/issues/{issueId}` | Customer-safe portal issue detail for valid portal sessions. |
+| `/api/client-portal/issues/{issueId}/messages` | Customer portal issue message creation. |
+| `/api/client-portal/members` | Customer portal member list and invite flows. |
 | `/api/surveys/email-response` | Signed email survey response capture. |
-| `/api/email/inbound/resend` | Inbound email webhook. |
-| `/api/discord/events` | Discord event handling. |
+| `/api/email/unsubscribe` | Signed customer email unsubscribe flow. |
 
 ## Authenticated Workspace Routes
 
-These routes power the Woes app and require a signed-in workspace user with the
-right permissions.
+These routes power the Woes app and require a signed-in workspace user with the right permissions. They do not accept widget public keys or `/api/v1` workspace API keys.
 
 | Route family | Purpose |
 | --- | --- |
 | `/api/account/settings` | Load and save workspace settings. |
+| `/api/account/profile` | Load and update the current operator profile. |
 | `/api/account/api-keys` | Create, list, and revoke workspace API keys. |
 | `/api/account/billing/usage` | Load plan usage, API key usage, add-ons, and subscription status. |
 | `/api/account/billing/plan` | Start a plan-change Checkout flow or update plan state when Stripe is not configured. |
@@ -68,21 +75,84 @@ right permissions.
 | `/api/account/csat` | Compatibility analytics route returning typed survey responses. |
 | `/api/account/surveys/email` | Send enabled email surveys. |
 | `/api/account/widget-analytics` | Load widget event analytics. |
+| `/api/account/widget/installation` | Load recent external widget install origins. |
+| `/api/account/widget/support-identity` | Load safe support identity fields used by widget/install tooling. |
 | `/api/account/ai-providers` | Manage Bring Your Own AI provider keys for entitled workspaces. |
+| `/api/account/ai-providers/test` | Test a Bring Your Own AI provider connection. |
+| `/api/account/ai-providers/activate` | Activate a Bring Your Own AI provider. |
+| `/api/account/assignment` | Save assignment and routing configuration. |
+| `/api/account/automations/logs` | Load automation execution logs. |
+| `/api/account/automations/test` | Test an automation rule safely. |
+| `/api/account/macros` | Create, list, update, and delete operator macros. |
+| `/api/account/notifications/preferences` | Load and save operator notification preferences. |
+| `/api/account/updates` | Create and list widget/customer updates. |
+| `/api/account/updates/{id}` | Read, update, or delete one widget/customer update. |
+| `/api/account/assets` | Upload workspace assets. |
+| `/api/account/invitations` | Invite workspace members. |
+| `/api/account/invitations/verify` | Verify invitation state. |
+| `/api/account/invitations/accept` | Accept a workspace invitation. |
+| `/api/account/status` | Save workspace status configuration. |
+| `/api/support-agent/settings` | Load and save support-agent workspace settings. |
+| `/api/support-agent/test` | Run support-agent test prompts. |
+| `/api/support-agent/feedback` | Record and review support-agent answer feedback. |
 | `/api/support-agent/runs` | Load support-agent run analytics. |
 | `/api/support-agents` | Manage workspace agents. |
-| `/api/support-agents/[id]/learn` | Run context learning for an agent. |
+| `/api/support-agents/{id}` | Read, update, or delete one agent. |
+| `/api/support-agents/{id}/learn` | Run context learning for an agent. |
+| `/api/support-agents/channels` | Load and save agent channel routing. |
 | `/api/api-sources` | Manage API context sources. |
-| `/api/clients` | Load aggregated client records. |
-| `/api/client-portal/issues` | Customer-safe portal issue list and creation for valid portal sessions. |
-| `/api/client-portal/issues/[issueId]` | Customer-safe portal issue detail and messages for valid portal sessions. |
+| `/api/api-sources/{id}` | Read, update, or delete one API context source. |
+| `/api/api-sources/{id}/auth` | Manage a source's API auth/test credentials. |
+| `/api/api-sources/{id}/test` | Run a guarded API source test. |
+| `/api/api-sources/{id}/rescan` | Rescan an API source. |
+| `/api/clients` | Load and manage aggregated client records. |
+| `/api/clients/rundown` | Generate an AI rundown for a client profile. |
 | `/api/issues` | Manage support issues. |
 | `/api/notes` | Manage internal notes. |
+| `/api/notifications` | Load operator notifications. |
+| `/api/notifications/read` | Mark notifications read. |
+| `/api/notifications/push/key` | Load the public web push key. |
+| `/api/notifications/push/subscribe` | Create or remove web push subscriptions. |
+| `/api/live-chat/conversations` | Authenticated in-app live chat preview and operator conversation flow. |
+| `/api/live-chat/identity` | Load authenticated operator live-chat identity. |
+| `/api/email/domains` | Manage sending domains. |
+| `/api/email/domains/{id}` | Read or delete a sending domain. |
+| `/api/email/domains/{id}/verify` | Trigger domain verification. |
+| `/api/email/send` | Send an outbound email reply. |
+| `/api/discord/channels` | Load available Discord channels. |
+| `/api/discord/install/start` | Start Discord installation. |
+| `/api/discord/install/callback` | Finish Discord installation. |
+| `/api/integrations/github` | Load or disconnect GitHub integration state. |
+| `/api/integrations/github/connect` | Start GitHub integration connection. |
+| `/api/integrations/github/callback` | Finish GitHub integration connection. |
+| `/api/integrations/github/repos` | List GitHub repositories visible to the integration. |
+
+## Team Chat Routes
+
+Team Chat routes are authenticated workspace routes for internal teammate messaging. They are listed separately because they are not customer live chat and are not public REST API endpoints.
+
+| Route family | Purpose |
+| --- | --- |
+| `/api/team-chat/conversations` | List or create DMs and internal conversations. |
+| `/api/team-chat/conversations/{conversationId}/messages` | List or send Team Chat messages. |
+| `/api/team-chat/conversations/{conversationId}/messages/{messageId}` | Edit or delete a Team Chat message. |
+| `/api/team-chat/conversations/{conversationId}/attachments` | List or create Team Chat attachments. |
+| `/api/team-chat/conversations/{conversationId}/reactions` | List or add message reactions. |
+| `/api/team-chat/conversations/{conversationId}/read` | Mark a Team Chat conversation read. |
+| `/api/team-chat/channels` | List joined/discoverable channels or create a channel. |
+| `/api/team-chat/channels/{conversationId}` | Update channel settings. |
+| `/api/team-chat/channels/{conversationId}/members` | List or add channel members. |
+| `/api/team-chat/channels/{conversationId}/members/{userId}` | Remove a channel member. |
+| `/api/team-chat/channels/{conversationId}/join` | Join a discoverable channel. |
+| `/api/team-chat/channels/{conversationId}/leave` | Leave a channel. |
+| `/api/team-chat/channels/{conversationId}/archive` | Archive a channel. |
+| `/api/team-chat/channels/{conversationId}/unarchive` | Restore an archived channel. |
+
+See [Team Chat](/platform/team-chat) for product behavior, permissions, and boundaries.
 
 ## Webhook Routes
 
-Webhook routes are server-to-server integration endpoints. They do not accept
-workspace API keys.
+Webhook routes are server-to-server integration endpoints. They do not accept workspace API keys.
 
 | Route family | Purpose |
 | --- | --- |
@@ -90,8 +160,10 @@ workspace API keys.
 | `/api/email/inbound/resend` | Receives inbound email events from Resend. |
 | `/api/discord/events` | Receives Discord interaction and message events. |
 
+## Admin Routes
+
+Admin routes under `/api/admin/*` are platform-admin only. They are intentionally not customer API surfaces.
+
 <Note>
-  Routes listed here may require authentication, workspace permissions, signed
-  tokens, provider webhooks, or public widget keys depending on the route
-  family.
+  Routes listed here may require authentication, workspace permissions, signed tokens, provider webhooks, public widget keys, conversation secrets, or platform-admin access depending on the route family.
 </Note>

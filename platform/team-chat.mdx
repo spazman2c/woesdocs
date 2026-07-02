@@ -1,0 +1,102 @@
+---
+title: "Team Chat"
+description: "Use internal workspace chat for teammate DMs, channels, presence, attachments, reactions, and collaboration away from customer conversations."
+---
+
+# Team Chat
+
+Team Chat is internal teammate-to-teammate messaging inside a Woes workspace. It is separate from customer-facing live chat: customers never see Team Chat messages, and Team Chat does not create customer support conversations.
+
+## When To Use It
+
+| Use Team Chat for | Use Inbox or Issues for |
+| --- | --- |
+| Internal coordination. | Customer-visible replies. |
+| Asking another operator for help. | Customer support handoff. |
+| DMs, private channels, and public workspace channels. | Tracking support work against a customer. |
+| Sharing attachments or notes with teammates. | Customer portal visibility. |
+
+## Conversations And Channels
+
+Team Chat supports two conversation types:
+
+| Type | Details |
+| --- | --- |
+| Direct messages | One-to-one teammate conversations. Woes derives a stable DM key for the two users. |
+| Channels | Slack-style public, private, and read-only channels with member management. |
+
+Public channels can be discovered and joined by workspace members with Team Chat access. Private channels require membership. Read-only channels can limit posting while still letting members follow updates.
+
+## Core Actions
+
+Operators can:
+
+- Start or continue DMs.
+- Create channels.
+- Browse and join discoverable channels.
+- Leave channels where they are a member.
+- Archive or unarchive channels when permitted.
+- Manage members in channel settings.
+- Send, edit, and delete their own messages.
+- Add emoji reactions.
+- Attach files to messages.
+- Mark conversations read.
+
+## Permissions
+
+Team Chat respects workspace permissions and membership checks.
+
+| Permission | Allows |
+| --- | --- |
+| `chat.read` | Open Team Chat and read conversations/channels the user can access. |
+| `chat.write` | Send messages, reactions, attachments, read receipts, and create/join conversations allowed by membership. |
+| Channel membership | Read or write a private channel. |
+| Channel owner/admin access | Manage channel settings, membership, archive state, and destructive actions. |
+
+If a user does not have Team Chat access, Woes shows an access state instead of the chat surface.
+
+## Presence And Realtime
+
+Team Chat uses the same workspace realtime presence foundation as the rest of Woes. While Team Chat is open, teammates can appear online, idle, or recently active. Realtime subscriptions update messages, reactions, attachments, membership, read state, and channel lists without requiring a refresh.
+
+Presence is operator context, not authorization. Route handlers still enforce workspace membership, channel membership, and per-action permissions.
+
+## Attachments And Reactions
+
+Attachments are linked to Team Chat messages and remain internal to the workspace. Reactions are scoped to the conversation and update live for everyone who can view the thread.
+
+## Route Boundaries
+
+Team Chat uses authenticated workspace routes under `/api/team-chat/*`. These routes require a signed-in Woes user session and do not accept public widget keys or `woesk_` REST API keys.
+
+Common route families include:
+
+| Route family | Purpose |
+| --- | --- |
+| `/api/team-chat/conversations` | List or create DMs and conversations. |
+| `/api/team-chat/conversations/{conversationId}/messages` | List or send messages. |
+| `/api/team-chat/conversations/{conversationId}/messages/{messageId}` | Edit or delete a message. |
+| `/api/team-chat/conversations/{conversationId}/attachments` | List or create message attachments. |
+| `/api/team-chat/conversations/{conversationId}/reactions` | List or add reactions. |
+| `/api/team-chat/conversations/{conversationId}/read` | Mark a conversation read. |
+| `/api/team-chat/channels` | List joined/discoverable channels or create a channel. |
+| `/api/team-chat/channels/{conversationId}` | Update channel settings. |
+| `/api/team-chat/channels/{conversationId}/members` | List or add channel members. |
+| `/api/team-chat/channels/{conversationId}/join` | Join a discoverable channel. |
+| `/api/team-chat/channels/{conversationId}/leave` | Leave a channel. |
+| `/api/team-chat/channels/{conversationId}/archive` | Archive a channel. |
+| `/api/team-chat/channels/{conversationId}/unarchive` | Restore an archived channel. |
+
+## Safety Notes
+
+- Team Chat is internal to workspace operators.
+- Team Chat messages are not customer-visible.
+- Customer widget credentials do not authorize Team Chat routes.
+- Workspace API keys do not authorize Team Chat routes.
+- Channel membership and workspace tenant checks apply to every request.
+
+## Related Pages
+
+- [Inbox](/platform/inbox)
+- [Users and Permissions](/settings/users-permissions)
+- [Route Map](/reference/routes)
