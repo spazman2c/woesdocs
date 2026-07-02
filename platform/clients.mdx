@@ -21,31 +21,43 @@ Client records are built from conversations, customer identity, custom fields, t
 | Open work | Current open conversations or issues. |
 | Tags and fields | Workspace-defined customer context. |
 
-## Add a Client
+## Health And Attention
 
-Use **Add client** when you want to create an account record before the first
-support conversation arrives.
+Client health is deterministic. It is calculated from current workspace data, not AI judgment.
+
+| Label | Meaning |
+| --- | --- |
+| Needs attention | Open urgent/high-priority work, several open conversations, or activity that clearly needs follow-up. |
+| Watch | Some open work, recent unresolved activity, or weak identity/contact confidence. |
+| Healthy | No active support work is open, or recent activity/resolution patterns look stable. |
+
+The profile also exposes a 0-100 `healthScore` with component scores for activity, conversation burden, and resolutions. Reasons explain why the label was chosen, such as open conversation count, urgent work, recent activity, verified contact count, or resolution rate.
+
+<Tip>
+  Treat health as a support triage signal. It helps decide who to review first; it is not a customer success score, renewal prediction, or AI-generated sentiment grade.
+</Tip>
+
+## Add A Client
+
+Use **Add client** when you want to create an account record before the first support conversation arrives.
 
 <Steps>
   <Step title="Open Clients">
     Click **Add client** from the Clients page header.
   </Step>
   <Step title="Enter account details">
-    Add the client name, optional primary contact, contact email, and internal
-    notes.
+    Add the client name, optional primary contact, contact email, and internal notes.
   </Step>
   <Step title="Create the record">
     Woes creates a manual client seed record and opens the new client profile.
   </Step>
 </Steps>
 
-Manual client records are stored as workspace-scoped customer activity with
-`channel = manual`. They appear in client aggregation, but they do not send a
-customer message or notify the customer.
+Manual client records are stored as workspace-scoped customer activity with `channel = manual`. They appear in client aggregation, but they do not send a customer message or notify the customer.
 
 ## Client Profile
 
-The profile view shows recent activity, conversation history, open work, customer context, and AI rundown tools when enabled.
+The profile view shows recent activity, conversation history, open work, contacts, channel mix, customer context, and AI rundown tools when enabled.
 
 The AI rundown summarizes the client profile from bounded workspace data. It does not fetch private message bodies beyond the allowed profile data and does not expose provider internals.
 
@@ -59,9 +71,13 @@ See [Client Portal](/platform/client-portal).
 
 Presence can be updated by the widget while the customer is active on a page with a valid existing conversation credential. Hidden tabs naturally age out.
 
-Presence is used for operator context and client activity, not for
-authentication. Identity still comes from the widget identity mode configured
-for the install.
+Presence is used for operator context and client activity, not for authentication. Identity still comes from the widget identity mode configured for the install.
+
+## Identity Quality
+
+Verified widget identity, email context, and portal access help Woes merge contacts into the right client profile. Anonymous visitors can still appear in Clients, but they may be grouped by anonymous ids until your product or docs site sends verified identity.
+
+Use [Widget Identity](/security/widget-identity) for signed customer identity and [Widget Routes](/api/widget-routes) for the public route boundaries.
 
 ## Custom Fields
 
@@ -79,3 +95,7 @@ Use custom fields for structured customer data such as:
 <Tip>
   Use tags for quick labels and custom fields for structured data that should appear consistently in customer context.
 </Tip>
+
+## REST API
+
+Server-side integrations can read the same client aggregate through the [Clients API](/api/clients) or generated `/api/v1/clients` endpoint reference. The REST response includes `health`, `healthScore`, metrics, contacts, recent conversations, and open tasks.

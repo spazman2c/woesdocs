@@ -5,13 +5,10 @@ description: "Add the Woes live chat widget to a Mintlify documentation site."
 
 # Install the Widget in Mintlify
 
-Mintlify can load custom JavaScript from your docs repository. Use that to add
-the Woes widget once, then let it appear across every page in your documentation
-site.
+Mintlify can load custom JavaScript from your docs repository. Use that to add the Woes widget once, then let it appear across every page in your documentation site.
 
 <Note>
-  The widget uses a public widget key such as `woesw_...` or
-  `trovw_agent_...`. Do not use a `woesk_` REST API key in browser code.
+  The widget uses a public widget key such as `trovw_...` or `trovw_agent_...`. Do not use a `woesk_` REST API key in browser code.
 </Note>
 
 ## Before You Start
@@ -22,49 +19,54 @@ You need:
 - A Woes workspace or agent widget key from **Settings → Keys**.
 - The production widget loader: `https://woes.dev/widget.js`.
 
-Use a workspace widget key when every docs visitor should route to the default
-agent. Use an agent widget key when your docs site should route visitors to a
-specific docs-focused agent.
+Use a workspace widget key when every docs visitor should route to the default agent. Use an agent widget key when your docs site should route visitors to a specific docs-focused agent.
 
 ## AI Agent Install Prompt
 
-If you want Codex, Cursor, Claude Code, or another coding agent to install the
-widget for you, copy this prompt and run it from your Mintlify docs repository.
+If you want Codex, Cursor, Claude Code, or another coding agent to install the widget for you, copy this prompt and run it from your Mintlify docs repository.
 
 <button className="woes-agent-prompt-copy" data-woes-copy-agent-prompt="mintlify-widget">
   Copy Prompt for the Agent
 </button>
 
 <textarea className="woes-agent-prompt-source" data-woes-agent-prompt="mintlify-widget" readOnly>
-Install the Woes live chat widget in this Mintlify docs repository.
+  Install the Woes live chat widget in this Mintlify docs repository.
 
-Goal:
-- Add the Woes widget to every docs page.
-- Use the production loader: https://woes.dev/widget.js.
-- Use a public widget key only. Never use or ask for a Woes REST API key, Supabase key, workspace secret, or identity verification secret.
+  Goal:
 
-Workflow:
-1. Inspect the repository structure and find the Mintlify root that contains docs.json or mint.json.
-2. Check whether a root-level widget file already exists, such as woes-widget.js.
-3. If it exists, update it carefully. If it does not exist, create woes-widget.js in the Mintlify content root.
-4. The file should install the widget once, guard against duplicate injection, and append this script:
+  * Add the Woes widget to every docs page.
+  * Use the production loader: [https://woes.dev/widget.js](https://woes.dev/widget.js).
+  * Use a public widget key only. Never use or ask for a Woes REST API key, Supabase key, workspace secret, or identity verification secret.
 
-   var script = document.createElement("script");
-   script.src = "https://woes.dev/widget.js";
-   script.setAttribute("data-public-key", "YOUR_WIDGET_PUBLIC_KEY");
-   document.head.appendChild(script);
+  Workflow:
 
-5. If this Mintlify setup uses a different custom script mechanism, follow the existing project pattern instead of creating a duplicate loader.
-6. Do not change unrelated navigation, OpenAPI files, theme settings, or content.
-7. Run the narrowest available docs validation, such as JSON parsing for docs.json and any existing lint/build command.
-8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw_... or trovw_agent_....
-9. Replace YOUR_WIDGET_PUBLIC_KEY with the key I provide, then show me the changed files and validation results.
+  1. Inspect the repository structure and find the Mintlify root that contains docs.json or mint.json.
+
+  2. Check whether a root-level widget file already exists, such as woes-widget.js.
+
+  3. If it exists, update it carefully. If it does not exist, create woes-widget.js in the Mintlify content root.
+
+  4. The file should install the widget once, guard against duplicate injection, create the Woes command queue before loading the script, and append this script:
+
+     var script = document.createElement("script");
+     script.src = "[https://woes.dev/widget.js](https://woes.dev/widget.js)";
+     script.setAttribute("data-public-key", "YOUR\_WIDGET\_PUBLIC\_KEY");
+     document.head.appendChild(script);
+
+  5. If this Mintlify setup uses a different custom script mechanism, follow the existing project pattern instead of creating a duplicate loader.
+
+  6. Do not change unrelated navigation, OpenAPI files, theme settings, or content.
+
+  7. Run the narrowest available docs validation, such as JSON parsing for docs.json and any existing lint/build command.
+
+  8. After the install file is in place and validated, ask me for the Woes public widget key. It should look like trovw\_... or trovw\_agent\_....
+
+  9. Replace YOUR\_WIDGET\_PUBLIC\_KEY with the key I provide, then show me the changed files and validation results.
 </textarea>
 
 ## Recommended Install
 
-Create a JavaScript file in the root of your Mintlify docs content directory,
-next to `docs.json` or `mint.json`.
+Create a JavaScript file in the root of your Mintlify docs content directory, next to `docs.json` or `mint.json`.
 
 For example, create `woes-widget.js`:
 
@@ -72,6 +74,14 @@ For example, create `woes-widget.js`:
 (function () {
   if (window.__woesDocsWidgetInstalled) return;
   window.__woesDocsWidgetInstalled = true;
+
+  window.Woes =
+    window.Woes ||
+    function () {
+      (window.Woes.q = window.Woes.q || []).push(
+        Array.prototype.slice.call(arguments),
+      );
+    };
 
   var script = document.createElement("script");
   script.src = "https://woes.dev/widget.js";
@@ -84,11 +94,10 @@ For example, create `woes-widget.js`:
 Replace `YOUR_WIDGET_PUBLIC_KEY` with the key copied from Woes.
 
 <Tip>
-  The Woes docs site uses this same pattern with its own public widget key:
-  `trovw_agent_07f3655b89074d4cb7763725fcfafc64`.
+  The Woes docs site uses this same pattern with its own public widget key: `trovw_agent_07f3655b89074d4cb7763725fcfafc64`.
 </Tip>
 
-## Deploy the Change
+## Deploy The Change
 
 Commit and push the file to the Git repository connected to Mintlify.
 
@@ -98,13 +107,11 @@ git commit -m "Add Woes docs widget"
 git push
 ```
 
-Mintlify will rebuild the docs site from the pushed commit. After the deploy
-finishes, open the public docs site and confirm the Woes launcher appears.
+Mintlify will rebuild the docs site from the pushed commit. After the deploy finishes, open the public docs site and confirm the Woes launcher appears.
 
 ## Direct Snippet
 
-If your Mintlify setup supports adding a raw script directly, use the same
-snippet Woes provides in **Settings → Install**:
+If your Mintlify setup supports adding a raw script directly, use the same snippet Woes provides in **Settings → Install**:
 
 ```html
 <script
@@ -113,14 +120,13 @@ snippet Woes provides in **Settings → Install**:
 </script>
 ```
 
-The JavaScript-file approach is usually easier to maintain because it keeps the
-widget install in one reusable file.
+The JavaScript-file approach is usually easier to maintain because it keeps the widget install in one reusable file.
 
 ## Identify Signed-In Readers
 
-Most public documentation sites can run anonymously. If your Mintlify docs are
-behind authentication and you can safely provide reader identity, call
-`window.Woes("identify", ...)` after the widget loads.
+Most public documentation sites can run anonymously. If your Mintlify docs are behind authentication and you can safely provide reader identity, call `window.Woes("identify", ...)` after your application receives identity from a backend endpoint.
+
+Unsigned identity can help operators recognize a reader, but it is not trusted identity proof.
 
 ```js
 window.Woes("identify", {
@@ -131,19 +137,17 @@ window.Woes("identify", {
 });
 ```
 
-For account-specific history or higher-trust routing, use signed identity. See
-[Widget Identity](/security/widget-identity). In Woes, open
-**Settings → Security**, select the agent widget key installed on Mintlify, then
-use **Copy prompt for AI install** if you want a coding assistant to wire the
-server-side HMAC or JWT endpoint.
+For account-specific history or higher-trust routing, use signed identity. In Woes, open **Settings → Security**, select the agent widget key installed on Mintlify, then use **Copy prompt for AI install** if you want a coding assistant to wire the server-side HMAC or JWT endpoint.
+
+Verified identity requires a server endpoint outside the Mintlify static docs repo unless your Mintlify site is backed by an authenticated application. That endpoint should return `Cache-Control: no-store` and should never expose `WOES_WIDGET_IDENTITY_SECRET`.
+
+Browser code should retry `window.Woes("identify", ...)` after login/session load, when `widget.js` loads, on window focus, and when the page becomes visible again. Repeating the same verified identity is safe.
 
 <Warning>
-  Generate HMAC proofs or JWTs only on your backend. Never place widget identity
-  secrets, REST API keys, workspace secrets, or customer-private data in the
-  Mintlify repository.
+  Generate HMAC proofs or JWTs only on your backend. Never place widget identity secrets, REST API keys, workspace secrets, or customer-private data in the Mintlify repository.
 </Warning>
 
-## Test the Install
+## Test The Install
 
 After Mintlify deploys:
 
@@ -151,8 +155,8 @@ After Mintlify deploys:
 2. Confirm the Woes launcher appears.
 3. Open the widget and send a test question.
 4. In Woes, open **Inbox** and confirm the conversation arrives.
-5. If you used an agent widget key, confirm the conversation is labeled with
-   the expected agent.
+5. If you used an agent widget key, confirm the conversation is labeled with the expected agent.
+6. If you used signed identity, confirm Woes shows the reader email/name and `identity_source` of `widget-token`.
 
 ## Troubleshooting
 
@@ -161,5 +165,11 @@ After Mintlify deploys:
 | Launcher does not appear | Confirm `woes-widget.js` is in the Mintlify content root and was pushed. |
 | Browser console shows a script error | Confirm the script URL is exactly `https://woes.dev/widget.js`. |
 | Conversation goes to the wrong agent | Use the correct agent widget key from **Agents** or **Settings → Keys**. |
-| Reader appears anonymous | Add `window.Woes("identify", ...)` or configure signed widget identity. |
+| Reader appears anonymous | Confirm the backend identity endpoint exists, the server-only secret is configured, and identify is retried after widget/auth lifecycle events. |
 | Widget key is rejected | Confirm you used a public widget key, not a `woesk_` REST API key. |
+
+## Related Pages
+
+- [Widget Identity](/security/widget-identity)
+- [Widget JavaScript API](/chat-widget/javascript-api)
+- [Widget Routes](/api/widget-routes)

@@ -1,0 +1,91 @@
+---
+title: "Widget Routes"
+sidebarTitle: "Widget routes"
+description: "Public widget route contracts for config, identity, messages, presence, events, feedback, surveys, and updates."
+---
+
+# Widget Routes
+
+Widget routes are public customer-browser routes used by `https://woes.dev/widget.js`, the embedded iframe, and mobile SDKs. They do not accept `woesk_` REST API keys. They authenticate by widget public key and, where conversation state is involved, the per-conversation `conversationSecret` returned when the conversation is created.
+
+<Warning>
+  A widget public key is public routing material, not a private credential. Never use it as proof that a caller can read or mutate a conversation. Conversation history, presence, feedback, and survey writes require the matching `conversationSecret` when they touch an existing thread.
+</Warning>
+
+## Shared Rules
+
+| Rule | Details |
+| --- | --- |
+| CORS | Widget routes are CORS-open for embedded customer sites. |
+| Public key | Pass `publicKey` as a query parameter or JSON body depending on the route. Workspace and agent widget keys are supported. |
+| Conversation secret | Prefer the `x-widget-conversation-secret` header for reads. Query/body `conversationSecret` is supported where noted for browser and SDK compatibility. |
+| Rate limits | Routes apply per-IP and per-workspace rate limits. `429` responses may include `Retry-After`. |
+| Boundaries | Responses must not include workspace secrets, operator debug traces, provider/model internals, service-role data, or another workspace's records. |
+
+## Routes
+
+| Method | Route | Purpose | Requires |
+| --- | --- | --- | --- |
+| `GET` | `/api/widget/config` | Load customer-safe widget branding, settings, surveys, quick links, availability, and identity mode for a widget key. | `publicKey` query. |
+| `POST` | `/api/widget/identity` | Verify an HMAC email hash or JWT for the selected widget key before the visitor sends trusted identity. | `publicKey` plus `emailHash` and `identity`, or `jwt`. |
+| `POST` | `/api/widget/messages` | Create or continue a widget conversation and store a customer message. May trigger AI response or handoff behavior. | `publicKey`, `body`; existing conversations also use `conversationKey` and `conversationSecret`. |
+| `GET` | `/api/widget/messages` | Read customer-safe message history for one widget conversation. | `publicKey`, `conversationKey`, and `conversationSecret`. |
+| `POST` | `/api/widget/presence` | Heartbeat active customer presence on an existing widget conversation. | `conversationKey`; public widgets also require `publicKey` and `conversationSecret`. |
+| `POST` | `/api/widget/events` | Record widget impressions, opens, closes, and engagement events. | `publicKey`, visitor/session ids, and event list. |
+| `GET` | `/api/widget/feedback` | Load thumbs feedback state for messages in one verified widget conversation. | `publicKey`, `conversationKey`, and `conversationSecret`. |
+| `POST` | `/api/widget/csat` | Record a configured CSAT or NPS survey response for a verified widget conversation. | `publicKey`, `surveyId`, `score`, `conversationKey`, and `conversationSecret`. |
+| `GET` | `/api/widget/updates` | Load published customer updates for a widget key. Optionally includes read state for a verified reader. | `publicKey`; optional `readerKey`, `verified=true`. |
+| `POST` | `/api/widget/updates/read` | Mark published widget updates as read for a verified reader. | `publicKey`, `readerKey`, and up to 50 UUID `updateIds`. |
+
+## Config
+
+```http
+GET /api/widget/config?publicKey=trovw_agent_xxx
+```
+
+Returns only customer-safe config: visual theme, launcher/welcome text, quick links, widget feature toggles, business-hours fields, enabled surveys, identity verification state, and whether the selected agent can auto-reply.
+
+Config also records the widget install origin for the operator-side install check. That recording is best-effort and never blocks the config response.
+
+## Identity Check
+
+```http
+POST /api/widget/identity
+Content-Type: application/json
+
+{
+  "publicKey": "trovw_agent_xxx",
+  "identity": {
+    "id": "user_123",
+    "email": "ada@example.com",
+    "name": "Ada Lovelace",
+    "company": "Example API Co"
+  },
+  "emailHash": "SERVER_GENERATED_HMAC"
+}
+```
+
+For JWT mode, send `{ "publicKey": "...", "jwt": "..." }` instead. A successful response includes `verified: true`, the resolved mode, and customer-safe identity fields. Failed proofs return `403` with `verified: false`.
+
+## Messages
+
+`POST /api/widget/messages` creates the conversation on the first message and returns a `conversationKey` plus an opaque `conversationSecret`. Store both per widget key in the browser or SDK. The secret is required to read or continue that conversation later.
+
+Message bodies are bounded and sanitized. `context` and `identity` are treated as customer-supplied until verified. Operator-only traces, provider internals, and private workspace data are excluded from widget history responses.
+
+## Presence, Feedback, And Surveys
+
+Presence, feedback, and survey routes all verify that the conversation belongs to the widget key's workspace before mutating or returning conversation state. Survey submissions also verify that the survey is configured and enabled for that workspace.
+
+## Updates
+
+Widget updates are published announcements shown in the widget Updates tab. Anonymous visitors can load published updates for the widget key. Verified visitors can include a `readerKey` so Woes can return and persist read state across devices.
+
+`readerKey` should be opaque and derived from verified identity, such as the verified identity hash. Do not send raw identity secrets or private account data as the reader key.
+
+## Related Pages
+
+- [Widget Runtime](/api/widget)
+- [Widget JavaScript API](/chat-widget/javascript-api)
+- [Widget Identity](/security/widget-identity)
+- [Install the Widget](/quickstart/install-widget)
