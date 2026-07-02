@@ -8,84 +8,95 @@ description: "Securely identify customers in the Woes widget using anonymous, HM
 Widget identity connects a visitor to a stable customer record and conversation history.
 
 <Warning>
-  Unsigned `identify` fields are display and routing metadata, not
-  authentication. Any browser user can alter them. Use HMAC or JWT identity
-  verification before showing account-specific history or trusting
-  account/customer ids.
+  Unsigned `identify` fields are display and routing metadata, not authentication. Any browser user can alter them. Use HMAC or JWT identity verification before showing account-specific history or trusting account/customer ids.
 </Warning>
 
 ## Modes
 
-| Mode       | Trust level | Description                                                                       |
-| ---------- | ----------- | --------------------------------------------------------------------------------- |
-| Off        | Low         | Customers can use the widget anonymously or with client-provided identity fields. |
-| HMAC email | Medium      | Your backend signs the normalized customer email.                                 |
-| JWT        | Higher      | Your backend issues a signed token with verified customer claims.                 |
+| Mode | Trust level | Description |
+| --- | --- | --- |
+| Off | Low | Customers can use the widget anonymously or with client-provided identity fields. |
+| HMAC email | Medium | Your backend signs the normalized customer email. |
+| JWT | Higher | Your backend issues a signed token with verified customer claims. |
 
-## How verification is enforced
+## How Verification Is Enforced
 
-Woes uses the same model as Intercom: verification protects identified users
-without locking out anonymous ones:
+Woes uses the same model as Intercom: verification protects identified users without locking out anonymous ones:
 
-- **Anonymous visitors** (no `identify` call, or `identify` with no email) can
-  always chat as leads. Turning on verification never blocks them.
-- **Identified visitors** — if you pass an identity (an email), it **must** carry
-  a valid HMAC hash or JWT. An identity claim **without** a valid proof is
-  rejected, so a browser user can never impersonate another account.
-- **Strict mode** — turn on **Require verified identity** to block anonymous
-  visitors entirely (everyone must be verified). Leave it off for a public
-  widget that still welcomes leads.
+- **Anonymous visitors** with no `identify` call, or `identify` with no email, can always chat as leads. Turning on verification never blocks them.
+- **Identified visitors** must carry a valid HMAC hash or JWT when they pass an email. An identity claim without a valid proof is rejected, so a browser user can never impersonate another account.
+- **Strict mode** blocks anonymous visitors entirely. Turn on **Require verified identity** only when everyone must be verified before chatting.
 
-Enable a mode from **Settings → Security**. Choose the agent widget key first,
-then set that agent's verification mode, generate its **identity secret**, and
-(optionally) toggle strict mode.
+Enable a mode from **Settings → Security**. Choose the agent widget key first, then set that agent's verification mode, generate its **identity secret**, and optionally toggle strict mode.
 
-Use separate agent widget keys and secrets when Woes is installed on different
-sites. For example, your docs site can use a docs-focused agent and JWT, while a
-marketing site can use a lead-support agent with anonymous chat.
+Use separate agent widget keys and secrets when Woes is installed on different sites. For example, your docs site can use a docs-focused agent and JWT, while a marketing site can use a lead-support agent with anonymous chat.
 
-The identity secret is private signing material. Keep it on your server only.
-Do not paste it into client JavaScript, mobile apps, documentation, or AI
-coding prompts.
+## Install Contract
+
+Verified identity has a hard public/private split:
+
+| Value | Where it belongs | Notes |
+| --- | --- | --- |
+| `WOES_AGENT_WIDGET_PUBLIC_KEY` | Browser-safe app config | Used as `data-public-key` on the widget script. |
+| `WOES_WIDGET_IDENTITY_SECRET` | Server-only app config | Copy it from **Settings → Security** for the selected agent widget key. Never expose it to client JavaScript, HTML, logs, analytics, or browser responses. |
+
+Your app should expose an authenticated, no-store endpoint, such as `/api/woes-identity`, that returns the signed proof for the current logged-in user.
+
+The browser should fetch that endpoint and call `window.Woes("identify", ...)`:
+
+- After login or session load.
+- When `https://woes.dev/widget.js` finishes loading.
+- On window focus.
+- When the page becomes visible again.
+
+Calling `identify` repeatedly for the same current user is safe. Do not suppress retries for the same HMAC or JWT before Woes has accepted it; retries prevent boot-order races from leaving a logged-in customer anonymous.
 
 ## HMAC Email
 
-In HMAC mode, your backend signs the normalized customer email using the
-selected agent widget's identity secret. The browser sends the email and hash
-to Woes.
+In HMAC mode, your backend signs the normalized customer email using the selected agent widget's identity secret. The browser sends the email and hash to Woes.
 
-Only the email is signed. Other fields such as name or company are treated as display metadata.
+Only the normalized email is verified. `name`, `company`, and `id` remain display metadata. Use JWT when account or contact ids must be verified.
 
-In HMAC mode, only the normalized email is verified. `name`, `company`, and
-`id` remain display metadata. Use JWT when account or contact ids must be
-verified.
+```ts
+import { createHmac } from "node:crypto";
 
-```js
-const { createHmac } = require("node:crypto");
+function getWoesIdentitySecret() {
+  const secret = process.env.WOES_WIDGET_IDENTITY_SECRET?.trim();
+  if (!secret || !/^[a-f0-9]{64}$/i.test(secret)) {
+    throw new Error("Woes identity secret is not configured");
+  }
+  return Buffer.from(secret, "hex");
+}
 
-const secret = process.env.WOES_WIDGET_IDENTITY_SECRET;
-const email = user.email.trim().toLowerCase();
-const secretBytes = Buffer.from(secret, "hex");
-const emailHash = createHmac("sha256", secretBytes).update(email).digest("hex");
+export async function GET() {
+  const user = await requireCurrentUser();
+  const email = user.email.trim().toLowerCase();
+  const emailHash = createHmac("sha256", getWoesIdentitySecret())
+    .update(email)
+    .digest("hex");
 
-res.json({
-  email,
-  name: user.name,
-  company: account.name,
-  id: user.id,
-  email_hash: emailHash,
-});
+  return Response.json(
+    {
+      id: user.id,
+      email,
+      email_hash: emailHash,
+      name: user.name,
+      company: user.accountName,
+    },
+    { headers: { "Cache-Control": "no-store" } },
+  );
+}
 ```
 
 Send the returned identity payload to the widget in the browser.
 
 ```js
 window.Woes("identify", {
+  id: identity.id,
   email: identity.email,
+  email_hash: identity.email_hash,
   name: identity.name,
   company: identity.company,
-  id: identity.id,
-  email_hash: identity.email_hash,
 });
 ```
 
@@ -93,25 +104,31 @@ window.Woes("identify", {
 
 In JWT mode, your backend signs a token that includes the customer's email and optional identity fields. Woes verifies the token before trusting the identity.
 
-```js
-const jwt = require("jsonwebtoken");
+```ts
+import jwt from "jsonwebtoken";
 
-const now = Math.floor(Date.now() / 1000);
-const token = jwt.sign(
-  {
-    email: user.email.trim().toLowerCase(),
-    name: user.name,
-    account_external_id: account.id,
-    contact_external_id: user.id,
-    aud: "YOUR_WIDGET_PUBLIC_KEY",
-    iat: now,
-    exp: now + 10 * 60,
-  },
-  process.env.WOES_WIDGET_IDENTITY_SECRET,
-  { algorithm: "HS256" },
-);
+export async function GET() {
+  const user = await requireCurrentUser();
+  const now = Math.floor(Date.now() / 1000);
+  const token = jwt.sign(
+    {
+      email: user.email.trim().toLowerCase(),
+      name: user.name,
+      account_external_id: user.accountId,
+      contact_external_id: user.id,
+      aud: process.env.WOES_AGENT_WIDGET_PUBLIC_KEY,
+      iat: now,
+      exp: now + 10 * 60,
+    },
+    process.env.WOES_WIDGET_IDENTITY_SECRET,
+    { algorithm: "HS256" },
+  );
 
-res.json({ jwt: token });
+  return Response.json(
+    { jwt: token },
+    { headers: { "Cache-Control": "no-store" } },
+  );
+}
 ```
 
 Then identify the visitor with the signed token.
@@ -122,22 +139,28 @@ window.Woes("identify", {
 });
 ```
 
-JWT identity tokens must use `HS256`, include an `email` claim, and set `aud` to
-the widget public key used by the install snippet. Keep token lifetimes short;
-Woes accepts verified widget identity JWTs up to 15 minutes from issue to expiry.
+JWT identity tokens must use `HS256`, include an `email` claim, and set `aud` to the widget public key used by the install snippet. Keep token lifetimes short; Woes accepts verified widget identity JWTs up to 15 minutes from issue to expiry.
+
+## Browser Integration Checklist
+
+- Load `https://woes.dev/widget.js` with the selected public widget key in `data-public-key`.
+- Create or rely on the Woes command queue before calling `window.Woes(...)`.
+- Fetch your authenticated identity endpoint with same-origin credentials and no-store caching.
+- Treat `401` from the identity endpoint as anonymous mode unless strict verified identity is required.
+- Call `window.Woes("identify", identity)` every time a valid signed identity is returned.
+- Verify a logged-in test visitor sends a message and appears in Woes with their email/name and `identity_source` of `widget-token`.
 
 ## Copy Prompt for AI Install
 
-Settings → Security includes **Copy prompt for AI install** after you select an
-agent widget key. Paste that prompt into your coding assistant to install the
-widget and create the server endpoint that mints the HMAC hash or JWT.
+Settings → Security includes **Copy prompt for AI install** after you select an agent widget key. Paste that prompt into your coding assistant to install the widget and create the server endpoint that mints the HMAC hash or JWT.
 
 The copied prompt intentionally includes:
 
 - The public widget key for the selected agent.
 - The selected verification mode.
 - Server-only environment variable guidance.
-- The required browser `window.Woes("identify", ...)` call.
+- The authenticated no-store identity endpoint contract.
+- The required browser `window.Woes("identify", ...)` call and retry behavior.
 
 The copied prompt intentionally excludes:
 
@@ -156,6 +179,5 @@ The copied prompt intentionally excludes:
 - Treat unsigned browser identity fields as untrusted metadata.
 
 <Warning>
-  A widget public key is public. It identifies the workspace or agent install,
-  but it is not a private authentication secret.
+  A widget public key is public. It identifies the workspace or agent install, but it is not a private authentication secret.
 </Warning>
