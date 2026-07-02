@@ -44,9 +44,33 @@ Use separate agent widget keys and secrets when Woes is installed on different
 sites. For example, your docs site can use a docs-focused agent and JWT, while a
 marketing site can use a lead-support agent with anonymous chat.
 
+<Warning>
+  The script tag and the identity proof must use the same selected agent widget
+  key. A valid HMAC or JWT for one agent does not verify a visitor on another
+  agent's widget key.
+</Warning>
+
 The identity secret is private signing material. Keep it on your server only.
 Do not paste it into client JavaScript, mobile apps, documentation, or AI
 coding prompts.
+
+## Verify an Install
+
+Use **Settings → Security** to confirm both halves of the integration:
+
+1. Select the agent widget key installed on the site.
+2. Open the site page where the widget script is installed.
+3. In Woes, click **Refresh** in **Install check**. The site origin should appear
+   with a recent `last seen` time.
+4. Generate a real identity proof from your application backend.
+5. Paste the customer email and `email_hash` for HMAC mode, or paste the JWT for
+   JWT mode, into **Test an identity proof**.
+6. Click **Verify proof** before testing a live chat message.
+
+If the proof fails, check that the backend uses the identity secret from the
+same selected agent, that the browser snippet uses that agent's public widget
+key, and that the email is normalized with `trim().toLowerCase()` before
+signing.
 
 ## HMAC Email
 
@@ -89,6 +113,10 @@ window.Woes("identify", {
 });
 ```
 
+Call `identify` after your backend returns the proof and before the visitor sends
+their first message. The widget asks Woes to verify the proof before it treats
+the visitor as verified.
+
 ## JWT
 
 In JWT mode, your backend signs a token that includes the customer's email and optional identity fields. Woes verifies the token before trusting the identity.
@@ -125,6 +153,9 @@ window.Woes("identify", {
 JWT identity tokens must use `HS256`, include an `email` claim, and set `aud` to
 the widget public key used by the install snippet. Keep token lifetimes short;
 Woes accepts verified widget identity JWTs up to 15 minutes from issue to expiry.
+
+The `aud` claim must exactly match the `data-public-key` in the installed widget
+script.
 
 ## Copy Prompt for AI Install
 

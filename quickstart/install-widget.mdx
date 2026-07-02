@@ -70,6 +70,10 @@ For higher-trust installs, use [Widget Identity](/security/widget-identity)
 with HMAC email verification or JWT. Configure it from **Settings → Security**
 after selecting the agent widget key installed on this site.
 
+The selected agent matters. The `data-public-key` in the script tag must match
+the agent selected in **Settings → Security**, and the backend proof must be
+generated with that same agent's identity secret.
+
 ```js
 window.Woes("identify", {
   email: "ada@example.com",
@@ -88,6 +92,21 @@ window.Woes("identify", {
   Generate identity proofs only on your backend. Never ship the widget identity
   secret to the browser, logs, analytics tools, or customer-visible pages.
 </Warning>
+
+## Verify the Install
+
+After adding the snippet, use Woes to confirm the site is wired correctly:
+
+1. Open **Settings → Security**.
+2. Select the agent widget key used by the installed snippet.
+3. Load the page where the widget is installed.
+4. Click **Refresh** in **Install check** and confirm the site origin appears.
+5. Generate a real HMAC hash or JWT from your backend.
+6. Paste it into **Test an identity proof** and click **Verify proof**.
+
+If the widget appears but the conversation is still anonymous, the most common
+cause is a mismatch between the installed `data-public-key`, the selected agent
+in Woes, and the identity secret used by the backend.
 
 ## Common JavaScript Calls
 
@@ -114,6 +133,6 @@ window.Woes("identify", {
 | Symptom                              | Check                                                                               |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | Widget does not load                 | Confirm the public key and script URL.                                              |
-| Conversation is anonymous            | Add an identify call or verified identity mode.                                     |
+| Conversation is anonymous            | Verify the HMAC/JWT in **Settings → Security** and confirm the agent key matches.   |
 | Agent answers from the wrong context | Use the right agent widget key and verify source attachments.                       |
 | Survey does not appear               | Confirm the survey is enabled, uses a widget channel, and triggers on issue solved. |
