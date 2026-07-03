@@ -11,9 +11,9 @@ Woes can route customers to different agents using agent-specific widget keys. T
 
 | Option | Use it when |
 | --- | --- |
-| Workspace default | One agent should answer most customer questions. |
-| Agent widget key | A page or product should always use a specific agent. |
-| Channel assignment | A channel should map to a specific agent. |
+| Agent widget key | A page, website, product, or docs area should always use a specific agent. |
+| Channel assignment | A channel should map to a specific agent from settings. |
+| Workspace fallback | A conversation arrives without an agent key and should use the workspace fallback. |
 
 ## Install Pattern
 
@@ -26,15 +26,30 @@ Use the agent's widget key in the install snippet for that site or page.
 </script>
 ```
 
+Agent widget keys keep configuration separated per surface. Each key can carry its own widget copy, appearance, pre-chat questions, identity verification settings, AI behavior, and attached context.
+
 ## Examples
 
 | Site area | Recommended agent |
 | --- | --- |
-| Main app | Default agent. |
+| Main app | Product support agent. |
 | API reference docs | Docs/API agent. |
 | Billing docs | Billing agent. |
 | Webhooks guide | Webhooks agent. |
 | Enterprise portal | Enterprise agent with restricted context. |
+
+## Labels In Inbox And Analytics
+
+The agent display name and system color are used throughout the workspace so operators can see which agent handled a conversation.
+
+| Surface | What to check |
+| --- | --- |
+| Conversation queue | The agent badge should show the expected agent name and color. |
+| Conversation header | The active agent label should match the installed widget key. |
+| Settings selectors | The selected agent should match the site or channel being configured. |
+| Analytics | Agent filters and breakdowns should use the configured display name. |
+
+If a conversation only shows the workspace name, confirm the page is using an agent widget key instead of an old workspace-level key.
 
 ## Verify Routing
 
@@ -42,7 +57,8 @@ Use the agent's widget key in the install snippet for that site or page.
 2. Start a test conversation.
 3. Confirm the conversation shows the expected agent label.
 4. Ask an endpoint-specific question and verify the answer cites the expected source.
+5. Check the same conversation in analytics or filters to confirm the agent label is searchable.
 
 <Tip>
-  Keep agent names clear. Operators should be able to understand which agent handled a conversation from the inbox and analytics labels.
+  Keep agent names clear. Operators should be able to understand which agent handled a conversation from the inbox, settings selectors, and analytics labels.
 </Tip>

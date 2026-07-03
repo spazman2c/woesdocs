@@ -1,0 +1,49 @@
+---
+title: "Live Chat Widget"
+sidebarTitle: "Live chat widget"
+description: "Use the Woes live chat widget as a customer support channel with agent routing, pre-chat questions, surveys, and install checks."
+icon: "message-square"
+---
+
+# Live Chat Widget
+
+The Live chat widget is the primary customer-facing Woes channel. It can be installed on product apps, documentation sites, customer portals, and marketing pages, then routed to a specific workspace agent through that agent's widget key.
+
+## Status
+
+**Available now.** The widget has a channel settings surface, install snippets, agent selection, install verification, appearance controls, pre-chat questions, identity verification, surveys, and widget analytics.
+
+## What it does
+
+Live chat lets teams:
+
+- Install `https://woes.dev/widget.js` with a workspace or agent widget key.
+- Route conversations to the selected agent and its attached context.
+- Customize launcher, panel, copy, colors, logos, quick links, and presentation.
+- Collect pre-chat questions before a new conversation starts.
+- Verify customer identity with HMAC email or JWT when account history must be trusted.
+- Show CSAT or NPS surveys after supported resolution events.
+- Track launcher views, opens, closes, locations, and page-level widget activity.
+
+## Where it appears in Woes
+
+- **Workspace Settings -\> Channels -\> Live chat** manages widget install, behavior, appearance, copy, pre-chat questions, surveys, and preview.
+- **Settings -\> Security** manages per-agent widget identity verification and install checks.
+- **Settings -\> Keys** lists agent widget keys for install snippets.
+- **Inbox** shows live chat conversations beside email and Discord.
+- **Analytics -\> Live chat** shows widget engagement metrics.
+
+## Recommended setup
+
+1. Create or choose the agent that should answer from this site.
+2. Copy that agent's widget key from **Settings -\> Keys** or the Live chat page.
+3. Install the snippet on the target site.
+4. Use **Settings -\> Security** to verify the installed origin and configure HMAC or JWT if the site has signed-in users.
+5. Send a test message and confirm it lands in the expected inbox queue with the expected agent label.
+
+## Related docs
+
+- [Live Chat](/channels/live-chat)
+- [Install the Widget](/quickstart/install-widget)
+- [Widget Identity](/security/widget-identity)
+- [Widget Runtime](/api/widget)

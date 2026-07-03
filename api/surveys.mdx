@@ -23,7 +23,7 @@ Widget survey responses use the active survey definition for the workspace. The 
 - CSAT: 1 to 5.
 - NPS: 0 to 10.
 
-Widget survey routes are scoped to the current widget conversation. They should be called by the installed widget or SDK, not by a server-side REST API integration.
+Widget survey routes are scoped to the current widget conversation. They verify the widget key, conversation secret, enabled survey, score range, and workspace relationship before writing a response. They should be called by the installed widget or SDK, not by a server-side REST API integration.
 
 ## Email Survey Responses
 
