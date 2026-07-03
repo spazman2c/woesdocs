@@ -1,0 +1,44 @@
+---
+title: "Webhooks Connector"
+sidebarTitle: "Webhooks"
+description: "Planned webhook connector for sending Woes support events to customer-owned systems."
+---
+
+# Webhooks Connector
+
+Webhooks are a planned connector for teams that want Woes events delivered to customer-owned systems without a no-code platform in the middle.
+
+## Status
+
+**Planned connector.** Webhooks should remain disabled until Woes has stable event schemas, signing, delivery retries, per-workspace subscriptions, and operator-visible delivery logs.
+
+## What it will do
+
+A Woes webhooks connector should let teams subscribe external systems to support events:
+
+- New conversation or issue created.
+- Issue status, priority, tag, assignment, or SLA changes.
+- Survey response received.
+- Automation rule completed or failed.
+- Agent handoff, low-confidence skip, or human takeover events.
+
+## Product fit
+
+Webhooks are for teams with their own backend, data warehouse, incident tooling, or internal workflow system. They should complement the public REST API: REST lets customers pull or mutate workspace records, while webhooks let Woes push event notifications when something changes.
+
+## Implementation requirements
+
+Before webhooks become active, Woes needs:
+
+- Workspace-scoped endpoint subscriptions.
+- Signed payloads and secret rotation.
+- Stable event schemas with versioning.
+- Retry, backoff, dead-letter, and replay behavior.
+- Delivery logs that redact secrets and customer-private fields where needed.
+- Rate limits and permission checks for creating or editing subscriptions.
+
+## Early recipes
+
+- Send high-priority support issues into an internal escalation service.
+- Mirror resolved issues into a data warehouse for reporting.
+- Notify a customer-owned workflow when a survey response is received.

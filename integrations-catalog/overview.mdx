@@ -1,59 +1,70 @@
 ---
 title: "Integrations Catalog"
 sidebarTitle: "Overview"
-description: "Understand the Woes integration catalog, current connector status, and what each integration is meant to do."
+description: "Understand the Woes customer connector catalog, current connector status, and what each integration is meant to do."
 ---
 
 # Integrations Catalog
 
-Woes integrations connect the support workspace to the systems where developer-support context already lives: customer channels, repository documentation, team workflows, engineering issues, customer records, and incident response.
+Woes integrations are customer-managed connectors to external systems that add support context, trigger workflow actions, notify teams, or attach operational evidence to a Woes workspace.
 
-This catalog is intentionally explicit about status. A connector should only look actionable when the Woes backend can support the action safely for a workspace.
+This catalog is intentionally limited to connectors a customer can install, authorize, subscribe to, or evaluate as a future customer-facing connector. Internal platform services do not belong here. Billing systems, email delivery infrastructure, hosting, observability used by Woes itself, and provider-specific backend plumbing should stay in Billing, Channels, Security, or developer reference docs instead of the Integrations tab.
+
+A connector should only look actionable when the Woes backend can support the action safely for a workspace.
 
 ## Status labels
 
 | Status | Meaning |
 | --- | --- |
-| Available now | The integration has a working Woes surface or supported setup path today. |
-| Planned connector | The integration appears in the product catalog but remains disabled until OAuth, install state, routes, permissions, and delivery behavior are implemented. |
-| Future candidate | A researched integration direction that fits the platform, but is not yet a product commitment or active connector. |
+| Available now | The connector has a working Woes surface or supported setup path today. |
+| Planned connector | The connector belongs in the customer catalog, but remains disabled until OAuth or installation, workspace mapping, permissions, routes, audit trails, and failure states are implemented. |
+| Additional connector candidate | A researched customer-facing connector direction that fits Woes, but is not yet a committed product surface. |
 
 ## Available now
 
-| Integration | What it does today |
+| Connector | What it does today |
 | --- | --- |
-| [GitHub](./github) | Imports repository docs, examples, and source-adjacent material into Woes API context. |
-| [Email](./email) | Uses email as a support channel alongside live chat and Discord. |
-| [Discord](./discord) | Brings selected Discord messages and threads into the shared Woes inbox. |
-| [Mintlify widget](./mintlify-widget) | Installs the Woes chat widget on a Mintlify documentation site. |
+| [GitHub](./github) | Imports repository docs, examples, SDK material, and source-adjacent notes into Woes API context. |
+| [Discord](./discord) | Connects selected Discord support activity to the shared Woes inbox and routing model. |
 
 ## Planned connectors
 
-| Integration | What it will do |
+| Connector | What it will do |
 | --- | --- |
+| [Webhooks](./webhooks) | Send signed Woes support events to customer-owned systems. |
+| [Zapier](./zapier) | Let no-code workflows trigger from or send updates into Woes support events. |
+| [Jira](./jira) | Link support conversations and issues to engineering ticket workflows. |
+| [Sentry](./sentry) | Attach application error evidence to support conversations and issues. |
+| [Notion](./notion) | Import selected product notes, FAQs, and support playbooks into Woes context. |
 | [Slack](./slack) | Send support alerts, SLA escalations, and automation notifications to team channels. |
 | [Linear](./linear) | Link support issues to product and engineering workflows. |
-| [Zapier](./zapier) | Let no-code workflows trigger or receive Woes support events. |
-| [Jira](./jira) | Connect support conversations to engineering ticket workflows. |
 
-## Future candidates
+## Additional connector candidates
 
 | Candidate | Why it fits Woes |
 | --- | --- |
 | [Confluence](./confluence) | Internal support runbooks and implementation notes can become grounded context. |
-| [Notion](./notion) | Product FAQs, snippets, and support playbooks can supplement API docs. |
-| [Sentry](./sentry) | Error events can connect customer reports to real application failures. |
 | [PagerDuty](./pagerduty) | Urgent support issues can escalate into on-call incident workflows. |
 | [HubSpot](./hubspot) | Account and CRM context can improve routing and operator decisions. |
-| [Stripe](./stripe) | Subscription and billing state can support billing-adjacent conversations. |
 
-## Integration principles
+## Connector principles
 
-- Channel integrations should create or continue records in the same Woes conversation and message model.
-- Context integrations should add workspace-scoped evidence for the support agent without exposing credentials or private data to customers.
-- Workflow integrations should be disabled until actions, permissions, audit trails, and failure states are fully implemented.
-- Customer-facing docs should never claim an integration is live before the product can actually connect it.
+- Customer connectors should be workspace-scoped and safe to install, disconnect, audit, and troubleshoot from Woes.
+- Context connectors should add evidence for operators and agents without exposing credentials or private data to customers.
+- Workflow connectors should stay disabled until actions, permissions, retries, audit trails, and failure states are fully implemented.
+- Event connectors should use signed payloads, bounded schemas, retry controls, and redacted delivery logs.
+- Customer-facing docs should never claim a connector is live before the product can actually connect it.
 
-## Where to manage integrations
+## What belongs elsewhere
 
-Use **Workspace Settings -\> Integrations** for the product catalog and connector status. Use **Context Library** for GitHub repository imports and source management. Use the channel settings pages for live chat, email, and Discord channel behavior.
+| Surface | Where it belongs |
+| --- | --- |
+| Woes subscription billing, invoices, and subscription management | [Billing](/settings/billing) |
+| Email domain setup, provider delivery, inbound receiving, and channel behavior | [Email channel](/channels/email) |
+| Live chat widget installation, launch behavior, identity, and visual setup | [Chat Widget](/chat-widget/overview) |
+| Public REST API and remote MCP usage from customer backends | [API Reference](/api-reference/overview) |
+| Internal route boundaries, provider webhooks, and platform implementation details | [Route boundaries](/developer/route-boundaries) |
+
+## Where to manage connectors
+
+Use **Workspace Settings -\> Integrations** for connector status and connector-level actions. Use **Context Library** for GitHub repository imports and source management. Use channel settings pages for live chat, email, and Discord behavior after a message enters Woes.

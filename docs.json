@@ -60,6 +60,21 @@
     {
       "source": "/api-agents",
       "destination": "/api/agents"
+    },
+    {
+      "source": "/integrations-catalog/email",
+      "destination": "/channels/email",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/mintlify-widget",
+      "destination": "/chat-widget/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/stripe",
+      "destination": "/integrations-catalog/overview",
+      "permanent": true
     }
   ],
   "navbar": {
@@ -519,31 +534,29 @@
             "icon": "check-circle",
             "pages": [
               "integrations-catalog/github",
-              "integrations-catalog/email",
-              "integrations-catalog/discord",
-              "integrations-catalog/mintlify-widget"
+              "integrations-catalog/discord"
             ]
           },
           {
             "group": "Planned connectors",
             "icon": "calendar-clock",
             "pages": [
-              "integrations-catalog/slack",
-              "integrations-catalog/linear",
+              "integrations-catalog/webhooks",
               "integrations-catalog/zapier",
-              "integrations-catalog/jira"
+              "integrations-catalog/jira",
+              "integrations-catalog/sentry",
+              "integrations-catalog/notion",
+              "integrations-catalog/slack",
+              "integrations-catalog/linear"
             ]
           },
           {
-            "group": "Future candidates",
+            "group": "Additional connector candidates",
             "icon": "sparkles",
             "pages": [
               "integrations-catalog/confluence",
-              "integrations-catalog/notion",
-              "integrations-catalog/sentry",
               "integrations-catalog/pagerduty",
-              "integrations-catalog/hubspot",
-              "integrations-catalog/stripe"
+              "integrations-catalog/hubspot"
             ]
           }
         ]

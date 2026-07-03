@@ -1,20 +1,20 @@
 ---
-title: "Sentry Candidate"
+title: "Sentry Connector"
 sidebarTitle: "Sentry"
-description: "Future candidate for connecting support conversations to application errors and issue evidence."
+description: "Planned Sentry connector for linking support conversations to application errors and issue evidence."
 ---
 
-# Sentry Candidate
+# Sentry Connector
 
-Sentry is a future integration candidate for connecting developer support conversations to application errors and production issue evidence.
+Sentry is a planned customer connector for connecting developer support conversations to application errors and production issue evidence.
 
 ## Status
 
-**Future candidate.** This is not currently a live Woes connector.
+**Planned connector.** This is not currently a live Woes connector. It should remain disabled until project access, event lookup, permissions, redaction, and audit behavior are implemented.
 
-## What it could do
+## What it will do
 
-A Sentry integration could help operators answer error-driven support questions faster:
+A Sentry connector should help operators answer error-driven support questions faster:
 
 - Attach relevant Sentry issues or events to Woes conversations.
 - Search recent errors by customer, release, environment, route, or error fingerprint where safe.
@@ -22,17 +22,20 @@ A Sentry integration could help operators answer error-driven support questions 
 - Trigger automations when a customer reports a known production error.
 - Link back to the Sentry issue for engineering investigation.
 
-## Why it fits Woes
+## Product fit
 
 Many API support questions begin with an error message, failed webhook, or unexpected server response. Connecting Woes to error telemetry can help distinguish documentation confusion from a real product failure.
 
-## Key design questions
+## Implementation requirements
 
-- Which Sentry projects and environments should Woes access?
-- How should customer identifiers be matched without leaking private data?
-- Which event fields are safe to show to operators or send to the AI agent?
-- Should Woes create support issues from Sentry alerts, or only attach evidence to existing conversations?
-- How should rate limits and large event payloads be bounded?
+Before Sentry becomes active, Woes needs:
+
+- Project and environment selection.
+- Workspace-scoped OAuth or token installation.
+- Customer-safe matching rules for users, accounts, releases, and routes.
+- Redaction of stack frames, request data, and metadata that should not leave operator-only context.
+- Rate limits and payload bounds for issue and event lookup.
+- Audit logs for attach, detach, and automation-driven actions.
 
 ## Possible first version
 
