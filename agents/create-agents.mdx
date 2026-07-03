@@ -9,9 +9,7 @@ Use **Agents** to create specialized support agents for different products, docs
 
 ## When To Create More Than One Agent
 
-Use one default agent when every customer should receive the same product and
-API support. Create additional agents when the answer should depend on a
-different context set, site, product line, or audience.
+Use one default agent when every customer should receive the same product and API support. Create additional agents when the answer should depend on a different context set, site, product line, or audience.
 
 | Pattern | Example |
 | --- | --- |
@@ -56,9 +54,7 @@ Use questions that match real support traffic:
 | Provider failure | Operator-safe error or handoff state. |
 | Human request | Clean operator handoff. |
 
-If a question fails, first check the **Context** tab for missing or unattached
-sources. Then tune behavior or guardrails only after the right source material
-is attached.
+If a question fails, first check the **Context** tab for missing or unattached sources. Then tune behavior or guardrails only after the right source material is attached.
 
 ## Agent Sections
 
@@ -68,6 +64,17 @@ is attached.
 | Context | Source attachments and coverage. |
 | Behavior | Persona, greeting, runbook instructions, and response style. |
 | Guardrails | Safety rules, confidence, handoff behavior, and boundaries. |
+
+## Agent Name And Color
+
+Each agent has a display name and system color. Use these fields to make the agent easy to identify anywhere Woes shows routing or ownership.
+
+| Field | Where it appears | Guidance |
+| --- | --- | --- |
+| Display name | Agents list, Inbox labels, conversation header, widget routing, analytics, and settings selectors. | Use the product, site, or support surface the agent owns. |
+| System color | Agent labels, badges, and selector accents. | Pick a color that helps operators distinguish agents at a glance. |
+
+Changing an agent name or color does not change its widget key, attached sources, security settings, or conversation history. It only changes how the agent is presented across the workspace.
 
 ## Default Agent
 
@@ -79,23 +86,14 @@ Each agent can have its own widget public key. Use this when you want a differen
 
 Find all agent keys in **Settings → Keys**.
 
-When you install an agent widget key, that key controls the widget copy,
-attached context, identity verification settings, and routing for that site.
-If two sites need different behavior, give each one a different agent key.
+When you install an agent widget key, that key controls the widget copy, attached context, identity verification settings, and routing for that site. If two sites need different behavior, give each one a different agent key.
 
 ## Billing And Capacity
 
-Agent capacity is plan-aware. The active plan includes a fixed number of agents
-and widgets, and extra agent/widget capacity can be added from
-[Billing](/settings/billing).
+Agent capacity is plan-aware. The active plan includes a fixed number of agents and widgets, and extra agent/widget capacity can be added from [Billing](/settings/billing).
 
-If the workspace reaches its effective agent limit, Woes blocks new agent
-creation until an admin removes unused agents, upgrades the plan, or adds
-capacity.
+If the workspace reaches its effective agent limit, Woes blocks new agent creation until an admin removes unused agents, upgrades the plan, or adds capacity.
 
 ## Bring Your Own AI
 
-Agent creation and source attachment are separate from model-provider billing.
-If the workspace uses [Bring Your Own AI](/settings/bring-your-own-ai), saved
-agents keep the same grounding, confidence, clarification, and handoff rules.
-Only server-side model execution changes.
+Agent creation and source attachment are separate from model-provider billing. If the workspace uses [Bring Your Own AI](/settings/bring-your-own-ai), saved agents keep the same grounding, confidence, clarification, and handoff rules. Only server-side model execution changes.

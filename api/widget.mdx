@@ -95,7 +95,7 @@ window.Woes("identify", {
 
 ## Pre-chat Questions
 
-Pre-chat questions are configured in **Settings → Channels → Live chat** and delivered through the widget config route. The widget asks them before the first message in a new conversation. Required questions are enforced by the public message route, so a custom script cannot bypass them.
+Pre-chat questions are configured in **Settings → Channels → Live chat** and delivered through the widget config route. The widget asks them before the first message in a new conversation and shows the pre-chat form as the main new-chat pane while those details are needed. Required questions are enforced by the public message route, so a custom script cannot bypass them.
 
 If the page identifies a visitor with `window.Woes("identify", ...)`, configured name, email, and company questions can be auto-filled from that identity. Verified identity modes should be used before trusting those fields for account-specific routing.
 

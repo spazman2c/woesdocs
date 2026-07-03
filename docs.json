@@ -521,7 +521,13 @@
               "integrations-catalog/github",
               "integrations-catalog/email",
               "integrations-catalog/discord",
-              "integrations-catalog/mintlify-widget"
+              "integrations-catalog/mintlify-widget",
+              "integrations-catalog/live-chat-widget",
+              "integrations-catalog/resend",
+              "integrations-catalog/api-context-sources",
+              "integrations-catalog/public-api",
+              "integrations-catalog/woes-mcp",
+              "integrations-catalog/stripe"
             ]
           },
           {
@@ -531,7 +537,8 @@
               "integrations-catalog/slack",
               "integrations-catalog/linear",
               "integrations-catalog/zapier",
-              "integrations-catalog/jira"
+              "integrations-catalog/jira",
+              "integrations-catalog/webhooks"
             ]
           },
           {
@@ -542,8 +549,7 @@
               "integrations-catalog/notion",
               "integrations-catalog/sentry",
               "integrations-catalog/pagerduty",
-              "integrations-catalog/hubspot",
-              "integrations-catalog/stripe"
+              "integrations-catalog/hubspot"
             ]
           }
         ]

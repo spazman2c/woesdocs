@@ -22,6 +22,7 @@ Settings controls workspace behavior, team access, channels, install snippets, s
 | Data | Custom fields, tags, statuses, and priority labels. |
 | Macros | Reusable operator replies and ticket actions. |
 | Surveys | CSAT and NPS survey configuration. |
+| Integrations | Channel, context-source, developer, billing, and workflow connector status. |
 | Security | Widget identity, logs and history, redaction, and workspace access controls. |
 
 ## Permission Model
@@ -33,16 +34,19 @@ Examples:
 - Editing macros requires macro permissions.
 - Editing automations requires automation permissions.
 - Changing company identity requires workspace write access.
-- Changing plans, add-ons, or subscription management requires workspace write
-  access.
-- Customizing a user's direct permissions requires user and role management
-  access.
+- Changing plans, add-ons, or subscription management requires workspace write access.
+- Customizing a user's direct permissions requires user and role management access.
 - Reading settings requires authenticated workspace access.
+
+## Integrations Catalog
+
+**Settings -\> Integrations** shows the currently visible workspace integration catalog. It includes available channel surfaces such as Live chat, Email, Resend, and Discord; context-source surfaces such as GitHub, OpenAPI, Postman, and GraphQL; developer surfaces such as Public API and Woes MCP; Stripe billing; and planned workflow connectors such as Slack, Linear, Zapier, Jira, and Webhooks.
+
+Cards that already have a working setup path route to the relevant Woes page. Planned connectors stay disabled until their backend routes, permissions, install state, audit trail, and failure states are implemented.
 
 ## Usage Visibility
 
-Settings surfaces current plan usage so admins can watch the limits that affect
-support operations:
+Settings surfaces current plan usage so admins can watch the limits that affect support operations:
 
 - AI resolutions.
 - Operator seats.
@@ -52,41 +56,31 @@ support operations:
 - Public API calls by workspace API key.
 - Live API checks from guarded source tests.
 
-Monthly public API and live API check meters reset at the start of each UTC
-month.
+Monthly public API and live API check meters reset at the start of each UTC month.
 
 ## Billing And Subscription Management
 
-Admins manage the active plan from [Billing](/settings/billing). Billing shows
-the selected plan, Stripe subscription status, projected monthly total, usage
-meters, public API calls by key, and active add-ons.
+Admins manage the active plan from [Billing](/settings/billing). Billing shows the selected plan, Stripe subscription status, projected monthly total, usage meters, public API calls by key, and active add-ons.
 
 When Stripe is configured:
 
 - Plan changes open Stripe Checkout.
 - The **Manage subscription** button opens Stripe Billing Portal.
 - Subscription updates sync back into Woes through Stripe webhooks.
-- Stripe customer and subscription identifiers are stored server-side for the
-  workspace.
+- Stripe customer and subscription identifiers are stored server-side for the workspace.
 
 ## Bring Your Own AI
 
-[Bring Your Own AI](/settings/bring-your-own-ai) appears only for workspaces on
-the Bring Your Own AI plan. It lets admins connect a customer-owned provider
-key from the curated in-app list and choose a supported model.
+[Bring Your Own AI](/settings/bring-your-own-ai) appears only for workspaces on the Bring Your Own AI plan. It lets admins connect a customer-owned provider key from the curated in-app list and choose a supported model.
 
-Provider keys are stored server-side and returned to the UI only as redacted
-status hints. They are never exposed to customers, docs pages, widget scripts,
-or REST API responses.
+Provider keys are stored server-side and returned to the UI only as redacted status hints. They are never exposed to customers, docs pages, widget scripts, or REST API responses.
 
 ## Safe Configuration Principles
 
 - Keep credentials in the correct secret settings, not in prompts or docs.
 - Use role-based permissions for changes that affect customers.
-- Use per-user permission overrides only when a user needs access that differs
-  from their role.
+- Use per-user permission overrides only when a user needs access that differs from their role.
 - Prefer a narrow role for operators who do not manage setup.
 - Review agent widget keys before installing widgets on public pages.
 - Manage personal notification preferences from the account/profile dialog.
-- Use the API Reference tab for REST API behavior, request examples, and
-  generated endpoint schemas.
+- Use the API Reference tab for REST API behavior, request examples, and generated endpoint schemas.

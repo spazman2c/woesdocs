@@ -6,7 +6,7 @@ description: "Understand the Woes integration catalog, current connector status,
 
 # Integrations Catalog
 
-Woes integrations connect the support workspace to the systems where developer-support context already lives: customer channels, repository documentation, team workflows, engineering issues, customer records, and incident response.
+Woes integrations connect the support workspace to the systems where developer-support context and workflows already live: customer channels, repository documentation, API source files, team handoffs, billing, public API integrations, and AI-tool access.
 
 This catalog is intentionally explicit about status. A connector should only look actionable when the Woes backend can support the action safely for a workspace.
 
@@ -15,16 +15,22 @@ This catalog is intentionally explicit about status. A connector should only loo
 | Status | Meaning |
 | --- | --- |
 | Available now | The integration has a working Woes surface or supported setup path today. |
-| Planned connector | The integration appears in the product catalog but remains disabled until OAuth, install state, routes, permissions, and delivery behavior are implemented. |
+| Planned connector | The integration appears in the product catalog but remains disabled until OAuth, install state, routes, permissions, audit trails, delivery behavior, and failure states are implemented. |
 | Future candidate | A researched integration direction that fits the platform, but is not yet a product commitment or active connector. |
 
 ## Available now
 
 | Integration | What it does today |
 | --- | --- |
-| [GitHub](./github) | Imports repository docs, examples, and source-adjacent material into Woes API context. |
+| [Live chat widget](./live-chat-widget) | Installs the customer widget, routes by agent widget key, collects pre-chat details, supports identity verification, and feeds Inbox plus Live chat analytics. |
 | [Email](./email) | Uses email as a support channel alongside live chat and Discord. |
+| [Resend](./resend) | Manages email sending-domain setup and DNS verification for supported email flows. |
 | [Discord](./discord) | Brings selected Discord messages and threads into the shared Woes inbox. |
+| [GitHub](./github) | Imports repository docs, examples, and source-adjacent material into Woes API context. |
+| [API context sources](./api-context-sources) | Imports OpenAPI, Swagger, Postman, GraphQL, GitHub, docs pages, and manual context into the Context Library. |
+| [Public API](./public-api) | Uses `woesk_` workspace API keys for server-side REST integrations and usage tracking. |
+| [Woes MCP](./woes-mcp) | Connects AI tools and internal assistants through the remote MCP endpoint backed by workspace API keys. |
+| [Stripe billing](./stripe) | Manages Woes plans, add-ons, subscription status, checkout, and Billing Portal access. |
 | [Mintlify widget](./mintlify-widget) | Installs the Woes chat widget on a Mintlify documentation site. |
 
 ## Planned connectors
@@ -35,6 +41,7 @@ This catalog is intentionally explicit about status. A connector should only loo
 | [Linear](./linear) | Link support issues to product and engineering workflows. |
 | [Zapier](./zapier) | Let no-code workflows trigger or receive Woes support events. |
 | [Jira](./jira) | Connect support conversations to engineering ticket workflows. |
+| [Webhooks](./webhooks) | Send signed outbound Woes support events to customer-owned systems. |
 
 ## Future candidates
 
@@ -45,15 +52,15 @@ This catalog is intentionally explicit about status. A connector should only loo
 | [Sentry](./sentry) | Error events can connect customer reports to real application failures. |
 | [PagerDuty](./pagerduty) | Urgent support issues can escalate into on-call incident workflows. |
 | [HubSpot](./hubspot) | Account and CRM context can improve routing and operator decisions. |
-| [Stripe](./stripe) | Subscription and billing state can support billing-adjacent conversations. |
 
 ## Integration principles
 
 - Channel integrations should create or continue records in the same Woes conversation and message model.
 - Context integrations should add workspace-scoped evidence for the support agent without exposing credentials or private data to customers.
+- Developer integrations should use server-side `woesk_` API keys, never widget public keys or browser code.
 - Workflow integrations should be disabled until actions, permissions, audit trails, and failure states are fully implemented.
 - Customer-facing docs should never claim an integration is live before the product can actually connect it.
 
 ## Where to manage integrations
 
-Use **Workspace Settings -\> Integrations** for the product catalog and connector status. Use **Context Library** for GitHub repository imports and source management. Use the channel settings pages for live chat, email, and Discord channel behavior.
+Use **Workspace Settings -\> Integrations** for the product catalog and connector status. Use **Context Library** for API context imports and source management. Use the channel settings pages for live chat, email, and Discord behavior. Use **Settings -\> Keys** for widget and workspace API keys, and **Settings -\> Billing** for Stripe-backed billing state.

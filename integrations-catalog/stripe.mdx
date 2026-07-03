@@ -1,39 +1,40 @@
 ---
-title: "Stripe Candidate"
-sidebarTitle: "Stripe"
-description: "Future candidate for billing and subscription context in Woes support conversations."
+title: "Stripe Billing"
+sidebarTitle: "Stripe billing"
+description: "Manage Woes plans, add-ons, subscription status, and billing portal access through Stripe."
 ---
 
-# Stripe Candidate
+# Stripe Billing
 
-Stripe is a future integration candidate for bringing billing and subscription context into Woes support conversations.
+Stripe is the billing integration Woes uses for workspace subscriptions, plan changes, add-ons, and subscription management.
 
 ## Status
 
-**Future candidate.** Woes uses Stripe internally for Woes billing, but this page describes a possible customer-owned Stripe integration for support context. It is not currently live.
+**Available now.** Workspaces can use Settings -\> Billing to manage plans and Stripe-backed subscription flows where Stripe is configured.
 
-## What it could do
+## What it does
 
-A customer-owned Stripe integration could help support teams answer billing-adjacent questions:
+Stripe billing helps admins:
 
-- Match a Woes client to Stripe customers and subscriptions.
-- Show plan, billing status, renewal, invoice, and payment-state context to operators.
-- Trigger support workflows when payments fail or subscriptions change.
-- Add billing state to routing decisions for verified customers.
-- Link operators to the relevant Stripe customer record.
+- See the current Woes plan and subscription status.
+- Start plan changes through Stripe Checkout.
+- Open Stripe Billing Portal through **Manage subscription**.
+- Add supported capacity such as operator seats or extra agent/widget capacity.
+- Keep Woes plan limits in sync with Stripe webhooks.
+- Track public API calls and live API checks against plan capacity.
 
-## Why it fits Woes
+## Where it appears in Woes
 
-Developer-support teams often receive questions that mix API behavior, account entitlements, billing state, and subscription limits. Stripe context can help operators answer accurately without asking customers for details the workspace already knows.
+- **Settings -\> Billing** is the main billing surface.
+- **Settings -\> Integrations** shows Stripe billing status as part of the workspace integration catalog.
+- **Settings -\> Keys** creates API keys whose usage is counted in billing usage meters.
 
-## Key design questions
+## Internal boundary
 
-- How should Woes distinguish internal Woes billing from a customer's connected Stripe account?
-- Which billing fields are operator-only and which, if any, are safe for AI context?
-- How should customer matching work across email, domain, metadata, and client ids?
-- Should subscription webhooks create Woes events or only refresh account context?
-- How should API keys and webhook secrets be stored and redacted?
+This page describes Woes billing through Stripe. It is different from a customer-owned Stripe data connector for importing subscription context into support conversations. Customer-owned billing-context integrations may be designed separately later and should not be assumed to be live from this page.
 
-## Possible first version
+## Related docs
 
-Start with read-only customer and subscription lookup for verified customer identities, then add webhook-driven account updates after the permission and audit model is stable.
+- [Billing](/settings/billing)
+- [Settings Overview](/settings/overview)
+- [API Keys](/settings/keys)
