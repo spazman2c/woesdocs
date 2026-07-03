@@ -60,6 +60,46 @@
     {
       "source": "/api-agents",
       "destination": "/api/agents"
+    },
+    {
+      "source": "/integrations-catalog/email",
+      "destination": "/channels/email",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/mintlify-widget",
+      "destination": "/chat-widget/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/stripe",
+      "destination": "/integrations-catalog/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/live-chat-widget",
+      "destination": "/chat-widget/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/resend",
+      "destination": "/channels/email",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/api-context-sources",
+      "destination": "/context/sources",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/public-api",
+      "destination": "/api-reference/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/woes-mcp",
+      "destination": "/api/mcp",
+      "permanent": true
     }
   ],
   "navbar": {
@@ -519,35 +559,27 @@
             "icon": "check-circle",
             "pages": [
               "integrations-catalog/github",
-              "integrations-catalog/email",
-              "integrations-catalog/discord",
-              "integrations-catalog/mintlify-widget",
-              "integrations-catalog/live-chat-widget",
-              "integrations-catalog/resend",
-              "integrations-catalog/api-context-sources",
-              "integrations-catalog/public-api",
-              "integrations-catalog/woes-mcp",
-              "integrations-catalog/stripe"
+              "integrations-catalog/discord"
             ]
           },
           {
             "group": "Planned connectors",
             "icon": "calendar-clock",
             "pages": [
-              "integrations-catalog/slack",
-              "integrations-catalog/linear",
+              "integrations-catalog/webhooks",
               "integrations-catalog/zapier",
               "integrations-catalog/jira",
-              "integrations-catalog/webhooks"
+              "integrations-catalog/sentry",
+              "integrations-catalog/notion",
+              "integrations-catalog/slack",
+              "integrations-catalog/linear"
             ]
           },
           {
-            "group": "Future candidates",
+            "group": "Additional connector candidates",
             "icon": "sparkles",
             "pages": [
               "integrations-catalog/confluence",
-              "integrations-catalog/notion",
-              "integrations-catalog/sentry",
               "integrations-catalog/pagerduty",
               "integrations-catalog/hubspot"
             ]

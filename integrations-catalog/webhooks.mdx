@@ -1,42 +1,45 @@
 ---
 title: "Webhooks Connector"
 sidebarTitle: "Webhooks"
-description: "Planned webhook connector for outbound Woes support events and workflow handoffs."
+description: "Planned webhook connector for sending Woes support events to customer-owned systems."
 icon: "webhook"
 ---
 
 # Webhooks Connector
 
-Webhooks are a planned connector for sending Woes support events to customer-owned systems.
+Webhooks are a planned connector for teams that want Woes events delivered to customer-owned systems without a no-code platform in the middle.
 
 ## Status
 
-**Planned connector.** Webhooks are visible as a product direction, but they should remain disabled until signing, retries, delivery logs, permissions, and failure behavior are implemented.
+**Planned connector.** Webhooks should remain disabled until Woes has stable event schemas, signing, delivery retries, per-workspace subscriptions, and operator-visible delivery logs.
 
 ## What it will do
 
-A webhook connector could send events such as:
+A Woes webhooks connector should let teams subscribe external systems to support events:
 
-- Conversation created or updated.
-- Issue created, updated, solved, or reopened.
+- New conversation or issue created.
+- Issue status, priority, tag, assignment, or SLA changes.
 - Survey response received.
-- Agent handoff or low-confidence skip.
-- SLA breach risk or breach.
-- Client/account activity changes.
+- Automation rule completed or failed.
+- Agent handoff, low-confidence skip, or human takeover events.
 
-## Design requirements before launch
+## Product fit
 
-Before webhooks become live, Woes should support:
+Webhooks are for teams with their own backend, data warehouse, incident tooling, or internal workflow system. They should complement the public REST API: REST lets customers pull or mutate workspace records, while webhooks let Woes push event notifications when something changes.
 
-- Per-workspace endpoint configuration.
-- Server-side signing secrets.
-- Delivery retries and backoff.
-- Delivery logs and replay controls.
-- Permission-gated create/update/delete actions.
-- Redacted payloads with no secrets, provider internals, or cross-workspace data.
+## Implementation requirements
 
-## Related docs
+Before webhooks become active, Woes needs:
 
-- [Automations](/platform/automations)
-- [Route Boundaries](/developer/route-boundaries)
-- [Security Logs](/security/security-logs)
+- Workspace-scoped endpoint subscriptions.
+- Signed payloads and secret rotation.
+- Stable event schemas with versioning.
+- Retry, backoff, dead-letter, and replay behavior.
+- Delivery logs that redact secrets and customer-private fields where needed.
+- Rate limits and permission checks for creating or editing subscriptions.
+
+## Early recipes
+
+- Send high-priority support issues into an internal escalation service.
+- Mirror resolved issues into a data warehouse for reporting.
+- Notify a customer-owned workflow when a survey response is received.
