@@ -55,6 +55,23 @@ When a customer asks a question, Woes:
 5. Asks a focused clarification question when key details are missing.
 6. Hands off to an operator when confidence is too low.
 
+## Confidence And Outcomes
+
+Confidence is calibrated from several signals: retrieved source quality,
+context sufficiency, the answer contract, missing details, citation verification,
+and the configured threshold. Lowering the threshold can increase answer rate,
+but it is usually the wrong first fix for handoffs. Improve source coverage,
+agent attachments, and examples before making the agent less conservative.
+
+| Situation | Expected behavior |
+| --- | --- |
+| Greeting or capability question | Respond deterministically without a retrieval-heavy answer. |
+| Exact API question with evidence | Answer concisely and cite the relevant source or endpoint. |
+| Missing endpoint, auth, payload, or error detail | Ask one focused clarification question or hand off. |
+| Human request | Hand off cleanly. |
+| Secret, system-prompt, or prompt-injection request | Refuse or hand off without exposing internals. |
+| Provider or retrieval failure | Return an operator-safe skipped or handoff state. |
+
 ## Model Routing
 
 By default, Woes routes agent model calls through the platform-managed AI
@@ -84,6 +101,10 @@ decision.
 
 Use this evidence to correct bad source coverage, add missing docs, leave
 message feedback, or take over the conversation when a human answer is safer.
+
+Customer-visible widget, email, and Discord replies never include raw traces,
+provider/model internals, token/cost details, source credentials, or
+operator-only debug fields.
 
 ## What Agents Must Not Do
 

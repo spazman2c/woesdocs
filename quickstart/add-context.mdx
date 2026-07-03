@@ -26,7 +26,7 @@ as specific as the source context it can retrieve.
 | GraphQL schema | Query/mutation types, fields, arguments, and schema descriptions. |
 | AsyncAPI | Event, message, and webhook documentation. |
 | SOAP or gRPC docs | Service operations, request/response contracts, and integration notes. |
-| GitHub repository | Docs, SDK examples, sample apps, README files, and source-adjacent API guidance. |
+| GitHub repository | Default-branch README, docs, specs, SDK examples, and source-adjacent API guidance. |
 
 ## Add a Source
 
@@ -59,7 +59,7 @@ as specific as the source context it can retrieve.
 | `openapi.yaml` or `openapi.json` | OpenAPI or spec upload | Check generated endpoint Markdown for auth and examples. |
 | A docs homepage | Website crawl | Keep the crawl scope to the docs domain or path you trust. |
 | A single troubleshooting article | Raw documentation URL | Add tags or folders so operators can find it later. |
-| A private docs repository | GitHub repository | Choose the branch and docs folders that match production behavior. |
+| A private docs repository | GitHub repository | Review the default-branch docs-like files that Woes imports before attaching the source to an agent. |
 | A support runbook | Markdown or text | Keep it concise and remove operator-only secrets before ingestion. |
 
 ## Source Health
@@ -68,8 +68,9 @@ Woes shows status and coverage so operators can understand what the agent knows.
 
 | State | Meaning |
 | --- | --- |
+| Pending | The source has been created and is waiting to scan. |
+| Processing | Woes is fetching, parsing, normalizing, and chunking the source. |
 | Ready | The source was scanned and has usable content. |
-| Partial | Some content was parsed, but one or more pages, documents, or endpoints need attention. |
 | Failed | Woes could not safely fetch or parse the source. Review the error and source accessibility. |
 | No endpoints | The source may contain useful docs, but no endpoint-level reference was found. |
 
@@ -77,7 +78,7 @@ Woes shows status and coverage so operators can understand what the agent knows.
 
 A source is ready for an agent when:
 
-- The source status is **Ready** or the partial warnings are understood.
+- The source status is **Ready** and any warnings or coverage gaps are understood.
 - Important endpoint paths and document titles appear in the source detail view.
 - Generated endpoint Markdown includes auth rules, request shape, response
   shape, and common errors where available.

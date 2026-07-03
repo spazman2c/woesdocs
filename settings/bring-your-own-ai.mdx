@@ -19,9 +19,9 @@ admins back to [Billing](/settings/billing).
 
 ## Supported Providers
 
-Woes supports a curated provider list in the app. The available providers and
-models may change as Woes updates its server-side routing and reliability
-controls.
+Woes supports a curated provider list in the app, currently including Anthropic,
+OpenAI, and Google where enabled. The available providers and models may change
+as Woes updates its server-side routing and reliability controls.
 
 Each provider entry can have one stored key. A workspace can connect more than
 one provider, but only one provider is active for support-agent routing at a
@@ -118,6 +118,10 @@ Admins can:
 
 If a provider key fails verification, Woes can save the status as failed and
 show an operator-safe error. The full key remains hidden.
+
+Failed verification does not activate the provider for support-agent routing.
+Pausing BYO AI returns the workspace to platform-managed routing without
+changing agent grounding, source attachments, confidence, or handoff behavior.
 
 ## Billing Notes
 

@@ -15,7 +15,7 @@ The Woes iOS SDK gives your customers a native live-chat experience in SwiftUI o
 | Widget routing | Uses a workspace key (`trovw_...`) or agent key (`trovw_agent_...`). |
 | Conversation continuity | Stores the conversation key and history secret per widget key. |
 | AI and handoff | Sends messages through Woes so the selected AI agent or operator can reply. |
-| Identity verification | Accepts server-generated HMAC email hashes or JWT proofs. |
+| Identity verification | Attaches server-generated HMAC email hashes or JWT proofs to message requests. |
 | Surveys | Submits configured CSAT or NPS surveys through the public widget API. |
 
 ## Requirements
@@ -98,6 +98,9 @@ Do not compute HMACs or store widget identity secrets in your iOS app. Use your 
 
 A mobile identity endpoint should use the same server-side contract as the web widget: authenticate the app user, normalize email with `trim().lowercased()`, sign with the server-only `WOES_WIDGET_IDENTITY_SECRET`, and return a no-store response. If the user signs in or switches accounts, refresh the SDK identity and send the new proof before the next message.
 
+The current iOS SDK attaches identity proof to widget message requests. It does
+not call the web widget's `/api/widget/identity` preflight route on its own.
+
 If identity verification is disabled, `email`, `name`, and `company` can still help operators recognize the customer, but verified identity is required for trusted account-specific context.
 
 ## Custom Fields
@@ -133,17 +136,17 @@ await viewModel.send("How do I create an API key?")
 The SDK uses public widget routes, not the `/api/v1` REST API:
 
 - `GET /api/widget/config`
-- `POST /api/widget/identity`
 - `GET /api/widget/messages`
 - `POST /api/widget/messages`
 - `POST /api/widget/presence`
-- `POST /api/widget/events`
 - `GET /api/widget/feedback`
 - `POST /api/widget/csat`
-- `GET /api/widget/updates`
-- `POST /api/widget/updates/read`
 
-The SDK never uses REST API keys, Supabase credentials, workspace secrets, operator debug traces, or provider/model internals. Conversation history still depends on the per-widget-key `conversationSecret`, and update read state should use an opaque verified reader key rather than raw secrets or private account data.
+The current SDK does not implement widget telemetry events, published updates,
+or update read-state routes. The SDK never uses REST API keys, Supabase
+credentials, workspace secrets, operator debug traces, or provider/model
+internals. Conversation history still depends on the per-widget-key
+`conversationSecret`.
 
 ## Related Pages
 

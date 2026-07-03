@@ -56,3 +56,15 @@ and improving the knowledge base so future replies get better.
 | Agent gives vague SDK answers | Ingest SDK examples or a GitHub repository with sample code. |
 | Agent hands off too often | Improve source coverage and review confidence settings. |
 | Agent answers too confidently | Tighten guardrails and review retrieval evidence. |
+
+## Failure Layers
+
+| Layer | What to inspect |
+| --- | --- |
+| Retrieval | Did the right source, endpoint, or chunk appear? |
+| Context pack | Did the prompt receive enough selected evidence to answer? |
+| Prompt or guardrail | Did instructions conflict with safe behavior? |
+| Confidence policy | Was the threshold appropriate for the evidence? |
+| Answer contract | Did the final answer cite API facts and avoid unsupported claims? |
+| UI/debug | Did operators see the skip reason, citations, and confidence clearly? |
+| Provider failure | Did the provider error, timeout, or BYO configuration fail safely? |

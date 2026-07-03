@@ -13,7 +13,7 @@ Discord support routes server messages into Woes using the same conversation and
 - Workspace-bound server installation.
 - Channel listing for text, announcement, and forum channels.
 - Inbound message forwarding to Woes.
-- Optional dedicated gateway worker for always-on Discord events.
+- Dedicated gateway worker for always-on Discord events.
 - Agent and operator handling from the same Inbox.
 
 ## Setup Flow
@@ -28,8 +28,8 @@ Discord support routes server messages into Woes using the same conversation and
   <Step title="Choose channels">
     Select the Discord channels Woes should listen to.
   </Step>
-  <Step title="Run the gateway worker if required">
-    Production Discord events require the gateway process described in the deployment notes.
+  <Step title="Run the gateway worker">
+    Production Discord intake requires the gateway process unless you have deployed another server-side Discord event source.
   </Step>
   <Step title="Test a message">
     Send a message in the selected channel and confirm it appears in Inbox.
@@ -39,6 +39,40 @@ Discord support routes server messages into Woes using the same conversation and
 ## Discord Conversations
 
 Woes maps Discord messages to conversations using server and channel/thread context. Forum posts and threads can map to the same support conversation where supported.
+
+## Routing Modes
+
+Configured Discord channels can route in mention mode or all-message mode.
+Mention mode requires the Woes app to be mentioned before a message is routed.
+All-message mode routes readable messages in configured channels. Thread and
+forum child messages follow the configured parent-channel rule.
+
+## Bot Removed Or Permissions Lost
+
+If the Woes app is removed from the server or loses channel access, channel
+discovery returns a reinstall state. In Settings, Woes shows a reinvite action
+and pauses normal channel discovery until the bot is invited again.
+
+After reinviting:
+
+1. Refresh the Discord channel list.
+2. Confirm the selected channels are still enabled.
+3. Send a test message in an enabled channel.
+4. Confirm exactly one conversation appears in Inbox.
+
+## Delivery Diagnostics
+
+The Discord gateway writes delivery diagnostics for messages that do not become
+Woes conversations. Common states include:
+
+| Diagnostic | Meaning |
+| --- | --- |
+| `message_ignored_unconfigured` | The server/channel was not configured for intake. |
+| `message_ignored_empty` | The routed Discord message had no usable text. |
+| `message_thread_create_failed` | Woes could not create or find the support thread. |
+
+Use these diagnostics with worker logs when a message reaches Discord but does
+not appear in Woes.
 
 ## Production Checklist
 

@@ -11,9 +11,17 @@ Woes can store source auth configuration and run guarded endpoint tests so suppo
 
 - Credentials are configured separately from documentation content.
 - Secret values are never returned in plaintext.
+- Secrets are encrypted or handled server-side through the source auth store.
 - Test execution applies credentials server-side only.
 - Results are sanitized before display.
 - Unsafe or uncontrolled targets are blocked by route-level safeguards.
+
+## Supported Auth Modes
+
+Source auth can represent common API authentication patterns, including bearer
+tokens, API keys in headers or query parameters, basic auth, OAuth-style token
+fields, custom headers, and mTLS configuration metadata. mTLS credentials can be
+configured, but live mTLS transport is not enabled yet.
 
 ## Configure Source Auth
 
@@ -56,8 +64,11 @@ commands. Source test payloads are bounded, and live API checks are tracked in
 billing usage when a guarded test executes.
 
 <Note>
-  mTLS credentials can be configured, but live mTLS transport is not enabled
-  yet.
+  Support-agent live verification uses the same guarded execution boundary. It
+  only runs after explicit customer run/confirm intent, only against concrete
+  retrieved endpoints, uses configured source auth, defaults to read-safe
+  behavior, requires write opt-in for unsafe methods, and shows redacted body
+  previews only in operator/Sandbox contexts.
 </Note>
 
 <Warning>

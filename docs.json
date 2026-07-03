@@ -202,8 +202,6 @@
                   "index",
                   "quickstart/overview",
                   "quickstart/add-context",
-                  "agents/create-agents",
-                  "quickstart/install-widget",
                   "quickstart/invite-team"
                 ],
                 "expanded": false
@@ -262,7 +260,7 @@
                 "expanded": false
               },
               {
-                "group": "Customer portal",
+                "group": "Client Portal",
                 "pages": [
                   "platform/client-portal",
                   "customer-portal/access-control"
@@ -283,10 +281,10 @@
                 "expanded": false
               },
               {
-                "group": "Account intelligence",
+                "group": "Clients and account intelligence",
                 "pages": [
-                  "account-intelligence/overview",
                   "platform/clients",
+                  "account-intelligence/overview",
                   "account-intelligence/presence"
                 ],
                 "expanded": false
@@ -310,7 +308,7 @@
                 "expanded": false
               },
               {
-                "group": "Broadcasts",
+                "group": "Updates",
                 "pages": [
                   "broadcasts/overview",
                   "broadcasts/create-broadcast",
@@ -334,7 +332,8 @@
                 "pages": [
                   "security/widget-identity",
                   "security/data-privacy",
-                  "security/tenant-isolation"
+                  "security/tenant-isolation",
+                  "security/security-logs"
                 ],
                 "expanded": false
               },

@@ -32,6 +32,8 @@ Woes uses section-specific permissions. This keeps broad settings access from be
 | Billing | Open subscription management and change paid capacity through workspace write access. |
 | Data | Tags, statuses, custom fields, and priority labels. |
 | Macros | Create, update, or delete macros. |
+| Team Chat | Read internal chat, send messages, and manage channels where allowed. |
+| Security | Read logs and configure security/redaction surfaces where allowed. |
 
 ## Roles And Per-User Access
 
@@ -98,5 +100,22 @@ the Users table to open the same item.
 - Give Owners full setup and permission access.
 - Give Admins channel, agent, billing, automation, and workspace configuration access.
 - Give Members inbox and issue workflow access.
-- Give Viewers read-only access for audits or leadership visibility.
+- Give Viewers read-mostly access for audits or leadership visibility. The default Viewer role can still send Team Chat messages.
 - Review direct user overrides during security and billing reviews.
+
+## Runtime Gating
+
+The access matrix controls actual product behavior, not just navigation.
+For example, Inbox read access lets a user inspect conversations, while
+`inbox.reply`, `inbox.archive`, `inbox.delete`, and `customers.write` control
+the composer, takeover, archive/delete actions, tags, notes, and customer-field
+edits. Users without a required action permission see a read-only or disabled
+state instead of a working control.
+
+Team Chat uses `chat.read` to open internal conversations, `chat.send` to send
+messages, reactions, attachments, and read receipts, and
+`chat.channels.manage` to create or administer channels where membership rules
+allow it.
+
+Security uses `security.read` for Settings → Security and Logs and history.
+`security.write` protects security and redaction configuration changes.

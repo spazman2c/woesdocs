@@ -16,6 +16,16 @@ Use this page when a workspace setup or support workflow does not behave as expe
 | Customer appears anonymous | Add identify calls or configure verified widget identity. |
 | History does not load | Confirm stable identity and conversation secret handling. |
 
+## Updates
+
+| Symptom | Check |
+| --- | --- |
+| Updates tab is hidden | Confirm widget Updates are enabled for the selected workspace or agent widget surface. |
+| Published update is not visible | Confirm the update is published, not expired or archived, and targets the widget surface being tested. |
+| Verified-only update is missing | Confirm the visitor has valid HMAC or JWT widget identity proof for the same widget key. |
+| Read state does not persist | Confirm read-state calls include valid verified identity proof; Woes derives the reader identity server-side. |
+| Clicks or views are missing | Confirm customers are seeing the widget Updates tab and interacting after the update was published. |
+
 ## Context
 
 | Symptom | Check |
@@ -24,6 +34,26 @@ Use this page when a workspace setup or support workflow does not behave as expe
 | No endpoints found | Add OpenAPI/Postman/schema material or endpoint reference pages. |
 | Agent asks too many clarifying questions | Inspect source coverage and add missing endpoint/auth/error details. |
 | Test request fails | Confirm source auth settings and safe endpoint URL. |
+
+## Email
+
+| Symptom | Check |
+| --- | --- |
+| Inbound email does not appear | Verify webhook authentication, active route address, and that the workspace address is in `To`, not only `Cc` or `Bcc`. |
+| Duplicate delivery | Provider redelivery should dedupe by email id; check whether the customer actually sent a new message. |
+| Email was skipped | Check for no route, empty email, invalid payload, or ambiguous route states. |
+| Auto-reply does not send | Confirm email is enabled, provider credentials are configured, the sending domain is verified, and the sender is not suppressed or automated. |
+
+## Discord
+
+| Symptom | Check |
+| --- | --- |
+| Channels fail to load | If Woes shows a reinvite state, invite the bot again and refresh channel discovery. |
+| Mention does nothing | Confirm the gateway worker is running, the channel is configured, and mention mode includes the Woes app mention. |
+| Bot appears offline | Confirm the worker token is valid, message content intent is enabled, and only one worker is running for the bot token. |
+| Diagnostic row says `message_ignored_unconfigured` | The server or channel is not configured for intake. |
+| Diagnostic row says `message_ignored_empty` | The Discord message did not contain usable text. |
+| Diagnostic row says `message_thread_create_failed` | Woes could not create or find the support thread for the message. |
 
 ## Agents
 
@@ -75,7 +105,7 @@ Use this page when a workspace setup or support workflow does not behave as expe
 | Issue does not route | Confirm assignment rules are enabled and the target team has active members. |
 | Nobody is eligible | Check capacity, away/inactive status, and required skills. |
 | Skill routing blocks work | Broaden the skill dimension or disable skill-block queueing for that team. |
-| Automation overwrote an assignee | Use the automation option to assign only when the issue is unassigned. |
+| Wrong AI agent answers a channel | Check the channel-specific agent selector and broader AI channel routing settings. |
 
 ## Notifications
 

@@ -84,3 +84,13 @@ details are not stored in workspace settings.
 The support agent receives workspace-scoped context and sanitized customer fields. It should treat customer fields as hints, not API evidence.
 
 Endpoint claims, auth rules, schemas, fields, and response behavior must come from retrieved API context.
+
+## Logs And History
+
+Workspace-visible logs and history are tenant-scoped and redacted before they
+are returned to the browser. They can include user/system activity and usage
+events such as public API calls or live API checks, but they must not expose raw
+API keys, bearer tokens, source auth secrets, request bodies, responses,
+provider internals, service-role details, or platform-admin audit internals.
+
+See [Security Logs](/security/security-logs).

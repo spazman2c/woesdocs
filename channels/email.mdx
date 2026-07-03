@@ -61,6 +61,29 @@ After DNS verifies, send a real email to the configured support address and
 confirm it appears in **Inbox** as an email conversation. Then reply from Woes
 and confirm the customer receives the response from the expected sender.
 
+## Inbound Behavior And Diagnostics
+
+Inbound email is accepted only after webhook authentication succeeds. Woes uses
+the verified recipient in the `To` header for workspace routing; messages sent
+only through `Cc` or `Bcc` are not used to choose a tenant. Deliveries that
+would span multiple workspaces are rejected instead of guessed.
+
+Provider redelivery is idempotent by email id, so retrying the same webhook
+should not create duplicate customer messages. Permanent skip states include
+missing route, empty email, invalid payload, and ambiguous route. Transient
+server errors return retryable failures so the provider can deliver again.
+
+Auto-replies require:
+
+- Email channel enabled.
+- Resend/provider credentials configured in the application environment.
+- A verified sending domain.
+- A non-suppressed sender.
+- A non-automated inbound email.
+
+Attachments are stored as metadata for operator context. Woes does not store or
+serve raw attachment contents from inbound email in the current flow.
+
 ## Survey Emails
 
 Email surveys use signed score links. A customer clicks a score, Woes verifies the token, validates the score range for the survey type, and records the response.

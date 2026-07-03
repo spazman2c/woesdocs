@@ -17,7 +17,7 @@ Workspace admins can invite operators and configure what each member can read or
     Add the teammate's email address and choose an initial role.
   </Step>
   <Step title="Assign permissions">
-    Use the role defaults or customize permissions in **Settings → Permissions**.
+    Use the role defaults or customize permissions in **Settings → Users → Access**.
   </Step>
   <Step title="Review viewing state">
     The Users table can show what an operator is currently viewing and lets admins jump directly to that item when available.
@@ -31,7 +31,14 @@ Workspace admins can invite operators and configure what each member can read or
 | Owner | Full workspace setup, billing-adjacent operations, permissions, keys, and security settings. |
 | Admin | Day-to-day configuration, channels, agents, automations, and team management. |
 | Member | Inbox, issues, replies, notes, macros, and customer support work. |
-| Viewer | Read-only or audit access. |
+| Viewer | Read-mostly or audit access. By default, Viewers can still send Team Chat messages. |
+
+## Invite Acceptance
+
+When an invitee opens the invitation link, Woes verifies the invitation and asks
+for a short email code before account setup continues. The invitee then sets a
+password of at least eight characters and joins the workspace with the role or
+direct access assigned by the admin.
 
 ## Operator Onboarding
 

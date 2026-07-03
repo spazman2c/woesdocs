@@ -34,8 +34,8 @@ Widget routes are public customer-browser routes used by `https://woes.dev/widge
 | `POST` | `/api/widget/events` | Record widget impressions, opens, closes, and engagement events. | `publicKey`, visitor/session ids, and event list. |
 | `GET` | `/api/widget/feedback` | Load thumbs feedback state for messages in one verified widget conversation. | `publicKey`, `conversationKey`, and `conversationSecret`. |
 | `POST` | `/api/widget/csat` | Record a configured CSAT or NPS survey response for a verified widget conversation. | `publicKey`, `surveyId`, `score`, `conversationKey`, and `conversationSecret`. |
-| `GET` | `/api/widget/updates` | Load published customer updates for a widget key. Optionally includes read state for a verified reader. | `publicKey`; optional `readerKey`, `verified=true`. |
-| `POST` | `/api/widget/updates/read` | Mark published widget updates as read for a verified reader. | `publicKey`, `readerKey`, and up to 50 UUID `updateIds`. |
+| `GET` | `/api/widget/updates` | Load published customer updates for a widget key. Optionally includes read state for a verified HMAC/JWT identity. | `publicKey`; verified identity headers where read state is needed. |
+| `POST` | `/api/widget/updates/read` | Mark published widget updates as read for a verified reader. | `publicKey`, verified HMAC/JWT identity proof, and up to 50 UUID `updateIds`. |
 
 ## Config
 
@@ -79,9 +79,11 @@ Presence, feedback, and survey routes all verify that the conversation belongs t
 
 ## Updates
 
-Widget updates are published announcements shown in the widget Updates tab. Anonymous visitors can load published updates for the widget key. Verified visitors can include a `readerKey` so Woes can return and persist read state across devices.
-
-`readerKey` should be opaque and derived from verified identity, such as the verified identity hash. Do not send raw identity secrets or private account data as the reader key.
+Widget updates are published announcements shown in the widget Updates tab.
+Anonymous visitors can load published updates for the widget key. Read state is
+only returned or written after Woes validates HMAC or JWT identity proof for the
+same widget key. The server derives the reader identity from that proof; clients
+should not invent or send their own `readerKey`.
 
 ## Related Pages
 

@@ -33,6 +33,7 @@ These routes use `Authorization: Bearer <woesk_...>` workspace API keys and are 
 | `/api/v1/usage` | Read current-month workspace usage meters. |
 | `/api/v1/usage/api-keys` | Read current-month public API calls by key prefix. |
 | `/api/v1/analytics` | Read sanitized analytics aggregates. |
+| `/api/mcp` | Remote MCP JSON-RPC endpoint. Discovery is public-safe; tool calls require `Authorization: Bearer <woesk_...>`. |
 
 ## Widget And Customer Routes
 
@@ -54,8 +55,8 @@ These routes are customer-facing, SDK-facing, or webhook-facing. They do not acc
 | `/api/client-portal/auth/logout` | End a customer portal session. |
 | `/api/client-portal/issues` | Customer-safe portal issue list and creation for valid portal sessions. |
 | `/api/client-portal/issues/{issueId}` | Customer-safe portal issue detail for valid portal sessions. |
-| `/api/client-portal/issues/{issueId}/messages` | Customer portal issue message creation. |
-| `/api/client-portal/members` | Customer portal member list and invite flows. |
+| `/api/client-portal/issues/{issueId}/messages` | Client Portal issue message creation. |
+| `/api/client-portal/members` | Client Portal member list and invite flows. |
 | `/api/surveys/email-response` | Signed email survey response capture. |
 | `/api/email/unsubscribe` | Signed customer email unsubscribe flow. |
 
@@ -77,6 +78,7 @@ These routes power the Woes app and require a signed-in workspace user with the 
 | `/api/account/widget-analytics` | Load widget event analytics. |
 | `/api/account/widget/installation` | Load recent external widget install origins. |
 | `/api/account/widget/support-identity` | Load safe support identity fields used by widget/install tooling. |
+| `/api/account/security/logs` | Load tenant-visible, redacted logs and usage history. |
 | `/api/account/ai-providers` | Manage Bring Your Own AI provider keys for entitled workspaces. |
 | `/api/account/ai-providers/test` | Test a Bring Your Own AI provider connection. |
 | `/api/account/ai-providers/activate` | Activate a Bring Your Own AI provider. |
@@ -158,7 +160,7 @@ Webhook routes are server-to-server integration endpoints. They do not accept wo
 | --- | --- |
 | `/api/stripe/webhook` | Receives Stripe subscription events and syncs billing entitlements. |
 | `/api/email/inbound/resend` | Receives inbound email events from Resend. |
-| `/api/discord/events` | Receives Discord interaction and message events. |
+| `/api/discord/events` | Receives worker-authorized Discord message events. |
 
 ## Admin Routes
 

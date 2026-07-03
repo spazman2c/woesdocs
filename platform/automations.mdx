@@ -1,6 +1,6 @@
 ---
 title: "Automations"
-description: "Create workflow automations with supported trigger, logic, condition, delay, routing, survey, note, notification, SLA, snooze, and archive nodes."
+description: "Create workflow automations with supported trigger, filter, AI condition, delay, routing, status, priority, tag, reply, survey, note, notification, SLA, snooze, and archive nodes."
 ---
 
 # Automations
@@ -30,6 +30,34 @@ An automation contains:
 - Version and publish state.
 - Logs and test results.
 
+## Supported Node Catalog
+
+The node library contains configurable node types, not duplicate preset nodes.
+For example, use **Set priority** and choose a priority value instead of adding
+separate "Set high priority" or "Set low priority" nodes. Use **Snooze issue**
+and choose a duration instead of separate one-hour or four-hour snooze nodes.
+
+| Node | Type | Use it for |
+| --- | --- | --- |
+| Trigger | Start | Start from a supported runtime event. |
+| If condition | Logic | Branch on conversation, issue, customer, message, survey, or tag fields. |
+| AI condition | Logic | Branch on detected topic or AI outcome. |
+| Delay | Timing | Wait minutes, hours, or days before continuing. |
+| Hand to AI agent | Routing | Let the Woes AI assistant handle the conversation. |
+| Human handoff | Routing | Stop AI ownership and leave the conversation for an operator. |
+| Assign team | Routing | Route work to a team queue. |
+| Set status | Ticket action | Move lifecycle state to a configured value. |
+| Set priority | Ticket action | Set the configured priority value. |
+| Add tag | Ticket action | Apply one normalized issue tag. |
+| Auto-reply | Message action | Add a configured assistant reply when the AI has not already answered. |
+| Notify | Operator action | Record an operator notification in automation notes. |
+| Send CSAT survey | Survey action | Request an eligible CSAT survey. |
+| Send NPS survey | Survey action | Request an eligible NPS survey. |
+| Set SLA target | SLA action | Apply first-response or resolution timing metadata. |
+| Add internal note | Operator action | Write an operator-only note. |
+| Snooze issue | Lifecycle action | Snooze until the configured future time. |
+| Archive issue | Lifecycle action | Move the conversation out of the active inbox. |
+
 ## Trigger Nodes
 
 Trigger nodes are the only starting point for an automation. Woes only exposes trigger events that are fired by the runtime.
@@ -52,7 +80,7 @@ Trigger nodes are the only starting point for an automation. Woes only exposes t
 | --- | --- |
 | If condition | Branch on fields from the issue or conversation. |
 | AI condition | Branch on detected customer intent or AI outcome. |
-| Delay | Wait minutes, hours, or days before continuing. Delay can use elapsed time or support-hours timing. |
+| Delay | Wait minutes, hours, or days before continuing. Support-hours delay basis is stored with the automation, but current runtime processing treats the delay as elapsed time. |
 
 Supported condition fields are priority, status, channel, assignee, tag, customer email, message text, message mentions workspace, survey type, survey score, CSAT score, AI topic, and AI outcome.
 
@@ -72,10 +100,16 @@ AI topic values are `api-question`, `human-request`, `off-topic`, `greeting`, `c
 | Notify | Records an operator notification in automation notes. | Recipient target; message is optional. |
 | Send CSAT survey | Requests customer satisfaction feedback. | Optional automation survey selection. |
 | Send NPS survey | Requests recommendation feedback. | Optional automation survey selection. |
-| Set SLA target | Applies a first response, next response, or resolution target. | SLA target. |
+| Set SLA target | Applies first-response or resolution timing metadata. | SLA target. |
 | Add internal note | Writes an operator-only note. | Note body. |
 | Snooze issue | Moves the item into waiting until a future time. | Snooze duration. |
 | Archive issue | Moves the conversation out of the active inbox. | None. |
+
+<Note>
+  Survey actions mark the conversation as requesting an eligible survey. The
+  widget and survey settings still decide whether a survey can be shown for that
+  customer and channel.
+</Note>
 
 ## Common Recipes
 
@@ -114,15 +148,18 @@ Use these as starting points, then adjust conditions for your workspace.
 | Step | Node |
 | --- | --- |
 | 1 | Trigger: **Customer replied** |
-| 2 | If condition: `status` is `solved` or `archived` |
+| 2 | If condition: `status` is `solved` |
 | 3 | Action: **Set status** to `Open` |
 | 4 | Action: **Assign team** or **Notify** |
 
 ## Assignment And Routing
 
-Automations can assign individual issues to an AI agent, account owner, specific user, or team. Use [Assignment](/settings/assignment) when you need persistent team routing rules with skills, capacity, schedules, or route previews.
+Automations can hand work to the AI agent, hand it back to a human operator, or
+route it to a team. Use [Assignment](/settings/assignment) when you need
+persistent routing rules with skills, capacity, schedules, or route previews.
 
-Use the **only when unassigned** option when an automation should avoid overwriting a human triage decision.
+Automations do not currently assign directly to an account owner or arbitrary
+workspace user. Keep those decisions in team assignment rules or manual triage.
 
 ## Testing Automations
 

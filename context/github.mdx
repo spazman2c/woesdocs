@@ -25,7 +25,7 @@ authorized connection.
     Open the GitHub integration from Context and authorize access.
   </Step>
   <Step title="Choose a repository">
-    Pick the owner, repository, and branch that should be scanned.
+    Pick the owner and repository that should be scanned.
   </Step>
   <Step title="Filter if needed">
     Search the repository list when you have access to many repos. Private
@@ -35,7 +35,7 @@ authorized connection.
     Woes creates a `github` source with repository metadata.
   </Step>
   <Step title="Scan files">
-    Woes collects supported documentation files and builds repository file documents.
+    Woes scans the repository default branch for supported documentation-like files and builds repository file documents.
   </Step>
   <Step title="Attach to an agent">
     Add the repository source to the agent that should answer from that material.
@@ -54,10 +54,15 @@ authorized connection.
 
 ## What Woes Scans
 
-Repository ingestion prioritizes documentation-oriented files such as Markdown,
-MDX, docs folders, README files, examples, and SDK usage notes. It is designed
-to build support context, not to index arbitrary private application code as a
-customer-facing answer source.
+Repository ingestion prioritizes documentation-oriented files from the default
+branch, such as Markdown, MDX, docs folders, README files, OpenAPI/spec files,
+examples, and SDK usage notes. It is designed to build support context, not to
+index arbitrary private application code as a customer-facing answer source.
+
+The current GitHub import flow does not expose branch or folder selection in
+the app. If different docs branches or folders matter, prepare a repository
+layout where the default branch contains the production support material you
+want agents to use.
 
 After import, open the created source in **Context** to review the scanned files,
 source status, and any partial-ingestion warnings before attaching it to an

@@ -19,7 +19,7 @@ Markdown.
 | Documentation sites | Human-written guides, concepts, setup flows, and troubleshooting. |
 | Markdown or pasted text | Runbooks, known issues, policy notes, and launch docs. |
 | GraphQL, AsyncAPI, SOAP, gRPC | Non-REST API surfaces and protocol-specific docs. |
-| GitHub repositories | READMEs, SDK examples, docs folders, and code-adjacent context. |
+| GitHub repositories | Default-branch READMEs, docs folders, specs, SDK examples, and code-adjacent support context. |
 
 ## Source Lifecycle
 
@@ -56,3 +56,7 @@ Markdown.
 Do not use the knowledge base to store raw customer secrets, private tokens, or
 operator-only credentials. Source auth credentials used for testing are stored
 separately from source content and should never be copied into public docs.
+
+URL ingestion and website crawling are bounded by safe-fetch, same-origin, size,
+time, and request-count controls. Public docs publication is sanitized and
+available only for ready source material.

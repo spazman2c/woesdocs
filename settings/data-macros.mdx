@@ -34,6 +34,11 @@ Use tags for:
 - Automation conditions.
 - Quick visual scanning.
 
+Managed tag scopes include issue tags and account-oriented labels. Issue tags
+render as colored chips in Inbox and Issues. If a historical record contains a
+tag id that no longer has a managed definition, Woes still shows it with a
+neutral fallback so the record does not lose context.
+
 ## Statuses and Priorities
 
 Statuses and priority labels determine how operators see lifecycle state in Inbox and Issues.
@@ -51,7 +56,10 @@ Macros can:
 - Set conversation status.
 - Record usage for analytics.
 
-Macro usage appears in the Workforce analytics dashboard.
+Enabled macros appear in the Inbox composer. Applying a macro appends its reply
+text to the conversation draft, applies configured issue tags or status changes
+where supported, and records usage for analytics. Macro usage appears in the
+Workforce analytics dashboard.
 
 <Tip>
   Use macros for repeatable operator language, not for hiding product uncertainty. If the same answer is needed often, also add it to API context.

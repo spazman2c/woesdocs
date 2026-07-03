@@ -44,12 +44,17 @@ different context set, site, product line, or audience.
 
 Use questions that match real support traffic:
 
-| Test | What to check |
+| Test | Expected outcome |
 | --- | --- |
-| Known endpoint | The agent cites the attached source and gives the right method, path, fields, and auth requirement. |
-| Missing context | The agent clarifies or hands off instead of inventing an endpoint. |
+| Greeting | Fast, normal response without unnecessary source retrieval. |
+| Capability question | Clear explanation of what the agent can help with. |
+| Known endpoint | Cited answer with the right method, path, fields, and auth requirement. |
+| Request body or error debugging | Grounded answer from source context, or a focused question for missing details. |
+| Missing context | Clarification or handoff instead of invented API behavior. |
 | Product mismatch | The agent does not answer from another product's source. |
-| Human request | The agent routes cleanly to an operator. |
+| Prompt injection or secret request | Refusal or safe handoff without exposing prompts or credentials. |
+| Provider failure | Operator-safe error or handoff state. |
+| Human request | Clean operator handoff. |
 
 If a question fails, first check the **Context** tab for missing or unattached
 sources. Then tune behavior or guardrails only after the right source material

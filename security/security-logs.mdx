@@ -1,0 +1,57 @@
+---
+title: "Security Logs"
+description: "Understand workspace-visible logs, usage history, redaction, and platform-admin audit boundaries."
+---
+
+# Security Logs
+
+Security logs help workspace admins review operational history without exposing
+secrets or platform-admin internals.
+
+## Access
+
+Logs and history require `security.read`. Security configuration changes, such
+as widget identity and redaction controls, require `security.write` where the
+product exposes write controls.
+
+## What The Workspace Can See
+
+Tenant-visible logs combine two workspace-scoped sources:
+
+| Source | What it contains |
+| --- | --- |
+| Activity log | User, system, and mirrored platform-admin activity that should be visible to the workspace. |
+| Usage events | Public API calls, live API checks, and related usage events tied to the workspace. |
+
+Platform-admin audit records are not read directly by the tenant UI. When a
+platform-admin action should be visible to the workspace, Woes mirrors a
+redacted activity entry into the tenant activity log.
+
+## Redaction
+
+Log metadata is recursively redacted before it is returned to the browser. Woes
+masks values that look like:
+
+- Full workspace API keys.
+- Bearer values.
+- Source auth secrets.
+- Widget identity secrets.
+- Token hashes.
+- Stored API key prefixes where needed.
+- Other secret-like metadata.
+
+Logs do not expose raw request bodies, raw responses, provider/model internals,
+service-role details, or customer-private data outside the workspace boundary.
+
+## How To Use Logs
+
+- Review API-key usage before rotating or revoking keys.
+- Confirm important settings and billing-adjacent changes.
+- Check whether a live API test or public API integration is consuming usage.
+- Use redacted metadata as an audit clue, not as a source of credentials.
+
+<Warning>
+  Logs are for audit and troubleshooting. Never paste API keys, source auth
+  secrets, BYO AI provider keys, widget identity secrets, or customer tokens
+  into log metadata, notes, macros, docs, screenshots, or customer replies.
+</Warning>

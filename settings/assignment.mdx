@@ -34,16 +34,23 @@ falls through when it cannot find an eligible member.
 | Recurring daily | Uses daily time windows for member assignment. |
 | Recurring weekly | Uses day-of-week and time windows for member assignment. |
 
-## Individual Assignment
+## AI Channel Routing
 
-Use Automations when one issue should be assigned to a specific target:
+Assignment controls issue and team routing. AI channel routing is a separate
+control that decides which support agent answers inbound live chat, email, and
+Discord conversations before or alongside human triage.
 
-- AI agent.
-- Account owner.
-- Specific workspace user.
+Use channel settings for the simple per-channel selector. Use the broader
+assignment/routing panel when you need the configured channel-agent list:
 
-The automation can optionally assign only when the issue is currently
-unassigned.
+| Channel | Agent routing behavior |
+| --- | --- |
+| Live chat | Selects one agent for the installed widget key or channel fallback. |
+| Email | Can route across multiple selected agents, with a stable agent selected for each conversation. |
+| Discord | Selects one agent for Discord intake. |
+
+Use Automations when a workflow should hand a conversation to the AI agent,
+hand it back to a human operator, or route it to a team.
 
 ## Preview Routing
 

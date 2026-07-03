@@ -79,8 +79,7 @@ parameters, body schemas, response examples, and test calls.
     Choose an endpoint in the **Endpoint Reference** section of this tab.
   </Step>
   <Step title="Paste your Bearer token">
-    Add a disposable scoped test key to the authorization field in the
-    playground.
+    Add a disposable test key to the authorization field in the playground.
   </Step>
   <Step title="Send the request">
     Review the example parameters or body, then run the request against
@@ -92,8 +91,10 @@ parameters, body schemas, response examples, and test calls.
 <Warning>
   API keys are server-side secrets. Do not place `woesk_` keys in browser
   snippets, frontend apps, customer-visible docs, or mobile clients. Use a
-  disposable, scoped test key in the docs playground and revoke it after use.
-  For production keys, run requests from your own backend.
+  disposable test key in the docs playground and revoke it after use. If you
+  need scoped playground keys, create them through backend or administrative
+  tooling until the Settings scope picker is available. For production keys, run
+  requests from your own backend.
 </Warning>
 
 ## Active Resources

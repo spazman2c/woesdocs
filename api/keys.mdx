@@ -79,5 +79,7 @@ specific resources:
 If a scoped key calls an endpoint outside its allowed scopes, the API returns
 `403 insufficient_scope`.
 
-Only these exact scopes can be created today. Leaving the scope list empty
-creates an unrestricted key.
+Only these exact scopes are accepted by the API key model. Leaving the scope
+list empty creates an unrestricted key. The current Settings UI creates named
+workspace API keys without a scope picker; scoped key creation is available
+where backend or administrative tooling supplies the scope list.

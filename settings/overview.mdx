@@ -1,6 +1,6 @@
 ---
 title: "Settings Overview"
-description: "Understand the Woes settings areas for workspace identity, billing, BYO AI, channels, agents, keys, users, roles, data, surveys, and notifications."
+description: "Understand the Woes settings areas for workspace identity, billing, BYO AI, channels, agents, keys, users, roles, access, data, and surveys."
 ---
 
 # Settings Overview
@@ -12,19 +12,17 @@ Settings controls workspace behavior, team access, channels, install snippets, s
 | Area | Use it for |
 | --- | --- |
 | Workspace | Company name, support URL, timezone, and identity. |
-| Channels | Live chat, email, and Discord channel settings. |
-| Install | Widget install snippets and setup instructions. |
+| Channels | Live chat, email, Discord, widget install snippets, and channel-specific agent selection. |
 | Assignment | Teams, skills, capacity, schedules, and routing previews. |
 | Billing | Plan selection, Stripe subscription status, usage meters, add-ons, and subscription management. |
 | Bring Your Own AI | Customer-owned model-provider keys for workspaces on the BYO AI plan. |
-| Keys | Workspace widget key, agent widget keys, and private REST API keys. |
+| Keys | Agent widget keys and private workspace API keys. |
 | Users | Members, roles, and current viewing state. |
-| Permissions | Section-specific access controls. |
-| Notifications | In-app, browser, email, push, sound, and quiet-hour preferences. |
+| Access | Section-specific role and per-user access controls. |
 | Data | Custom fields, tags, statuses, and priority labels. |
 | Macros | Reusable operator replies and ticket actions. |
 | Surveys | CSAT and NPS survey configuration. |
-| Security | Widget identity and workspace access controls. |
+| Security | Widget identity, logs and history, redaction, and workspace access controls. |
 
 ## Permission Model
 
@@ -88,6 +86,7 @@ or REST API responses.
 - Use per-user permission overrides only when a user needs access that differs
   from their role.
 - Prefer a narrow role for operators who do not manage setup.
-- Review keys before installing widgets on public pages.
+- Review agent widget keys before installing widgets on public pages.
+- Manage personal notification preferences from the account/profile dialog.
 - Use the API Reference tab for REST API behavior, request examples, and
   generated endpoint schemas.

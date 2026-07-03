@@ -57,6 +57,27 @@ Customer-visible replies, operator-only notes, AI trace details, and internal
 confidence data stay separate. Do not copy trace output into a customer reply
 unless you intentionally rewrite it as a safe support answer.
 
+Operators may see retrieval citations, confidence, skip reasons, and live-check
+summaries where available. Customers must not see raw traces, provider/model
+internals, token or cost details, source credentials, or stored auth material.
+
+## Permissions And Read-Only Access
+
+Inbox controls are gated by the action they perform.
+
+| Permission | Controls |
+| --- | --- |
+| `inbox.read` | Open Inbox and inspect allowed conversations. |
+| `inbox.reply` | Reply, take over AI-handled conversations, add/remove issue tags, apply macros, and add internal notes. |
+| `inbox.archive` | Archive or restore conversations. |
+| `inbox.delete` | Delete conversations where allowed. |
+| `customers.write` | Edit customer context fields from the conversation panel. |
+
+Operators with read access but without the matching action permission can still
+review the conversation, but Woes shows a read-only footer or disabled action
+state instead of a working composer, takeover, archive, delete, tag, note, or
+customer-field control.
+
 ## Active Viewing
 
 Inbox shows who is viewing a conversation in real time. Avatars appear in the conversation header and queue rows so operators can avoid duplicate work.
@@ -65,9 +86,16 @@ Admins can also open **Settings → Users** to see what each user is currently v
 
 ## Internal Notes
 
-Operators can add internal notes to conversations. Notes are operator-only and are not shown to customers or the widget.
+Operators with reply access can add internal notes to conversations. Notes are operator-only and are not shown to customers or the widget.
 
 When a conversation is converted to an issue, manual notes and automation notes are copied to the issue when possible.
+
+## Tags
+
+Issue tags in the context panel render as colored chips. Operators with reply
+access can add or remove tags. Woes normalizes free-text labels into tag ids and
+uses managed tag definitions where they exist; unknown historical ids remain
+visible with a neutral fallback.
 
 ## Good Operating Habits
 

@@ -47,6 +47,10 @@ curl https://woes.dev/api/v1/sources \
 The response includes the created source plus counts for extracted documents,
 endpoints, and chunks.
 
+If the workspace has reached its effective API source capacity, creation returns
+a capacity error instead of silently importing a partial source. Increase plan
+capacity or remove unused sources before retrying.
+
 ## Read Source Details
 
 ```http
@@ -69,6 +73,10 @@ docs publication state.
 }
 ```
 
+Only ready sources can be published. Published docs are served from a sanitized
+public slug and omit source credentials, workspace secrets, service-role data,
+and raw private metadata.
+
 ## Rescan
 
 ```http
@@ -77,6 +85,12 @@ POST /api/v1/sources/{sourceId}/rescan
 
 Rescan works for URL-backed sources. Pasted/manual sources are not rescannable;
 create a new source when the source content lives only in the request body.
+
+## Source Statuses
+
+API source statuses are `pending`, `processing`, `ready`, and `failed`.
+Coverage gaps or warnings can still exist on a ready source, but `partial` is
+not a persisted source status.
 
 ## Delete
 
