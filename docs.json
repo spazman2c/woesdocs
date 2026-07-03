@@ -75,6 +75,31 @@
       "source": "/integrations-catalog/stripe",
       "destination": "/integrations-catalog/overview",
       "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/live-chat-widget",
+      "destination": "/chat-widget/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/resend",
+      "destination": "/channels/email",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/api-context-sources",
+      "destination": "/context/sources",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/public-api",
+      "destination": "/api-reference/overview",
+      "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/woes-mcp",
+      "destination": "/api/mcp",
+      "permanent": true
     }
   ],
   "navbar": {
