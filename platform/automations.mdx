@@ -1,11 +1,12 @@
 ---
 title: "Automations"
-description: "Create workflow automations with supported trigger, filter, AI condition, delay, routing, status, priority, tag, reply, survey, note, notification, SLA, snooze, and archive nodes."
+description: "Create, test, publish, and monitor Woes automations built from When, If, Delay, and Then nodes."
+sidebarTitle: "Overview"
 ---
 
 # Automations
 
-Automations are workspace-level workflow rules. They help route support work, apply labels, set lifecycle state, and trigger follow-up actions.
+Automations are workspace-level workflow rules. They help route support work, apply labels, set lifecycle state, request surveys, schedule follow-up, and record operator-visible notes.
 
 Automations are managed from the primary **Automations** surface, not inside Settings.
 
@@ -13,8 +14,8 @@ Automations are managed from the primary **Automations** surface, not inside Set
 
 | Permission | Access |
 | --- | --- |
-| `automations.read` | View automation rules and logs. |
-| `automations.write` | Create, edit, publish, unpublish, and delete automations. |
+| `automations.read` | View automation rules, tests, history, delay queues, and logs. |
+| `automations.write` | Create, edit, test, publish, unpublish, and delete automations. |
 
 Owners and Admins receive both permissions by default. Members and Viewers receive read access by default.
 
@@ -22,93 +23,29 @@ Owners and Admins receive both permissions by default. Members and Viewers recei
 
 An automation contains:
 
-- Kickoff event.
-- Optional conditions.
-- One or more ordered paths.
-- Optional delays.
-- Actions.
+- One **When** trigger event.
+- Optional **If** or **AI condition** nodes.
+- Optional **Delay** nodes.
+- One or more **Then** action nodes.
 - Version and publish state.
-- Logs and test results.
+- Test status and last-tested timestamp.
+- History, delay queue, and run logs.
 
-## Supported Node Catalog
+New automations start as drafts. A draft can be edited and tested, but it does not run for customers until it is published. A published automation is live when it is enabled and has a published version.
 
-The node library contains configurable node types, not duplicate preset nodes.
-For example, use **Set priority** and choose a priority value instead of adding
-separate "Set high priority" or "Set low priority" nodes. Use **Snooze issue**
-and choose a duration instead of separate one-hour or four-hour snooze nodes.
+## Node Reference
 
-| Node | Type | Use it for |
-| --- | --- | --- |
-| Trigger | Start | Start from a supported runtime event. |
-| If condition | Logic | Branch on conversation, issue, customer, message, survey, or tag fields. |
-| AI condition | Logic | Branch on detected topic or AI outcome. |
-| Delay | Timing | Wait minutes, hours, or days before continuing. |
-| Hand to AI agent | Routing | Let the Woes AI assistant handle the conversation. |
-| Human handoff | Routing | Stop AI ownership and leave the conversation for an operator. |
-| Assign team | Routing | Route work to a team queue. |
-| Set status | Ticket action | Move lifecycle state to a configured value. |
-| Set priority | Ticket action | Set the configured priority value. |
-| Add tag | Ticket action | Apply one normalized issue tag. |
-| Auto-reply | Message action | Add a configured assistant reply when the AI has not already answered. |
-| Notify | Operator action | Record an operator notification in automation notes. |
-| Send CSAT survey | Survey action | Request an eligible CSAT survey. |
-| Send NPS survey | Survey action | Request an eligible NPS survey. |
-| Set SLA target | SLA action | Apply first-response or resolution timing metadata. |
-| Add internal note | Operator action | Write an operator-only note. |
-| Snooze issue | Lifecycle action | Snooze until the configured future time. |
-| Archive issue | Lifecycle action | Move the conversation out of the active inbox. |
+The automation builder uses a small set of configurable node primitives. It does not expose duplicate preset nodes such as "Set high priority" or "Snooze for four hours." Instead, choose the node and configure the value in the inspector.
 
-## Trigger Nodes
-
-Trigger nodes are the only starting point for an automation. Woes only exposes trigger events that are fired by the runtime.
-
-| Trigger | When it runs |
+| Reference | What it covers |
 | --- | --- |
-| Issue created | A new issue or support conversation is created. |
-| New live chat conversation | A visitor starts a new live chat conversation. |
-| Customer replied | A customer sends a new message on an existing issue or conversation. |
-| New Discord message | A Discord message is routed into the Woes inbox. |
-| Issue status changed | Status changes to open, waiting, or solved. |
-| Issue solved / reopened / snoozed / archived | The matching lifecycle action happens in the inbox. |
-| Priority changed / issue assigned / tag added | The matching operator-side field changes. |
-| SLA breached / no first response | The automation scheduler detects the SLA event. |
-| CSAT completed / NPS completed | A customer submits the matching survey response. |
-
-## Logic Nodes
-
-| Node | Use it for |
-| --- | --- |
-| If condition | Branch on fields from the issue or conversation. |
-| AI condition | Branch on detected customer intent or AI outcome. |
-| Delay | Wait minutes, hours, or days before continuing. Support-hours delay basis is stored with the automation, but current runtime processing treats the delay as elapsed time. |
-
-Supported condition fields are priority, status, channel, assignee, tag, customer email, message text, message mentions workspace, survey type, survey score, CSAT score, AI topic, and AI outcome.
-
-AI topic values are `api-question`, `human-request`, `off-topic`, `greeting`, `closing`, and `abusive`. AI outcome values are `answered`, `handed-off`, and `resolved`.
-
-## Action Nodes
-
-| Action | Result | Required configuration |
-| --- | --- | --- |
-| Hand to AI agent | Assigns the conversation to the Woes AI assistant. | None. |
-| Human handoff | Stops AI ownership and leaves the issue for an operator. | None. |
-| Assign team | Routes the issue to a team. | Team name. |
-| Set status | Moves lifecycle state. | Status value. |
-| Set priority | Updates priority. | Priority value. |
-| Add tag | Applies a normalized issue tag. | Tag value. |
-| Auto-reply | Inserts a delivered assistant message when the AI has not already answered. | Reply body. |
-| Notify | Records an operator notification in automation notes. | Recipient target; message is optional. |
-| Send CSAT survey | Requests customer satisfaction feedback. | Optional automation survey selection. |
-| Send NPS survey | Requests recommendation feedback. | Optional automation survey selection. |
-| Set SLA target | Applies first-response or resolution timing metadata. | SLA target. |
-| Add internal note | Writes an operator-only note. | Note body. |
-| Snooze issue | Moves the item into waiting until a future time. | Snooze duration. |
-| Archive issue | Moves the conversation out of the active inbox. | None. |
+| [Automation Nodes](/platform/automations/nodes/overview) | How the node library, trigger dropdown, validation, and publish model fit together. |
+| [When triggers](/platform/automations/nodes/when-triggers) | Every selectable trigger event, grouped exactly like the in-app When dropdown. |
+| [Logic and delay nodes](/platform/automations/nodes/logic-and-delay) | If conditions, AI conditions, delay scheduling, branches, operators, and caveats. |
+| [Then actions](/platform/automations/nodes/then-actions) | Every action node, required fields, runtime effects, conflicts, delayed behavior, and storage side effects. |
 
 <Note>
-  Survey actions mark the conversation as requesting an eligible survey. The
-  widget and survey settings still decide whether a survey can be shown for that
-  customer and channel.
+  The docs only describe nodes and trigger events that are selectable in the current builder. Some older ids still exist in stored data types for compatibility but are not current choices.
 </Note>
 
 ## Common Recipes
@@ -119,52 +56,72 @@ Use these as starting points, then adjust conditions for your workspace.
 
 | Step | Node |
 | --- | --- |
-| 1 | Trigger: **Issue created** or **New live chat conversation** |
-| 2 | If condition: `channel` is `live chat` and `message text` mentions an API topic |
-| 3 | Action: **Hand to AI agent** |
-| 4 | Action: **Set priority** to `Medium` |
+| 1 | When: **New message on issue** or **New live chat conversation** |
+| 2 | AI condition: **Customer intent is API question** |
+| 3 | Then: **Hand to AI agent** |
+| 4 | Then: **Add tag** such as `api-question` |
 
 ### Escalate Missing Context
 
 | Step | Node |
 | --- | --- |
-| 1 | Trigger: **Customer replied** |
-| 2 | AI condition: `AI outcome` is `handed-off` |
-| 3 | Action: **Add tag** such as `needs-context` |
-| 4 | Action: **Human handoff** |
-| 5 | Action: **Notify** the owning team |
+| 1 | When: **New message on issue** |
+| 2 | AI condition: **AI outcome is handed-off** |
+| 3 | Then: **Add tag** such as `needs-context` |
+| 4 | Then: **Human handoff** |
+| 5 | Then: **Notify** the owning team |
 
 ### Collect CSAT After Resolution
 
 | Step | Node |
 | --- | --- |
-| 1 | Trigger: **Issue solved** |
-| 2 | Delay: wait until the customer has had time to read the resolution |
+| 1 | When: **Issue solved** |
+| 2 | Delay: wait long enough for the customer to read the resolution |
 | 3 | If condition: issue does not already have the survey exclusion tag |
-| 4 | Action: **Send CSAT survey** |
+| 4 | Then: **Send CSAT survey** |
 
 ### Reopen When A Customer Replies
 
 | Step | Node |
 | --- | --- |
-| 1 | Trigger: **Customer replied** |
-| 2 | If condition: `status` is `solved` |
-| 3 | Action: **Set status** to `Open` |
-| 4 | Action: **Assign team** or **Notify** |
+| 1 | When: **New message on issue** |
+| 2 | If condition: **Status is solved** |
+| 3 | Then: **Set status** to `open` |
+| 4 | Then: **Assign team** or **Notify** |
+
+### Escalate SLA Breaches
+
+| Step | Node |
+| --- | --- |
+| 1 | When: **SLA breached** or **No first response in time** |
+| 2 | If condition: **Priority is urgent** or **Channel is live chat** |
+| 3 | Then: **Notify** |
+| 4 | Then: **Assign team** |
+| 5 | Then: **Add internal note** |
 
 ## Assignment And Routing
 
-Automations can hand work to the AI agent, hand it back to a human operator, or
-route it to a team. Use [Assignment](/settings/assignment) when you need
-persistent routing rules with skills, capacity, schedules, or route previews.
+Automations can hand work to the AI agent, hand it back to a human operator, or route it to a team. Use [Assignment](/settings/assignment) when you need persistent routing rules with skills, capacity, schedules, or route previews.
 
-Automations do not currently assign directly to an account owner or arbitrary
-workspace user. Keep those decisions in team assignment rules or manual triage.
+Automations should be used for event-driven workflow changes: tags, notes, notifications, surveys, SLA metadata, status, priority, team routing, AI handoff, human handoff, snooze, and archive.
 
 ## Testing Automations
 
-Use the built-in test flow before publishing. Woes creates a sandbox record, applies the automation, verifies each expected effect, then removes the sandbox.
+Use the built-in test flow before publishing. Woes creates a sandbox conversation, builds an event that satisfies the automation filters, applies the workflow, verifies the expected effects, and removes the sandbox.
 
 <Warning>
   Automation tests are designed to avoid production data mutation. Do not test by manually triggering rules on real customer records unless you intend the workflow to run.
 </Warning>
+
+## Logs And History
+
+Automations keep history and run evidence so operators can understand what happened:
+
+| Surface | What it shows |
+| --- | --- |
+| Last test | Latest draft test status and date. |
+| History | Publish and edit history for the automation. |
+| Logs | Runtime automation runs collected from conversation metadata. |
+| Delay queue | Delayed work waiting for the scheduled automation processor. |
+
+Logs are best-effort operational evidence. Automations should never block the customer or operator path if a workflow fails to apply.
