@@ -1,0 +1,59 @@
+---
+title: "Integrations Catalog"
+sidebarTitle: "Overview"
+description: "Understand the Woes integration catalog, current connector status, and what each integration is meant to do."
+---
+
+# Integrations Catalog
+
+Woes integrations connect the support workspace to the systems where developer-support context already lives: customer channels, repository documentation, team workflows, engineering issues, customer records, and incident response.
+
+This catalog is intentionally explicit about status. A connector should only look actionable when the Woes backend can support the action safely for a workspace.
+
+## Status labels
+
+| Status | Meaning |
+| --- | --- |
+| Available now | The integration has a working Woes surface or supported setup path today. |
+| Planned connector | The integration appears in the product catalog but remains disabled until OAuth, install state, routes, permissions, and delivery behavior are implemented. |
+| Future candidate | A researched integration direction that fits the platform, but is not yet a product commitment or active connector. |
+
+## Available now
+
+| Integration | What it does today |
+| --- | --- |
+| [GitHub](./github) | Imports repository docs, examples, and source-adjacent material into Woes API context. |
+| [Email](./email) | Uses email as a support channel alongside live chat and Discord. |
+| [Discord](./discord) | Brings selected Discord messages and threads into the shared Woes inbox. |
+| [Mintlify widget](./mintlify-widget) | Installs the Woes chat widget on a Mintlify documentation site. |
+
+## Planned connectors
+
+| Integration | What it will do |
+| --- | --- |
+| [Slack](./slack) | Send support alerts, SLA escalations, and automation notifications to team channels. |
+| [Linear](./linear) | Link support issues to product and engineering workflows. |
+| [Zapier](./zapier) | Let no-code workflows trigger or receive Woes support events. |
+| [Jira](./jira) | Connect support conversations to engineering ticket workflows. |
+
+## Future candidates
+
+| Candidate | Why it fits Woes |
+| --- | --- |
+| [Confluence](./confluence) | Internal support runbooks and implementation notes can become grounded context. |
+| [Notion](./notion) | Product FAQs, snippets, and support playbooks can supplement API docs. |
+| [Sentry](./sentry) | Error events can connect customer reports to real application failures. |
+| [PagerDuty](./pagerduty) | Urgent support issues can escalate into on-call incident workflows. |
+| [HubSpot](./hubspot) | Account and CRM context can improve routing and operator decisions. |
+| [Stripe](./stripe) | Subscription and billing state can support billing-adjacent conversations. |
+
+## Integration principles
+
+- Channel integrations should create or continue records in the same Woes conversation and message model.
+- Context integrations should add workspace-scoped evidence for the support agent without exposing credentials or private data to customers.
+- Workflow integrations should be disabled until actions, permissions, audit trails, and failure states are fully implemented.
+- Customer-facing docs should never claim an integration is live before the product can actually connect it.
+
+## Where to manage integrations
+
+Use **Workspace Settings -\> Integrations** for the product catalog and connector status. Use **Context Library** for GitHub repository imports and source management. Use the channel settings pages for live chat, email, and Discord channel behavior.

@@ -1,0 +1,39 @@
+---
+title: "Sentry Candidate"
+sidebarTitle: "Sentry"
+description: "Future candidate for connecting support conversations to application errors and issue evidence."
+---
+
+# Sentry Candidate
+
+Sentry is a future integration candidate for connecting developer support conversations to application errors and production issue evidence.
+
+## Status
+
+**Future candidate.** This is not currently a live Woes connector.
+
+## What it could do
+
+A Sentry integration could help operators answer error-driven support questions faster:
+
+- Attach relevant Sentry issues or events to Woes conversations.
+- Search recent errors by customer, release, environment, route, or error fingerprint where safe.
+- Add operator-visible error context to support issues.
+- Trigger automations when a customer reports a known production error.
+- Link back to the Sentry issue for engineering investigation.
+
+## Why it fits Woes
+
+Many API support questions begin with an error message, failed webhook, or unexpected server response. Connecting Woes to error telemetry can help distinguish documentation confusion from a real product failure.
+
+## Key design questions
+
+- Which Sentry projects and environments should Woes access?
+- How should customer identifiers be matched without leaking private data?
+- Which event fields are safe to show to operators or send to the AI agent?
+- Should Woes create support issues from Sentry alerts, or only attach evidence to existing conversations?
+- How should rate limits and large event payloads be bounded?
+
+## Possible first version
+
+Start with read-only issue lookup and manual attachment from the operator panel. Keep automatic event ingestion and alert-triggered issue creation for a later version.

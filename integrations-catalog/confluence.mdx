@@ -1,0 +1,39 @@
+---
+title: "Confluence Candidate"
+sidebarTitle: "Confluence"
+description: "Future candidate for importing Confluence runbooks and internal documentation into Woes context."
+---
+
+# Confluence Candidate
+
+Confluence is a future integration candidate for teams whose internal support knowledge lives in Atlassian documentation.
+
+## Status
+
+**Future candidate.** This is a researched direction, not a live Woes connector or committed release item.
+
+## What it could do
+
+A Confluence integration could turn internal documentation into workspace-scoped support context:
+
+- Import selected spaces, pages, or page trees.
+- Keep support runbooks and implementation notes searchable in Woes.
+- Give agents and operators grounded context beyond public API docs.
+- Track freshness and rescan status for imported pages.
+- Link source evidence back to the originating Confluence page.
+
+## Why it fits Woes
+
+Developer-support teams often keep internal explanations, known issues, rollout notes, and customer-specific support procedures in Confluence. Those materials can help operators and AI agents answer accurately, as long as they remain workspace-scoped and safe for model retrieval.
+
+## Key design questions
+
+- Which spaces and pages should be eligible for import?
+- How should private or sensitive internal pages be excluded?
+- Should Woes import page comments, attachments, or only rendered page content?
+- How should page permissions map to Woes workspace permissions?
+- How should rescans handle renamed or moved pages?
+
+## Possible first version
+
+Start with read-only page import from selected Confluence spaces, with manual rescan and clear source attribution. Keep write-back and comment sync out of the first version.

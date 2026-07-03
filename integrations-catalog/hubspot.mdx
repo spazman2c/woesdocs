@@ -1,0 +1,39 @@
+---
+title: "HubSpot Candidate"
+sidebarTitle: "HubSpot"
+description: "Future candidate for CRM and account context inside Woes support workflows."
+---
+
+# HubSpot Candidate
+
+HubSpot is a future integration candidate for bringing CRM and account context into Woes support workflows.
+
+## Status
+
+**Future candidate.** This is not currently a live Woes connector.
+
+## What it could do
+
+A HubSpot integration could help operators understand the account behind a support conversation:
+
+- Match Woes clients to HubSpot companies and contacts.
+- Show account owner, lifecycle stage, plan context, and recent CRM activity where allowed.
+- Create HubSpot tasks or tickets from Woes support issues.
+- Add Woes support summaries back to CRM records.
+- Support routing or automations based on CRM fields.
+
+## Why it fits Woes
+
+Support teams need account context to prioritize urgent customers, route ownership, and coordinate with success or sales teams. CRM context can improve support decisions without turning Woes into a CRM.
+
+## Key design questions
+
+- Which HubSpot objects should be read or written first?
+- How should contact matching work when widget identity is anonymous or partial?
+- Which CRM fields are safe for agent context versus operator-only display?
+- Should Woes create HubSpot tickets, tasks, notes, or timeline events?
+- How should duplicate company/contact matches be handled?
+
+## Possible first version
+
+Start with read-only contact/company lookup for verified customer emails, plus operator-only account context in the client panel.

@@ -1,0 +1,43 @@
+---
+title: "Zapier Connector"
+sidebarTitle: "Zapier"
+description: "Planned Zapier connector for no-code workflow automation around Woes support events."
+---
+
+# Zapier Connector
+
+Zapier is a planned no-code automation connector for teams that want Woes events to interact with external systems without custom code.
+
+## Status
+
+**Planned connector.** Zapier should remain disabled until Woes has stable trigger/action contracts, authentication, payload scopes, and replay-safe delivery behavior.
+
+## What it will do
+
+Zapier should let teams build lightweight integrations around Woes events:
+
+- Trigger a Zap when a new issue is created.
+- Trigger a Zap when an SLA breach, survey response, tag, or assignment event occurs.
+- Send selected external events back into Woes as notes, tags, or workflow inputs.
+- Push Woes activity into spreadsheets, project tools, CRM tools, or notification systems.
+
+## Product fit
+
+Zapier is best for long-tail workflow coverage. Core support behavior should remain native in Woes when reliability, tenant boundaries, or customer-facing state matter.
+
+## Implementation requirements
+
+Before Zapier becomes active, Woes needs:
+
+- Public app authentication model.
+- Stable event schemas and versioning.
+- Workspace-scoped trigger subscriptions.
+- Rate limits and replay protection.
+- Redaction of customer-private fields where needed.
+- Clear failure and retry reporting.
+
+## Early recipes
+
+- Add high-priority Woes issues to a shared operations sheet.
+- Create a CRM task when an enterprise customer leaves low CSAT.
+- Notify an external system when a Woes issue is solved.

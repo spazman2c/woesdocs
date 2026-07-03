@@ -1,0 +1,39 @@
+---
+title: "Notion Candidate"
+sidebarTitle: "Notion"
+description: "Future candidate for importing Notion product notes, FAQs, and support playbooks into Woes context."
+---
+
+# Notion Candidate
+
+Notion is a future integration candidate for teams that manage product notes, FAQs, and support playbooks in Notion.
+
+## Status
+
+**Future candidate.** This is not currently a live Woes connector.
+
+## What it could do
+
+A Notion integration could bring selected workspace pages into the Woes context layer:
+
+- Import pages or databases selected by an admin.
+- Use FAQs, troubleshooting guides, and internal runbooks as support context.
+- Preserve source links so operators can inspect the original note.
+- Rescan pages when support documentation changes.
+- Help identify outdated or weak knowledge-base coverage.
+
+## Why it fits Woes
+
+Notion often holds the practical explanations that are missing from formal API specs: edge cases, rollout notes, implementation details, and support scripts. Woes could use that material to improve answers while preserving confidence, citations, and handoff rules.
+
+## Key design questions
+
+- Should Woes support selected pages only, selected databases, or both?
+- How should page permissions be represented after import?
+- Should comments and child pages be included?
+- How should stale Notion content affect agent confidence?
+- How should operators distinguish internal-only context from customer-safe citations?
+
+## Possible first version
+
+Start with read-only import of selected pages and child pages, plus manual rescan. Keep database sync and write-back for a later version.

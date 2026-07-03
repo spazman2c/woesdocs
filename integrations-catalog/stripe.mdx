@@ -1,0 +1,39 @@
+---
+title: "Stripe Candidate"
+sidebarTitle: "Stripe"
+description: "Future candidate for billing and subscription context in Woes support conversations."
+---
+
+# Stripe Candidate
+
+Stripe is a future integration candidate for bringing billing and subscription context into Woes support conversations.
+
+## Status
+
+**Future candidate.** Woes uses Stripe internally for Woes billing, but this page describes a possible customer-owned Stripe integration for support context. It is not currently live.
+
+## What it could do
+
+A customer-owned Stripe integration could help support teams answer billing-adjacent questions:
+
+- Match a Woes client to Stripe customers and subscriptions.
+- Show plan, billing status, renewal, invoice, and payment-state context to operators.
+- Trigger support workflows when payments fail or subscriptions change.
+- Add billing state to routing decisions for verified customers.
+- Link operators to the relevant Stripe customer record.
+
+## Why it fits Woes
+
+Developer-support teams often receive questions that mix API behavior, account entitlements, billing state, and subscription limits. Stripe context can help operators answer accurately without asking customers for details the workspace already knows.
+
+## Key design questions
+
+- How should Woes distinguish internal Woes billing from a customer's connected Stripe account?
+- Which billing fields are operator-only and which, if any, are safe for AI context?
+- How should customer matching work across email, domain, metadata, and client ids?
+- Should subscription webhooks create Woes events or only refresh account context?
+- How should API keys and webhook secrets be stored and redacted?
+
+## Possible first version
+
+Start with read-only customer and subscription lookup for verified customer identities, then add webhook-driven account updates after the permission and audit model is stable.
