@@ -21,6 +21,11 @@ Transport: JSON-RPC over HTTP.
 
 Authentication: `Authorization: Bearer <woesk_...>`.
 
+Discovery-safe methods such as `GET`, `initialize`, `ping`, `resources/list`,
+`prompts/list`, and `tools/list` may be available without a workspace key.
+Actual `tools/call` requests require `Authorization: Bearer <woesk_...>` and
+are checked against the API key's scopes.
+
 <Warning>
   MCP clients should use server-side workspace API keys only. Do not place a `woesk_` key in browser JavaScript, customer-visible docs, mobile apps, or widget snippets.
 </Warning>
@@ -55,7 +60,10 @@ MCP client configuration varies by tool, but the important pieces are the remote
 }
 ```
 
-Create the API key in **Settings, then Keys**. Use the smallest scope set that matches the tool you are connecting.
+Create the API key in **Settings, then Keys**. The current Settings UI creates
+named workspace API keys without a scope picker. If you need scoped keys for an
+MCP client, create them through backend or administrative tooling and use the
+smallest scope set that matches the tools you are connecting.
 
 <Note>
   Some MCP clients support remote HTTP servers directly. Others require a small local proxy that forwards JSON-RPC requests to `https://woes.dev/api/mcp` with the Authorization header. Use your client's current remote-server instructions when adding the URL.
@@ -79,7 +87,8 @@ Create the API key in **Settings, then Keys**. Use the smallest scope set that m
 | `woes_get_usage` | `usage:read` |
 | `woes_get_analytics` | `analytics:read` |
 
-Leaving a workspace API key unrestricted allows every public API action available to the MCP server, but scoped keys are safer for AI tools.
+Leaving a workspace API key unrestricted allows every public API action
+available to the MCP server, but scoped keys are safer for AI tools.
 
 ## Tool Catalog
 
@@ -123,7 +132,8 @@ Required input: `conversationId` and `body`.
 
 ### Usage And Analytics
 
-`woes_get_usage` returns current-month usage meters and per-key API usage.
+`woes_get_usage` returns current-month usage meters from `GET /api/v1/usage`.
+It does not expose the `/api/v1/usage/api-keys` per-key usage endpoint.
 
 `woes_get_analytics` returns sanitized aggregate analytics for agents, surveys, widgets, and customer feedback.
 
@@ -208,4 +218,10 @@ Use read-only keys for assistants that summarize, search, or report. Add write s
 
 For production automation, keep one key per integration. That gives admins clear per-key usage and an easy revoke path if a client, server, or workflow is compromised.
 
-For local testing, create a disposable scoped key, run the MCP client, then revoke the key from **Settings, then Keys** when you are done.
+For local testing, create a disposable key, run the MCP client, then revoke the
+key from **Settings, then Keys** when you are done. Use backend/admin tooling
+for scoped local-test keys until the Settings scope picker is available.
+
+The MCP adapter is intentionally narrower than the full REST API. It does not
+currently expose source update/delete/rescan/publication actions or per-key
+usage reads.

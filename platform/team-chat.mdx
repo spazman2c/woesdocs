@@ -23,9 +23,9 @@ Team Chat supports two conversation types:
 | Type | Details |
 | --- | --- |
 | Direct messages | One-to-one teammate conversations. Woes derives a stable DM key for the two users. |
-| Channels | Slack-style public, private, and read-only channels with member management. |
+| Channels | Slack-style public and private channels with member management. |
 
-Public channels can be discovered and joined by workspace members with Team Chat access. Private channels require membership. Read-only channels can limit posting while still letting members follow updates.
+Public channels can be discovered and joined by workspace members with Team Chat access. Private channels require membership. Archived channels are read-only until they are restored.
 
 ## Core Actions
 
@@ -41,6 +41,8 @@ Operators can:
 - Add emoji reactions.
 - Attach files to messages.
 - Mark conversations read.
+- Click a teammate name in a thread to view their profile popover, email them
+  with a `mailto:` link, or start a direct message when allowed.
 
 ## Permissions
 
@@ -49,9 +51,9 @@ Team Chat respects workspace permissions and membership checks.
 | Permission | Allows |
 | --- | --- |
 | `chat.read` | Open Team Chat and read conversations/channels the user can access. |
-| `chat.write` | Send messages, reactions, attachments, read receipts, and create/join conversations allowed by membership. |
+| `chat.send` | Send messages, reactions, attachments, read receipts, and create/join conversations allowed by membership. |
+| `chat.channels.manage` | Create channels and manage channel settings, members, archive state, and destructive actions where membership rules allow it. |
 | Channel membership | Read or write a private channel. |
-| Channel owner/admin access | Manage channel settings, membership, archive state, and destructive actions. |
 
 If a user does not have Team Chat access, Woes shows an access state instead of the chat surface.
 

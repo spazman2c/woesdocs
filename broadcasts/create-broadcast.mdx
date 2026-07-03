@@ -1,42 +1,44 @@
 ---
-title: "Create a Broadcast"
-description: "Structure customer announcements so they are clear, safe, and actionable."
+title: "Create an Update"
+description: "Create, schedule, publish, and archive widget updates for customers."
 ---
 
-# Create a Broadcast
+# Create an Update
 
-A good broadcast is specific, targeted, and tied to a real customer need. Avoid
-generic marketing copy; customers should understand what changed and whether
-they need to act.
+A good update is specific, useful, and tied to something customers need to know
+while they are asking for support.
 
-## Message Structure
+## Required Content
 
-| Section | Include |
+| Field | Use it for |
 | --- | --- |
-| Subject | The product area, change, or action required. |
-| Summary | One or two sentences explaining what changed. |
-| Impact | Who is affected and how. |
-| Action | What the customer should do next, if anything. |
-| Link | Updated docs, issue status, release note, or support thread. |
+| Title | The product area, change, or action required. |
+| Body | A short explanation of what changed and who is affected. |
+| Audience | Whether everyone or verified customers should see it. |
+| Target | The workspace or agent/widget surface where the update should appear. |
+| CTA | Optional link to docs, release notes, a migration guide, or the relevant app page. |
+| Cover image | Optional visual context for the update. |
+| Expiry | Optional date after which the update should no longer appear. |
 
-## Draft Checklist
+## Lifecycle
 
-- The audience is specific.
-- The message has a clear reason.
-- The customer impact is accurate.
-- The required action is explicit.
-- Links point to current docs or product pages.
-- No private customer data or internal-only notes are included.
-- Support operators know how to respond to replies.
+| State | Meaning |
+| --- | --- |
+| Draft | Saved internally but not visible to customers. |
+| Scheduled | Ready to publish at a future time. |
+| Published | Visible in eligible widget Updates tabs. |
+| Archived | Removed from active customer visibility while preserving history. |
 
-## Example Outline
+## Publishing Checklist
 
-```text
-Subject: Webhook retry behavior is now documented
+- The widget Updates tab is enabled for the intended surface.
+- The target agent/widget is correct.
+- The audience matches the customer trust level.
+- The update has no internal notes, customer-private data, or secrets.
+- Links point to public or customer-safe destinations.
+- Operators know how to answer follow-up questions in Inbox.
 
-We updated the webhook documentation with retry timing, delivery headers, and
-example payloads for failed deliveries.
-
-If your team handles webhook retries manually, review the updated docs before
-changing retry logic. No production change is required.
-```
+<Warning>
+  Updates are customer-visible. Do not use them for private incident notes,
+  unreleased commitments, credentials, or account-specific support details.
+</Warning>

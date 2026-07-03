@@ -13,6 +13,7 @@ Woes exposes several route families with different callers, credentials, and dat
 | --- | --- | --- | --- |
 | Public REST API | Your server-side integrations. | Workspace API key such as `woesk_...`. | Workspace-scoped resources intended for external automation. |
 | Widget routes | Customer browsers with a widget install. | Widget public key, plus conversation secret for conversation-bound reads and writes. | Only the visitor's widget conversation, public widget configuration, and customer-facing surfaces. |
+| Public docs routes | Anyone with the published docs URL. | Public slug. | Sanitized generated docs for ready published sources. |
 | Verified widget identity | Your backend, then the customer's browser. | Server-held widget identity secret creates a short-lived proof. The browser sends the proof to `/api/widget/identity`. | Attaches name, email, and external ID to the current widget visitor without exposing the secret. |
 | Client portal routes | Authenticated customer portal users. | Portal session. | Customer-visible portal issues and membership records for that portal account. |
 | Account routes | Authenticated Woes operators and admins. | Woes user session. | Workspace settings, inbox data, clients, issues, docs ingestion, automations, billing, and operator workflows. |
@@ -25,6 +26,14 @@ Woes exposes several route families with different callers, credentials, and dat
 Use `/api/v1/*` routes from trusted server-side code only. These routes authenticate with workspace API keys and are documented in the [API Reference](/api-reference/overview).
 
 Do not call the public REST API directly from a browser, mobile app, widget script, or static docs site. REST API keys can read or mutate workspace data and must not be exposed to customers.
+
+## Public Docs Routes
+
+Published source docs are available under `/docs/{slug}`. These routes are
+public read-only documentation surfaces for ready sources. They do not accept
+workspace API keys, widget keys, source auth credentials, or operator sessions,
+and they should never expose source secrets, private metadata, or operator
+debug data.
 
 ## Widget And Customer Routes
 

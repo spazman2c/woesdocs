@@ -30,11 +30,14 @@ The issue detail view includes:
 
 Issue tags render as colored chips. Operators with reply access can add or remove issue tags from the issue detail view.
 
-Tags can be managed globally in **Settings → Data → Tags**. Unknown tag ids are still shown with a neutral fallback so historical records do not disappear.
+Tags can be managed globally in **Settings → Data → Tags**. Operators can use
+managed issue tags or enter free-text values, which Woes normalizes to tag ids.
+Unknown tag ids are still shown with a neutral fallback so historical records do
+not disappear.
 
 ## Internal Notes
 
-Issue notes are stored in the same notes system as conversation notes, with `target_type = issue`. Operator notes can be deleted by operators; automation notes are kept as provenance.
+Issue notes are stored in the same notes system as conversation notes, with `target_type = issue`. Operator-source notes can be deleted by operators with reply access; automation notes are kept as provenance.
 
 ## Saving Behavior
 

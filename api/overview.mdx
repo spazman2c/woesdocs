@@ -90,13 +90,18 @@ Create keys in **Settings → Keys**. Full secrets are shown once and then store
 
 Open any page in the **Endpoint Reference** group to test an API request from the docs. Each endpoint page has an interactive playground with example parameters and request bodies already filled in.
 
-1. Create a disposable scoped test key in **Settings → Keys**.
+1. Create a disposable test key in **Settings → Keys**.
 2. Paste that `woesk_` key into the Bearer token field.
 3. Review the prefilled parameters or JSON body.
 4. Click **Send** to run the request against `https://woes.dev`.
 
 <Warning>
-  Use a disposable, scoped test key in the docs playground. Do not paste a production integration key. Playground requests run against `https://woes.dev` and may transit the docs runtime when proxying is enabled. For production keys, run `curl` or SDK calls from your own backend and revoke playground test keys after use.
+  Use a disposable test key in the docs playground. If you need scoped test keys,
+  create them through backend or administrative tooling until the Settings scope
+  picker is available. Do not paste a production integration key. Playground
+  requests run against `https://woes.dev` and may transit the docs runtime when
+  proxying is enabled. For production keys, run `curl` or SDK calls from your
+  own backend and revoke playground test keys after use.
 </Warning>
 
 <Note>

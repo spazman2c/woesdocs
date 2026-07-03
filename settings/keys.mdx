@@ -12,8 +12,8 @@ API integrations.
 
 | Key type | Prefix | Purpose |
 | --- | --- | --- |
-| Workspace widget key | `woesw_` | Public identifier for the default workspace widget install. |
 | Agent widget key | `trovw_agent_` | Public identifier for a specific agent's widget install. |
+| Workspace/default widget key | `woesw_` or legacy `trovw_` | Public runtime identifier for default or legacy widget installs when present. |
 | Workspace API key | `woesk_` | Private secret for authenticated REST API calls. |
 
 ## Widget Keys
@@ -23,12 +23,14 @@ Widget keys are public identifiers. They can live in client-side install snippet
 Use widget keys to:
 
 - Install the Woes widget.
-- Route a page to the default workspace agent.
 - Route a page to a specific support agent.
 
 ## Agent Keys
 
-Each agent can have its own widget key. The Keys page lists all agent keys, source counts, and copy actions so teams can install the right agent in the right place.
+Each agent can have its own widget key. The Keys page lists agent keys, source
+counts, and copy actions so teams can install the right agent in the right
+place. Workspace/default widget keys may exist for default or legacy runtime
+support, but agent widget keys are the primary install and routing surface.
 
 ## Workspace API Keys
 
@@ -39,8 +41,10 @@ calls are tracked against the key that authenticated the request, so admins can
 review usage by integration from **Settings → Billing**.
 
 The Keys page shows the key name, prefix, status, created date, last-used date,
-and revoke action. API request examples and endpoint schemas live in the
-[API Reference](/api-reference/overview).
+and revoke action. The current in-app key creator makes a named workspace API
+key; server-side API support also understands scoped keys where those are
+created by backend or administrative tooling. API request examples and endpoint
+schemas live in the [API Reference](/api-reference/overview).
 
 <Warning>
   Treat `woesk_` secrets as private. Do not put them in browser code, docs pages, support messages, screenshots, or client-side snippets.

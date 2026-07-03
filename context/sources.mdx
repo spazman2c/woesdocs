@@ -46,7 +46,7 @@ flow, while structured sources use an API-shape detection flow.
 | Detecting API shape | Identify whether the source is OpenAPI, GraphQL, Postman, docs, gRPC, SOAP, SDK, or mixed content. |
 | Extracting every call | Pull endpoint, operation, schema, example, and auth details where available. |
 | Organizing Markdown docs | Produce endpoint-level Markdown and document summaries. |
-| Building API brain graph | Prepare relationships for retrieval and agent grounding. |
+| Building retrieval context | Prepare endpoint Markdown, documents, chunks, and relationships for retrieval and agent grounding. |
 | Publishing searchable context | Make the source available to attached agents. |
 
 ## Detail View
@@ -92,6 +92,39 @@ Woes can auto-detect or ingest a specific source type:
 - SDK docs.
 - Raw Markdown or text.
 - GitHub repository docs and examples.
+
+## Safe Fetch And Crawl Boundaries
+
+Woes source ingestion is intentionally bounded. URL and website sources are
+fetched through safe-fetch controls that block private, loopback, reserved, and
+unsafe hosts or ports, re-check redirects, and enforce request, byte, and time
+budgets. Website crawling stays within the allowed origin/path scope and uses
+bounded depth and page counts; it is not an unbounded crawl of every page on a
+site.
+
+## Rescan And Source Limits
+
+URL-backed sources can be rescanned when the upstream material changes. Manual
+or pasted-content sources should be recreated when their content changes because
+there is no upstream URL to fetch again.
+
+Workspaces have plan and add-on source capacity. When a new source would exceed
+the effective source limit, Woes blocks creation instead of silently dropping or
+partially importing the source.
+
+## Public Docs Publication
+
+Ready sources can be published as sanitized public docs under `/docs/{slug}`.
+Publishing exposes customer-safe generated documentation, endpoint Markdown,
+and source summaries; it does not expose source auth credentials, raw private
+source metadata, operator debug data, or workspace secrets. Non-ready sources
+must be fixed before they are published.
+
+## Docs Companion Sources
+
+When a docs URL resolves to both documentation and API-shaped material, Woes can
+create or reuse a companion documentation source so conceptual docs and endpoint
+reference material remain inspectable without losing the API source boundary.
 
 <Tip>
   If customers often ask the same question and the agent clarifies or hands off, add that answer to source context instead of weakening the agent's confidence threshold.
