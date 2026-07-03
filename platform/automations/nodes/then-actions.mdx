@@ -1,0 +1,227 @@
+---
+title: "Then Actions"
+sidebarTitle: "Then actions"
+description: "Every Then action node in Woes Automations, including configuration, runtime effects, and caveats."
+---
+
+# Then Actions
+
+Then actions are the nodes that change a conversation, issue, survey request, or operator-visible notes. Logic and Delay nodes decide whether an action is reached; action nodes perform the effect.
+
+All current action nodes are issue- or conversation-scoped. The builder validates required fields and blocks publish when an action cannot run.
+
+## Routing actions
+
+### Hand to AI agent
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `assign_ai` |
+| Action kind | `assign_agent` |
+| Category | Routing |
+| Required config | None; target is set to the Woes AI agent. |
+| Runtime effect | Sets assignment metadata to AI, including the Woes AI assistant id/name. |
+| Use it for | Letting the AI agent handle API questions or first responses when context exists. |
+| Caveats | Auto-reply actions may be suppressed when the AI has already answered the same customer message. |
+
+### Human handoff
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `human_handoff` |
+| Action kind | `assign_agent` |
+| Category | Routing |
+| Required config | None; target is human/operator. |
+| Runtime effect | Sets assignment and handoff metadata to operator/human. |
+| Use it for | Escalating AI handoffs, abusive messages, VIP messages, or requests for a person. |
+| Caveats | This leaves the issue for human triage rather than choosing a specific teammate. |
+
+### Assign team
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `set_team` |
+| Action kind | `set_team` |
+| Category | Routing |
+| Required config | Team name. |
+| Runtime effect | Sets `assignedTeamName` and marks the assignment source as automation. |
+| Use it for | Routing to Support, API Support, Billing, Docs, or Engineering Triage. |
+| Caveats | Team assignment is stored as conversation metadata by the conversation runner. Standalone issue-created mapping does not currently persist team assignment as a first-class issue field. |
+
+## Inbox actions
+
+### Set status
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `set_status` |
+| Action kind | `set_status` |
+| Category | Inbox |
+| Required config | Status value. |
+| Runtime effect | Normalizes lifecycle status and updates the conversation status plus `statusId` and `statusLifecycle` metadata. |
+| Use it for | Reopening, waiting, solving, auto-closing, or moving a conversation back to open. |
+| Caveats | Runtime supports lifecycle values such as `open`, `waiting`, and `solved`, plus common synonyms. Invalid/custom values are skipped. |
+
+### Set priority
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `set_priority` |
+| Action kind | `set_priority` |
+| Category | Inbox |
+| Required config | Priority value. |
+| Runtime effect | Sets lowercased priority metadata. |
+| Use it for | Urgent escalation, downgrade rules, SLA routing, or survey follow-up prioritization. |
+| Caveats | Standalone Issues-board automation mapping writes priority to the issue record when available. |
+
+### Add tag
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `add_tags` |
+| Action kind | `add_tags` |
+| Category | Inbox |
+| Required config | Tag value. |
+| Runtime effect | Normalizes the label into a workspace tag id and adds it to `issueTags` without removing existing tags. |
+| Use it for | `api-question`, `auth`, `docs-gap`, `bug-report`, `vip`, `csat-followup`, or channel tags. |
+| Caveats | Add tag is additive, so overlap detection does not treat cross-automation tag additions as conflicts. |
+
+### Add internal note
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `add_note` |
+| Action kind | `add_note` |
+| Category | Inbox |
+| Required config | Note body. |
+| Runtime effect | Appends an operator-only automation note to conversation metadata. Notes are capped. |
+| Use it for | Recording why a workflow fired, what evidence to review, or what follow-up is needed. |
+| Caveats | This action is one-shot per automation per conversation to avoid duplicate notes on recurring message events. |
+
+### Snooze issue
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `snooze` |
+| Action kind | `snooze` |
+| Category | Inbox |
+| Required config | Duration: `1h`, `4h`, `1d`, `3d`, or `1w`. |
+| Runtime effect | Sets status to waiting and writes a `snoozeUntil` timestamp. |
+| Use it for | Deferring follow-up, waiting for customers, or temporarily moving a conversation out of the active queue. |
+| Caveats | Snooze durations are fixed. The scheduler can wake elapsed snoozes back to open when appropriate. |
+
+### Archive issue
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `archive` |
+| Action kind | `archive` |
+| Category | Inbox |
+| Required config | None. |
+| Runtime effect | Writes `archivedAt` and `visibility: archived` metadata. |
+| Use it for | Removing conversations from the active inbox after cleanup workflows. |
+| Caveats | Archive does not by itself set the lifecycle status to solved. Pair it with Set status when that is the desired behavior. |
+
+## Messaging actions
+
+### Auto-reply
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `auto_reply` |
+| Action kind | `auto_reply` |
+| Category | Messaging |
+| Required config | Reply text. |
+| Runtime effect | Inserts a delivered assistant message with automation metadata. |
+| Use it for | Acknowledgements, after-hours messages, simple expectation setting, or delayed follow-up. |
+| Caveats | One-shot per automation per conversation. Suppressed when the caller indicates the AI already answered the same customer message. Standalone Issues-board automations resolve the action but do not post customer-facing issue comments. |
+
+### Notify
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `send_notification` |
+| Action kind | `send_notification` |
+| Category | Messaging |
+| Required config | None. Target and message are optional. |
+| Runtime effect | Records an operator-visible automation note with `kind: notification`. |
+| Use it for | Assignee reminders, team-channel instructions, escalation notes, or owner follow-up. |
+| Caveats | This is not an external Slack/email delivery integration today. It records a stored note/notification inside Woes. |
+
+### Send CSAT survey
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `send_csat_survey` |
+| Action kind | `send_csat_survey` |
+| Category | Messaging |
+| Required config | Optional survey selection. |
+| Runtime effect | Marks the conversation as requesting a CSAT survey and stores request timestamp/type/id metadata. |
+| Use it for | Asking for satisfaction feedback after resolution or escalation. |
+| Caveats | The action requests a survey; widget and survey settings still decide whether and how the customer sees it. |
+
+### Send NPS survey
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `send_nps_survey` |
+| Action kind | `send_nps_survey` |
+| Category | Messaging |
+| Required config | Optional survey selection. |
+| Runtime effect | Marks the conversation as requesting an NPS survey and stores request timestamp/type/id metadata. |
+| Use it for | Recommendation feedback after support interactions or account milestones. |
+| Caveats | Like CSAT, this records the survey request metadata; final delivery depends on survey configuration and customer surface eligibility. |
+
+## SLA actions
+
+### Set SLA target
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `set_sla` |
+| Action kind | `set_sla` |
+| Category | SLA |
+| Required config | SLA target: `first_response`, `next_response`, or `resolution`. |
+| Runtime effect | Sets `slaTarget` metadata on the conversation. |
+| Use it for | Choosing which SLA breach class matters for a workflow before scheduler evaluation. |
+| Caveats | This does not notify anyone by itself. Pair it with Notify, Set priority, or Assign team if a breach should move work. |
+
+## Conflict behavior
+
+Woes prevents overlapping automations when two enabled automations share the same When trigger, have overlapping conditions, and run conflicting actions.
+
+| Action kind | Conflict behavior |
+| --- | --- |
+| `assign_agent` | Singular. Different targets conflict; same target is treated as redundant overlap. |
+| `set_team` | Singular. Different teams conflict; same team is redundant overlap. |
+| `set_status` | Singular. Different statuses conflict; same status is redundant overlap. |
+| `set_priority` | Singular. Different priorities conflict; same priority is redundant overlap. |
+| `set_sla` | Conflicting when overlapping. |
+| `auto_reply` | Conflicting when overlapping, to avoid duplicate replies. |
+| `send_csat_survey` | Conflicting when overlapping, to avoid duplicate survey requests. |
+| `send_nps_survey` | Conflicting when overlapping, to avoid duplicate survey requests. |
+| `snooze` | Conflicting when overlapping. |
+| `archive` | Conflicting when overlapping. |
+| `add_tags` | Additive; not a cross-automation conflict. |
+| `add_note` | Additive, but one-shot per automation per conversation. |
+| `send_notification` | Additive; records notes/notifications. |
+
+## Delayed actions
+
+If a Then action sits after a Delay node, Woes queues it instead of applying it immediately. The scheduled automation processor applies the queued action when due.
+
+Delayed actions behave the same as immediate actions once they are applied. If the source automation is disabled or deleted before the delayed action is due, the scheduler skips that stale queued work.
+
+## Audit and storage
+
+Automation effects are stored with the support record they act on:
+
+| Data | Storage |
+| --- | --- |
+| Automation definition | Workspace settings JSON. |
+| Run audit | Conversation metadata `automationRunLog`, capped. |
+| Delay queue | Conversation metadata `automationDelayQueue`, capped. |
+| Idempotency | Conversation metadata `automationsApplied` and `automationOnce`. |
+| Tags, status, priority, assignment, SLA, snooze, archive | Conversation metadata and, where applicable, conversation status. |
+| Auto-replies | `support_messages` rows with automation metadata. |
+| Internal notes and notifications | Conversation metadata `automationNotes`; issue copies become automation-sourced notes. |

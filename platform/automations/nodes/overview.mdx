@@ -1,0 +1,59 @@
+---
+title: "Automation Nodes"
+sidebarTitle: "Overview"
+description: "Understand how Woes automation nodes fit together before choosing When, If, Delay, and Then steps."
+---
+
+# Automation Nodes
+
+Automation nodes are the building blocks inside the Woes automation builder. Each automation starts with one **When** node, can branch through **If** or **AI condition** nodes, can wait through **Delay**, and finishes by running one or more **Then** action nodes.
+
+The builder intentionally exposes configurable primitives instead of many duplicate preset nodes. For example, choose **Set priority** and then pick `urgent`, `high`, `medium`, or `low`; choose **Snooze issue** and then pick the duration.
+
+## How the menus are organized
+
+The Automations editor has two related menus:
+
+| Menu | What it controls |
+| --- | --- |
+| **When** trigger dropdown | The event that starts the automation. This appears inside the trigger node inspector. |
+| **Node library** | The nodes you add after the trigger: logic, delay, routing, inbox, messaging, and SLA actions. |
+
+The current node library groups are:
+
+| Group | Nodes |
+| --- | --- |
+| Logic | If condition, AI condition, Delay |
+| Inbox | Add internal note, Add tag, Archive issue, Set priority, Set status, Snooze issue |
+| Routing | Assign team, Hand to AI agent, Human handoff |
+| Messaging | Auto-reply, Notify, Send CSAT survey, Send NPS survey |
+| SLA | Set SLA target |
+
+## Execution model
+
+Published and enabled automations run against workspace support records. Drafts can be tested, but they do not run for customers until they are published.
+
+A single runtime event can satisfy more than one trigger. For example, a new live chat conversation can match both **Issue created** and **New live chat conversation**, so generic issue routing and live-chat-specific routing can run in the same pass.
+
+## Validation rules
+
+Before publishing, Woes validates that the graph can actually run:
+
+- Exactly one trigger node must start the automation.
+- The trigger must connect to another node.
+- At least one action must be reachable from the trigger.
+- Action nodes that are not connected block publish.
+- Disconnected logic or delay nodes warn because they will not run.
+- Loops are blocked.
+- Required fields, such as status, priority, team, tag, note body, or auto-reply body, must be filled in.
+- Conflicting automations with the same trigger and overlapping conditions are blocked.
+
+## Related node references
+
+- [When triggers](/platform/automations/nodes/when-triggers)
+- [Logic and delay nodes](/platform/automations/nodes/logic-and-delay)
+- [Then actions](/platform/automations/nodes/then-actions)
+
+<Note>
+  Some legacy event ids still exist in stored data types for backward compatibility. The docs below only cover nodes and trigger events that are selectable in the current builder.
+</Note>

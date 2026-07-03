@@ -1,0 +1,170 @@
+---
+title: "Logic and Delay Nodes"
+sidebarTitle: "Logic and delay"
+description: "Use If, AI condition, and Delay nodes to branch and schedule Woes automation paths."
+---
+
+# Logic and Delay Nodes
+
+Logic nodes decide whether a path should continue. Delay nodes schedule downstream actions for later. They do not change the issue by themselves; they control which Then actions run, and when.
+
+## Node summary
+
+| Node | Catalog id | Type | Use it for |
+| --- | --- | --- | --- |
+| If condition | `filter` | Logic | Branch on conversation, issue, customer, message, survey, or tag fields. |
+| AI condition | `ai_condition` | Logic | Branch on detected customer intent or AI outcome. |
+| Delay | `delay` | Timing | Wait minutes, hours, or days before continuing. |
+
+## If condition
+
+The **If condition** node checks one runtime field against one value. It has two outputs:
+
+| Output | Meaning |
+| --- | --- |
+| Yes | The condition matched. |
+| No | The condition did not match. |
+
+If you connect only one output, only that branch runs. If you connect both outputs, Woes follows the matching branch for the event.
+
+### Fields
+
+| Field | Runtime value |
+| --- | --- |
+| Priority | Current priority, usually `urgent`, `high`, `medium`, or `low`. |
+| Status | Current lifecycle status, usually `open`, `waiting`, or `solved`. |
+| Channel | Conversation channel, such as `email`, `live chat`, or `discord`. |
+| Assignee | Assigned operator, assignment label, or AI assignment value. |
+| Tag | Existing issue tags, normalized and joined for matching. |
+| Customer email | Customer email on the conversation. |
+| Message text | Latest customer message body. |
+| Message mentions workspace | `true` when the latest message contains an @ mention or Discord mention token. |
+| Survey type | Survey type, such as `csat` or `nps`. |
+| Survey score | Survey score as a string number. CSAT is commonly 1-5; NPS is commonly 0-10. |
+
+### Operators
+
+| Operator | Behavior |
+| --- | --- |
+| `is` | Exact lowercased string match. |
+| `is not` | Passes when the field does not exactly match the value. |
+| `contains` | Passes when the field includes the value. |
+| `does not contain` | Passes when the field does not include the value. |
+| `greater than` | Numeric comparison. Fails if either side is not numeric. |
+| `less than` | Numeric comparison. Fails if either side is not numeric. |
+
+### Examples
+
+| Goal | Condition |
+| --- | --- |
+| Route urgent issues | Priority `is` urgent |
+| Route Discord mentions | Channel `is` Discord, then Message mentions workspace `is` true |
+| Detect docs questions | Message text `contains` documentation |
+| Follow up on low CSAT | Survey score `less than` 4 |
+| Skip a tag | Tag `does not contain` vip |
+
+### Limitations
+
+- Unknown operators never match.
+- Numeric comparisons only work when both values can be parsed as numbers.
+- Issue-scoped fields only make sense on issue or conversation events. The builder validation blocks incompatible combinations.
+- Tag matching reads normalized issue tags. Prefer stable tag names and avoid relying on capitalization.
+
+## AI condition
+
+The **AI condition** node is still a filter node, but it uses platform-populated AI signals instead of a free-text field.
+
+| Config | Options |
+| --- | --- |
+| AI detects | Customer intent or AI outcome |
+| Operator | Always `is` |
+| Value | A fixed value from the selected signal list |
+
+### Customer intent values
+
+Customer intent is detected from the latest customer message.
+
+| Value | Meaning |
+| --- | --- |
+| `api-question` | The customer is asking an API or integration question. |
+| `human-request` | The customer is asking for a person. |
+| `off-topic` | The message is outside the expected support scope. |
+| `greeting` | The message is a greeting. |
+| `closing` | The message is a closing, thanks, or goodbye. |
+| `abusive` | The message appears abusive. |
+
+### AI outcome values
+
+AI outcome is available after the AI agent has handled or stamped the conversation.
+
+| Value | Meaning |
+| --- | --- |
+| `answered` | The AI agent was assigned or answered. |
+| `handed-off` | The AI agent handed the conversation to an operator. |
+| `resolved` | The AI agent marked the conversation as resolved. |
+
+### Examples
+
+| Goal | Condition |
+| --- | --- |
+| Let AI handle API questions | Customer intent `isapi-question` -\> Hand to AI agent |
+| Escalate human requests | Customer intent `ishuman-request` -\> Human handoff |
+| Tag AI handoffs | AI outcome `ishanded-off` -\> Add tag |
+| Close polite endings | Customer intent `isclosing` -\> Set status solved |
+
+### Limitations
+
+- Customer intent is deterministic platform classification from the latest message, not a custom prompt.
+- AI outcome can be empty before the AI agent has handled the conversation.
+- Canvas simulation assumes AI conditions match so it can show the path. The real runtime uses the actual fields.
+
+## Delay
+
+The **Delay** node waits before downstream actions run. It has one normal output; it does not branch.
+
+| Config | Values |
+| --- | --- |
+| Amount | Positive number. |
+| Unit | Minutes, hours, or days. |
+| Basis | Any time or support hours only. |
+| Only run if | Always after the wait, no customer reply since, no agent reply since, or no status change since. |
+
+### Runtime behavior
+
+When a path reaches a Delay node, Woes partitions actions into two groups:
+
+| Group | Behavior |
+| --- | --- |
+| Immediate actions | Actions before the Delay run right away. |
+| Delayed actions | Actions after the Delay are queued on the conversation and applied by the scheduled automation processor. |
+
+Multiple Delay nodes can stack. If the same action is reachable through more than one delayed path, the shortest delay wins.
+
+### Delay queue
+
+Delayed actions are stored on the conversation metadata until they are due. The scheduled processor applies due work later and drops stale queued work when the source automation has been disabled or deleted.
+
+### Current caveats
+
+<Warning>
+  The Delay node stores a support-hours basis and an "only run if no change" option. Today, delayed runtime execution treats support-hours delay as elapsed time, and the no-change guard is configuration metadata rather than a fully enforced runtime guard. Use these fields carefully until your workspace has verified the behavior you need.
+</Warning>
+
+### Examples
+
+| Goal | Setup |
+| --- | --- |
+| Warn before an SLA miss | When status changes -\> If status is open -\> Delay 2 hours -\> Notify. |
+| Close stale waiting issues | When status changes -\> If status is waiting -\> Delay 3 days -\> Set status solved. |
+| Send a survey later | When issue solved -\> Delay 15 minutes -\> Send CSAT survey. |
+
+## Validation behavior
+
+| Situation | Result |
+| --- | --- |
+| Filter missing field or value | Error; publish blocked. |
+| Delay amount is 0 or invalid | Warning. |
+| Disconnected If/AI/Delay node | Warning; it will not run. |
+| Connected If/AI/Delay node with no outgoing path | Warning; the path stops there. |
+| Loop in graph | Error; publish blocked. |
+| No reachable action | Error; publish blocked. |

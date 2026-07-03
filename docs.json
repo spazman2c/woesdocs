@@ -212,7 +212,23 @@
                   "support-workflows/omnichannel-support",
                   "platform/inbox",
                   "platform/issues",
-                  "platform/automations",
+                  {
+                    "group": "Automations",
+                    "icon": "workflow",
+                    "pages": [
+                      "platform/automations",
+                      {
+                        "group": "Nodes",
+                        "icon": "git-branch",
+                        "pages": [
+                          "platform/automations/nodes/overview",
+                          "platform/automations/nodes/when-triggers",
+                          "platform/automations/nodes/logic-and-delay",
+                          "platform/automations/nodes/then-actions"
+                        ]
+                      }
+                    ]
+                  },
                   "platform/team-chat",
                   "settings/assignment",
                   "settings/surveys",
