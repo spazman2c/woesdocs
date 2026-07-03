@@ -1,0 +1,44 @@
+---
+title: "Slack Connector"
+sidebarTitle: "Slack"
+description: "Planned Slack connector for support notifications, escalations, and team workflow handoff."
+---
+
+# Slack Connector
+
+Slack is a planned team-workflow connector for support alerts and escalation visibility.
+
+## Status
+
+**Planned connector.** The Settings catalog may show Slack as planned, but Woes should not present a working Slack install action until OAuth, workspace mapping, delivery routes, permission checks, retry behavior, and audit logging are implemented.
+
+## What it will do
+
+Slack should help support teams keep important Woes events visible where teammates already coordinate:
+
+- Send SLA breach alerts to selected Slack channels.
+- Notify teams when urgent issues are created or reassigned.
+- Post automation-generated alerts from Woes workflows.
+- Link back to the relevant Woes conversation, issue, or client.
+- Optionally support channel-specific routing rules later.
+
+## Product fit
+
+Slack is best as a notification and escalation surface, not a replacement for the Woes inbox. Operators should still resolve customer conversations in Woes so assignment, status, SLA, audit, and analytics stay coherent.
+
+## Implementation requirements
+
+Before Slack becomes active, Woes needs:
+
+- Slack OAuth install and reconnect flow.
+- Workspace-to-Slack-team mapping.
+- Channel picker with safe permission checks.
+- Message delivery, retry, and error states.
+- Automation action support.
+- Tenant-scoped activity logs and secret redaction.
+
+## Early recipes
+
+- Notify `#support-triage` when an issue breaches first-response SLA.
+- Post urgent customer issues to a product support channel.
+- Notify the assigned team when a Discord support thread becomes high priority.

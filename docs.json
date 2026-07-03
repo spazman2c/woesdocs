@@ -502,6 +502,51 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Integrations",
+        "icon": "plug-zap",
+        "groups": [
+          {
+            "group": "Start here",
+            "icon": "map",
+            "pages": [
+              "integrations-catalog/overview"
+            ]
+          },
+          {
+            "group": "Available now",
+            "icon": "check-circle",
+            "pages": [
+              "integrations-catalog/github",
+              "integrations-catalog/email",
+              "integrations-catalog/discord",
+              "integrations-catalog/mintlify-widget"
+            ]
+          },
+          {
+            "group": "Planned connectors",
+            "icon": "calendar-clock",
+            "pages": [
+              "integrations-catalog/slack",
+              "integrations-catalog/linear",
+              "integrations-catalog/zapier",
+              "integrations-catalog/jira"
+            ]
+          },
+          {
+            "group": "Future candidates",
+            "icon": "sparkles",
+            "pages": [
+              "integrations-catalog/confluence",
+              "integrations-catalog/notion",
+              "integrations-catalog/sentry",
+              "integrations-catalog/pagerduty",
+              "integrations-catalog/hubspot",
+              "integrations-catalog/stripe"
+            ]
+          }
+        ]
       }
     ]
   }

@@ -1,0 +1,44 @@
+---
+title: "Linear Connector"
+sidebarTitle: "Linear"
+description: "Planned Linear connector for linking Woes support issues to product and engineering workflows."
+---
+
+# Linear Connector
+
+Linear is a planned product and engineering workflow connector.
+
+## Status
+
+**Planned connector.** Linear should remain disabled in Woes until account install, team/project selection, issue sync, permissions, and audit behavior are fully designed.
+
+## What it will do
+
+Linear should help support and product teams turn real customer pain into product work:
+
+- Create Linear issues from Woes support conversations or issues.
+- Link an existing Linear issue to a Woes support record.
+- Carry customer context, channel, severity, tags, and source evidence into the Linear issue.
+- Reflect product status back into Woes where it is useful for operators.
+- Support closing-the-loop workflows when product work ships.
+
+## Product fit
+
+Linear belongs in the support-to-product handoff path. It should not move the customer conversation out of Woes; it should give engineering the right context while Woes keeps ownership of customer communication.
+
+## Implementation requirements
+
+Before Linear becomes active, Woes needs:
+
+- Linear OAuth install and workspace mapping.
+- Team, project, label, and priority mapping.
+- Create/link/unlink actions with validation.
+- Sync model for status updates and closed-loop notifications.
+- Conflict handling when linked product issues are moved or archived.
+- Tenant-scoped audit logs.
+
+## Early recipes
+
+- Create a Linear issue when a support issue is tagged `bug` and marked high priority.
+- Link repeated feature requests to an existing product issue.
+- Notify affected customers when linked work moves to shipped or resolved.

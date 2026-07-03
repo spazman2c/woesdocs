@@ -1,0 +1,44 @@
+---
+title: "Jira Connector"
+sidebarTitle: "Jira"
+description: "Planned Jira connector for linking support conversations to engineering ticket workflows."
+---
+
+# Jira Connector
+
+Jira is a planned engineering-ticket connector for teams that manage bugs, platform work, and releases in Atlassian workflows.
+
+## Status
+
+**Planned connector.** Jira should remain disabled until Woes has OAuth or app installation, project mapping, issue field mapping, sync behavior, and permission boundaries implemented.
+
+## What it will do
+
+Jira should help support teams move technical support issues into engineering without losing customer context:
+
+- Create Jira issues from Woes conversations or standalone issues.
+- Link Woes support records to existing Jira tickets.
+- Include support transcript summaries, API context, priority, tags, customer impact, and reproduction notes.
+- Reflect relevant Jira status back into Woes for operator visibility.
+- Support customer follow-up when the linked engineering ticket is resolved.
+
+## Product fit
+
+Jira is strongest for teams with formal engineering intake and release workflows. Woes should remain the customer communication system while Jira owns implementation tracking.
+
+## Implementation requirements
+
+Before Jira becomes active, Woes needs:
+
+- Atlassian install or OAuth flow.
+- Project, issue type, field, and priority mapping.
+- Safe create/link/unlink actions.
+- Status sync and webhook verification.
+- Error handling for permissions and required fields.
+- Tenant-scoped audit logs.
+
+## Early recipes
+
+- Create a Jira bug when a Woes issue is tagged `bug` and contains reproduction steps.
+- Link a customer conversation to an existing incident ticket.
+- Notify operators when a linked Jira ticket reaches Done.
