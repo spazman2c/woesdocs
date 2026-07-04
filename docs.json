@@ -560,6 +560,7 @@
             "pages": [
               "integrations-catalog/github",
               "integrations-catalog/discord",
+              "integrations-catalog/slack",
               "integrations-catalog/linear"
             ]
           },
@@ -571,8 +572,7 @@
               "integrations-catalog/zapier",
               "integrations-catalog/jira",
               "integrations-catalog/sentry",
-              "integrations-catalog/notion",
-              "integrations-catalog/slack"
+              "integrations-catalog/notion"
             ]
           },
           {

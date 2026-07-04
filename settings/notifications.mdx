@@ -1,6 +1,6 @@
 ---
 title: "Notification Preferences"
-description: "Configure personal in-app, browser, email, push, and sound notifications for support events."
+description: "Configure personal in-app, browser, email, push, Slack, and sound notifications for support events."
 ---
 
 # Notification Preferences
@@ -17,6 +17,7 @@ They live in the account/profile dialog, not the workspace Settings sidebar.
 | Browser | Browser notifications for active operators. |
 | Email | Async updates that still deliver during quiet hours where configured. |
 | Push | Device push notifications where available. |
+| Slack | Direct messages to an operator's connected Slack user. |
 
 ## Events
 
@@ -24,7 +25,7 @@ Notification preferences are a per-event by per-channel matrix.
 
 | Event | What it means |
 | --- | --- |
-| New message | A customer replied in live chat, email, or Discord. |
+| New message | A customer replied in live chat, email, Discord, or Slack. |
 | New conversation | A new conversation was started. |
 | Assigned to you | A conversation or issue was assigned to you. |
 | @mention | You were mentioned in an internal note. |
@@ -44,7 +45,8 @@ Use the master channel switches to enable or disable an entire delivery channel.
 Use the event matrix to decide exactly which events should use each channel.
 
 Browser notifications may ask for browser permission. Push notifications depend
-on browser support and server push configuration.
+on browser support and server push configuration. Slack notifications require
+the workspace Slack app and a connected Slack user for the operator.
 
 ## Best Practices
 
@@ -52,5 +54,7 @@ on browser support and server push configuration.
 - Use browser or push notifications for active support shifts.
 - Keep in-app notifications enabled for auditability.
 - Review email notification behavior for on-call operators.
+- Connect Slack for operators who want assignment, mention, handoff, or team
+  chat notifications in Slack.
 - Use **Mute all notifications** for temporary focus time instead of disabling
   individual events one by one.
