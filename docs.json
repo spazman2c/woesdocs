@@ -559,7 +559,8 @@
             "icon": "check-circle",
             "pages": [
               "integrations-catalog/github",
-              "integrations-catalog/discord"
+              "integrations-catalog/discord",
+              "integrations-catalog/slack"
             ]
           },
           {
@@ -571,7 +572,6 @@
               "integrations-catalog/jira",
               "integrations-catalog/sentry",
               "integrations-catalog/notion",
-              "integrations-catalog/slack",
               "integrations-catalog/linear"
             ]
           },
