@@ -1,44 +1,66 @@
 ---
 title: "Jira Connector"
 sidebarTitle: "Jira"
-description: "Planned Jira connector for linking support conversations to engineering ticket workflows."
+description: "Link Woes support issues to Jira — create issues from support work and sync status back to engineering."
 ---
 
 # Jira Connector
 
-Jira is a planned engineering-ticket connector for teams that manage bugs, platform work, and releases in Atlassian workflows.
+Jira is the live engineering-ticket connector for Woes. It lets support move a technical issue into Atlassian without losing customer context, and keeps the linked Jira ticket in step as the support issue progresses.
 
 ## Status
 
-**Planned connector.** Jira should remain disabled until Woes has OAuth or app installation, project mapping, issue field mapping, sync behavior, and permission boundaries implemented.
+**Available now.** Workspaces can connect a Jira Cloud site over Atlassian OAuth 2.0, choose a default project, create Jira issues from Woes support issues, and have Woes push status changes to the linked ticket.
 
-## What it will do
+## What it does
 
-Jira should help support teams move technical support issues into engineering without losing customer context:
+- **Connect a Jira site** from **Workspace Settings → Integrations → Jira** using Atlassian OAuth 2.0 (3LO). Woes stores the site and encrypted access/refresh tokens, and refreshes them automatically.
+- **Pick a default project.** In the Jira card's manage dialog, choose the Jira project new issues are created in.
+- **Create a Jira issue from a support issue.** Open a support issue's detail drawer and choose **Create Jira issue**. Woes creates the ticket in your default project from the issue's summary and description, then links the two records.
+- **Jump to the ticket.** Once linked, the issue shows **View in Jira** with the Jira key and a direct link.
+- **Status sync (Woes → Jira).** When a linked support issue changes status — from the board dropdown, drag-and-drop, or an automatic close — Woes moves the Jira issue to the matching status (see the mapping below). Sync is best-effort: a Jira hiccup never blocks the support workflow.
+- **Disconnect** at any time from the Jira card. Disconnecting deletes the stored connection and tokens.
 
-- Create Jira issues from Woes conversations or standalone issues.
-- Link Woes support records to existing Jira tickets.
-- Include support transcript summaries, API context, priority, tags, customer impact, and reproduction notes.
-- Reflect relevant Jira status back into Woes for operator visibility.
-- Support customer follow-up when the linked engineering ticket is resolved.
+## Where it appears in Woes
 
-## Product fit
+- **Workspace Settings → Integrations** — connect, disconnect, and set the default Jira project.
+- **Issue detail drawer** — a Jira panel with **Create Jira issue** (or **View in Jira** once linked).
 
-Jira is strongest for teams with formal engineering intake and release workflows. Woes should remain the customer communication system while Jira owns implementation tracking.
+## Status mapping
 
-## Implementation requirements
+| Woes issue status | Jira transition |
+| --- | --- |
+| Closed / resolved | Done |
+| On you / on customer | In Progress |
+| New / on hold | To Do |
 
-Before Jira becomes active, Woes needs:
+Woes transitions to the nearest matching workflow transition available on the Jira issue.
 
-- Atlassian install or OAuth flow.
-- Project, issue type, field, and priority mapping.
-- Safe create/link/unlink actions.
-- Status sync and webhook verification.
-- Error handling for permissions and required fields.
-- Tenant-scoped audit logs.
+## Setup
 
-## Early recipes
+1. Create an OAuth 2.0 (3LO) integration in the [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) with **Resource-level** access.
+2. Add the **Jira platform REST API** and these scopes: `read:jira-work`, `write:jira-work`, `read:jira-user`, `offline_access`, `manage:jira-project` (`offline_access` is required so Woes receives refresh tokens).
+3. Add the callback URL `https://<your-woes-domain>/api/integrations/jira/callback`.
+4. Set `JIRA_CLIENT_ID` and `JIRA_CLIENT_SECRET` in your Woes deployment.
+5. In Woes, open **Settings → Integrations → Jira → Connect**, authorize the Jira site, then set a default project.
 
-- Create a Jira bug when a Woes issue is tagged `bug` and contains reproduction steps.
-- Link a customer conversation to an existing incident ticket.
-- Notify operators when a linked Jira ticket reaches Done.
+## Security model
+
+Woes stores the Jira OAuth access and refresh tokens encrypted at rest and uses them only server-side. Browser routes return safe connection metadata (site name and URL), never the tokens. Every connection, token, and OAuth-state record is scoped to the workspace, and disconnecting removes the stored credentials.
+
+## Current limits
+
+- **One-directional.** Woes pushes issue creation and status to Jira. A change made in Jira does not yet flow back into Woes (no inbound webhook sync), and comments are not mirrored.
+- **No automation action yet.** Creating a Jira issue is an operator action from the issue drawer; it is not yet available as an automation "then" action.
+
+## Good first use cases
+
+- Escalate a reproducible bug from a support issue into your engineering backlog without retyping context.
+- Keep the Jira ticket's status honest by driving it from the support issue's lifecycle.
+- Give operators a one-click jump from the support issue to the engineering ticket that owns the fix.
+
+## Related docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Issues](/support-workflows/omnichannel-support)
+- [Settings → Integrations](/settings/integrations)
