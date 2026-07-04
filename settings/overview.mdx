@@ -40,9 +40,13 @@ Examples:
 
 ## Integrations Catalog
 
-**Settings -\> Integrations** shows the currently visible workspace integration catalog. It includes available customer and workflow connectors such as GitHub, Discord, Slack, Jira, Linear, HubSpot, and Notion; planned workflow connectors such as Zapier, Webhooks, and Sentry; and additional connector candidates such as Confluence and PagerDuty.
+**Settings -\> Integrations** shows the currently visible workspace integration catalog. It includes available customer, context, CRM, and workflow connectors such as GitHub, Discord, Slack, Jira, Linear, Confluence, HubSpot, Notion, Zapier, and Sentry. Planned or candidate connectors, such as Webhooks and PagerDuty, stay non-actionable until Woes exposes a supported customer setup path.
 
-Cards that already have a working setup path route to the relevant Woes page. Planned connectors stay disabled until their backend routes, permissions, install state, audit trail, and failure states are implemented.
+Cards that already have a working setup path route to the relevant Woes page or connection dialog. Planned connectors stay disabled or hidden until their permissions, install state, audit trail, and failure states are ready for customers.
+
+Context-style integrations such as GitHub, Notion, Confluence, and synced
+HubSpot CRM records appear in the Context Library after import or sync. HubSpot
+CRM context is operator-only and is not exposed to customers.
 
 ## Usage Visibility
 
@@ -66,7 +70,7 @@ When Stripe is configured:
 
 - Plan changes open Stripe Checkout.
 - The **Manage subscription** button opens Stripe Billing Portal.
-- Subscription updates sync back into Woes through Stripe webhooks.
+- Subscription updates sync back into Woes after Stripe confirms the billing state.
 - Stripe customer and subscription identifiers are stored server-side for the workspace.
 
 ## Bring Your Own AI

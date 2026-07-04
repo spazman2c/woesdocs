@@ -152,20 +152,24 @@ Team Chat routes are authenticated workspace routes for internal teammate messag
 
 See [Team Chat](/platform/team-chat) for product behavior, permissions, and boundaries.
 
-## Webhook Routes
+## Managed Event Routes
 
-Webhook routes are server-to-server integration endpoints. They do not accept workspace API keys.
+Some Woes features receive server-to-server events from connected providers.
+These managed event routes do not accept workspace API keys and are not direct
+customer API surfaces.
 
-| Route family | Purpose |
+| Event family | Purpose |
 | --- | --- |
-| `/api/stripe/webhook` | Receives Stripe subscription events and syncs billing entitlements. |
-| `/api/email/inbound/resend` | Receives inbound email events from Resend. |
-| `/api/discord/events` | Receives worker-authorized Discord message events. |
+| Billing events | Keep subscription status and included limits in sync. |
+| Email delivery events | Receive inbound email and delivery updates for configured email channels. |
+| Channel events | Receive approved activity from connected support channels such as Discord or Slack. |
 
 ## Admin Routes
 
 Admin routes under `/api/admin/*` are platform-admin only. They are intentionally not customer API surfaces.
 
 <Note>
-  Routes listed here may require authentication, workspace permissions, signed tokens, provider webhooks, public widget keys, conversation secrets, or platform-admin access depending on the route family.
+  Routes listed here may require authentication, workspace permissions, signed
+  tokens, public widget keys, conversation secrets, or platform-admin access
+  depending on the route family.
 </Note>

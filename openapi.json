@@ -1814,7 +1814,10 @@
             "asyncapi",
             "grpc",
             "soap",
-            "github"
+            "github",
+            "notion",
+            "confluence",
+            "hubspot"
           ]
         }
       },
@@ -3133,7 +3136,10 @@
               "asyncapi",
               "grpc",
               "soap",
-              "github"
+              "github",
+              "notion",
+              "confluence",
+              "hubspot"
             ]
           },
           "status": {

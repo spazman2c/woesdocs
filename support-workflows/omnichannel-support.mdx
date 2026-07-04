@@ -1,18 +1,17 @@
 ---
 title: "Omnichannel Support"
-description: "Run live chat, email, and Discord support from one Woes workspace."
+description: "Run live chat, email, Discord, and Slack support from one Woes workspace."
 ---
 
 # Omnichannel Support
 
-Woes treats live chat, email, and Discord as channels on one support model. A
-conversation can come from any supported channel, but operators still triage it
-from the same inbox, convert it into issues, attach customer context, and use AI
-agent evidence from the same knowledge base.
+Woes treats live chat, email, Discord, and Slack as channels on one support
+model. A conversation can come from any supported channel, but operators still
+triage it from the same inbox, convert it into issues, attach customer context,
+and use AI agent evidence from the same knowledge base.
 
-Channel pages own provider setup, gateway or webhook diagnostics, and
-channel-agent selection details. This page focuses on the shared support
-workflow after a message enters Woes.
+Channel pages own setup, delivery checks, and channel-agent selection details.
+This page focuses on the shared support workflow after a message enters Woes.
 
 ## How Channels Work Together
 
@@ -21,6 +20,7 @@ workflow after a message enters Woes.
 | Live chat | In-product support, docs support, fast developer questions. | [Inbox](/platform/inbox) |
 | Email | Longer support threads, account handoffs, NPS or CSAT survey delivery. | [Inbox](/platform/inbox) |
 | Discord | Community and developer-server questions that need workspace visibility. | [Inbox](/platform/inbox) |
+| Slack | Shared-channel support, DMs, app mentions, and emoji-created tickets. | [Inbox](/platform/inbox) |
 
 Every supported channel can share:
 
@@ -34,7 +34,9 @@ Every supported channel can share:
 
 <Steps>
   <Step title="Connect channels">
-    Start with the [chat widget](/quickstart/install-widget), then add [email](/channels/email) and [Discord](/channels/discord) if those are active support surfaces.
+    Start with the [chat widget](/quickstart/install-widget), then add
+    [email](/channels/email), [Discord](/channels/discord), or
+    [Slack](/channels/slack) if those are active support surfaces.
   </Step>
   <Step title="Route work">
     Use [assignment settings](/settings/assignment), tags, statuses, and priorities to keep the inbox predictable.

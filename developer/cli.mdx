@@ -1,0 +1,144 @@
+---
+title: "Woes CLI"
+sidebarTitle: "CLI"
+description: "Install and use the Woes terminal app for inbox triage, conversations, issues, clients, and JSON output."
+---
+
+# Woes CLI
+
+The Woes CLI lets operators and developers work with a Woes workspace from the
+terminal. Run `woes` for a full-screen inbox, or use one-shot commands for
+scripts and automation.
+
+## Install
+
+```bash
+curl -fsSL https://woes.dev/install.sh | sh
+```
+
+The installer downloads the CLI to `~/.woes/bin/woes`. If your current shell
+cannot find `woes` immediately, open a new terminal or run:
+
+```bash
+export PATH="$HOME/.woes/bin:$PATH"
+```
+
+<Note>
+  The CLI requires Node.js 18 or newer.
+</Note>
+
+## Log In
+
+```bash
+woes login
+```
+
+The CLI opens a browser authorization page. After you approve terminal access in
+Woes, the terminal finishes setup and stores a local workspace key for future
+CLI requests.
+
+## Open The Terminal Inbox
+
+```bash
+woes
+```
+
+The full-screen inbox shows active conversations and a selected conversation
+preview. Use the keyboard to move quickly:
+
+| Key | Action |
+| --- | --- |
+| `j` or Down arrow | Move to the next conversation. |
+| `k` or Up arrow | Move to the previous conversation. |
+| `Enter` | Open the selected transcript. |
+| `b` or Left arrow | Return to the inbox from a transcript. |
+| `r` | Refresh the inbox or transcript. |
+| `?` or `h` | Show help. |
+| `q` or Ctrl-C | Quit. |
+
+## Commands
+
+### Account
+
+```bash
+woes status
+woes logout
+```
+
+### Inbox And Conversations
+
+```bash
+woes inbox list --limit 20
+woes inbox view <conversation-id>
+woes conversations list --status open --channel live-chat
+woes conversations view <conversation-id>
+woes conversations messages <conversation-id>
+```
+
+### Issues
+
+```bash
+woes issues list --status open --priority high
+woes issues view <issue-id>
+```
+
+### Clients
+
+```bash
+woes clients list --search acme
+woes clients view <client-id>
+```
+
+## JSON Output
+
+Add `--json` to supported commands when a script should consume the response.
+
+```bash
+woes conversations list --status open --limit 10 --json
+```
+
+## Use A Different API Base
+
+Production uses `https://woes.dev` by default. For a test environment, pass a
+base URL:
+
+```bash
+woes --base-url https://example.test status
+```
+
+## What The CLI Can Do Today
+
+| Area | Available today |
+| --- | --- |
+| Inbox | Full-screen terminal inbox for open and waiting conversations. |
+| Conversations | List conversations, view one conversation, and read its messages. |
+| Issues | List and view workspace issues. |
+| Clients | List and view client account aggregates. |
+| Account | Log in, log out, and check the active workspace connection. |
+| Automation output | Return JSON for command-line scripts. |
+
+## Current Boundaries
+
+- The CLI is workspace-scoped to the account you authorize.
+- It reads Woes data through the same public API boundaries as other API-key
+  integrations.
+- It does not currently send operator replies, run macros, assign conversations,
+  or change AI takeover state from the terminal.
+- Keep the local machine trusted. Logging out removes the local CLI credential.
+
+## Troubleshooting
+
+| Issue | What to do |
+| --- | --- |
+| `woes: command not found` | Open a new terminal, or add `~/.woes/bin` to your `PATH`. |
+| Login page approves but terminal stays pending | Re-run `woes login` and complete the browser approval in the same workspace. |
+| `Not logged in` | Run `woes login`. |
+| Empty inbox | Confirm the workspace has open or waiting conversations. Solved conversations are not shown in the interactive inbox. |
+| Need machine-readable output | Add `--json` to the command. |
+
+## Related Docs
+
+- [REST API authentication](/api/authentication)
+- [Conversations API](/api/conversations)
+- [Issues API](/api/issues)
+- [Clients API](/api/clients)

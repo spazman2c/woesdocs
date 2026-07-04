@@ -207,7 +207,7 @@ The MCP server follows the same public API boundary as `/api/v1`.
 | Error | What to check |
 | --- | --- |
 | `Authentication required. Pass Authorization: Bearer <woesk_...>.` | The MCP client is not sending the Authorization header for tool calls. |
-| `insufficient_scope` | Add the required scope in **Settings, then Keys** or create a narrower key for the specific workflow. |
+| `insufficient_scope` | Use a key with the required scope. Until scoped key creation is available in the normal Settings UI, use an unrestricted workspace key, a Zapier-created scoped key where applicable, or ask an admin to provision the right scoped key for the workflow. |
 | `invalid_request` | Check the tool input schema. Required ids must be valid UUIDs where noted. |
 | `rate_limited` | Wait for the key's public API rate limit window to reset or use a key with the right allowance. |
 | Empty lists | Confirm the API key belongs to the workspace you expect and that matching records exist. |

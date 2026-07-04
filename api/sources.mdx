@@ -19,11 +19,18 @@ context, and other supported source types.
 
 ## Supported Source Types
 
+The REST Sources API directly creates these source types:
+
 `auto`, `openapi`, `json`, `url`, `website`, `text`, `graphql`, `postman`,
 `asyncapi`, `grpc`, `soap`, and `github`.
 
 Use `auto` when you want Woes to detect the source shape. Use a specific type
 when your pipeline already knows what it is sending.
+
+Connector-created sources, such as Notion pages and Confluence spaces, appear
+in source list and detail responses after they are imported from their
+integration flows. HubSpot CRM context can also appear as an operator-only
+source after it is synced from the HubSpot integration.
 
 ## Create a Source
 

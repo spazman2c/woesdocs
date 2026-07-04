@@ -9,10 +9,9 @@ GitHub repositories can be used as context sources. This is useful when your API
 
 ## Before You Connect
 
-GitHub import requires the Woes server to have GitHub OAuth configured. If the
-import window says GitHub is not configured, an admin needs to set the GitHub
-client id, client secret, and token encryption secret in the production
-environment before users can authorize repositories.
+GitHub import needs to be enabled for your Woes workspace. If the GitHub card
+or import window says **Setup needed**, contact your workspace admin or Woes
+support before trying to authorize repositories.
 
 You also need access to the GitHub account or organization that owns the
 repository. Woes can only list repositories that GitHub grants to the
@@ -70,9 +69,10 @@ agent.
 
 ## Security Notes
 
-Woes stores GitHub connection data server-side. Client-side access is denied by
-RLS, and attached repository content can become support evidence for agents.
-Treat selected repositories and branches as customer-support source material.
+Woes keeps the GitHub connection server-side and only shows safe account and
+repository metadata in the app. Attached repository content can become support
+evidence for agents, so treat selected repositories and branches as
+customer-support source material.
 
 <Warning>
   Do not attach repositories, branches, docs, code comments, or examples that

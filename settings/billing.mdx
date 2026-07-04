@@ -66,7 +66,7 @@ Plan changes from Woes use Stripe Checkout.
     Stripe Checkout collects payment details and starts the subscription.
   </Step>
   <Step title="Return to Woes">
-    Woes syncs the confirmed subscription through Stripe webhooks and updates workspace limits after Stripe confirms the billing state.
+    Woes syncs the confirmed subscription and updates workspace limits after Stripe confirms the billing state.
   </Step>
 </Steps>
 
@@ -150,7 +150,7 @@ Use [Users and Permissions](/settings/users-permissions) to limit Billing access
 | Symptom | Check |
 | --- | --- |
 | Manage subscription does not open | Confirm Stripe is configured and the workspace has or can create a Stripe customer. |
-| Plan still looks unchanged after Checkout | Wait for Stripe webhook sync, then refresh Billing. |
+| Plan still looks unchanged after Checkout | Wait for billing confirmation sync, then refresh Billing. |
 | Downgrade is blocked | Current usage or enabled features exceed the target plan. Remove extras or choose a larger plan. |
-| Add-on quantity looks wrong | Confirm the active Stripe subscription item quantity and wait for the subscription update webhook. |
+| Add-on quantity looks wrong | Confirm the active Stripe subscription item quantity and wait for billing confirmation sync. |
 | BYO AI settings are hidden | Switch to the Bring Your Own AI plan from Billing first. |

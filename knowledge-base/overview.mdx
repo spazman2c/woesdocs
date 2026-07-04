@@ -21,12 +21,14 @@ Markdown.
 | GraphQL, AsyncAPI, SOAP, gRPC | Non-REST API surfaces and protocol-specific docs. |
 | GitHub repositories | Default-branch READMEs, docs folders, specs, SDK examples, and code-adjacent support context. |
 | Notion pages | Product notes, FAQs, setup guides, release notes, and support playbooks shared with the Woes Notion integration. |
+| Confluence spaces | Support runbooks, implementation notes, release guidance, and troubleshooting pages imported from Confluence. |
+| HubSpot CRM records | Operator-only account, contact, deal, and owner context for support triage. |
 
 ## Source Lifecycle
 
 <Steps>
   <Step title="Add a source">
-    Use [Add API Context](/quickstart/add-context) or [Sources](/context/sources) to submit a URL, spec, repository, imported Notion page, or pasted content.
+    Use [Add API Context](/quickstart/add-context) or [Sources](/context/sources) to submit a URL, spec, repository, imported Notion page, imported Confluence space, or pasted content.
   </Step>
   <Step title="Watch ingestion">
     Woes scans the source, extracts usable content, builds Markdown, chunks it for retrieval, and publishes searchable context.
@@ -61,3 +63,7 @@ separately from source content and should never be copied into public docs.
 URL ingestion and website crawling are bounded by safe-fetch, same-origin, size,
 time, and request-count controls. Public docs publication is sanitized and
 available only for ready source material.
+
+HubSpot CRM records are different from normal knowledge-base sources: they are
+operator-only account context and are not used as customer-facing widget answer
+evidence by default.

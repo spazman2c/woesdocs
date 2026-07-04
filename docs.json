@@ -273,7 +273,8 @@
                   "settings/assignment",
                   "settings/surveys",
                   "channels/email",
-                  "channels/discord"
+                  "channels/discord",
+                  "channels/slack"
                 ],
                 "expanded": false
               },
@@ -397,6 +398,7 @@
                 "group": "Developer",
                 "pages": [
                   "developer/overview",
+                  "developer/cli",
                   "developer/rest-api",
                   "reference/glossary",
                   "developer/route-boundaries"
@@ -561,26 +563,27 @@
               "integrations-catalog/github",
               "integrations-catalog/discord",
               "integrations-catalog/slack",
+              "integrations-catalog/woes-cli",
               "integrations-catalog/jira",
               "integrations-catalog/linear",
+              "integrations-catalog/confluence",
               "integrations-catalog/hubspot",
-              "integrations-catalog/notion"
+              "integrations-catalog/notion",
+              "integrations-catalog/zapier",
+              "integrations-catalog/sentry"
             ]
           },
           {
             "group": "Planned connectors",
             "icon": "calendar-clock",
             "pages": [
-              "integrations-catalog/webhooks",
-              "integrations-catalog/zapier",
-              "integrations-catalog/sentry"
+              "integrations-catalog/webhooks"
             ]
           },
           {
             "group": "Additional connector candidates",
             "icon": "sparkles",
             "pages": [
-              "integrations-catalog/confluence",
               "integrations-catalog/pagerduty"
             ]
           }

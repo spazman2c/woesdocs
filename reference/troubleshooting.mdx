@@ -39,21 +39,20 @@ Use this page when a workspace setup or support workflow does not behave as expe
 
 | Symptom | Check |
 | --- | --- |
-| Inbound email does not appear | Verify webhook authentication, active route address, and that the workspace address is in `To`, not only `Cc` or `Bcc`. |
-| Duplicate delivery | Provider redelivery should dedupe by email id; check whether the customer actually sent a new message. |
-| Email was skipped | Check for no route, empty email, invalid payload, or ambiguous route states. |
-| Auto-reply does not send | Confirm email is enabled, provider credentials are configured, the sending domain is verified, and the sender is not suppressed or automated. |
+| Inbound email does not appear | Confirm email support is enabled, an answering agent is selected, and the customer sent to the configured forwarding or support address. |
+| Duplicate delivery | Check whether the customer sent a new message or retried from another mailbox. Woes attempts to avoid duplicate messages from the same delivery. |
+| Email was skipped | Check for an unmatched route, empty message, automated-only email, or a message sent only through `Cc` or `Bcc`. |
+| Auto-reply does not send | Confirm email is enabled, the sending domain is verified, an agent is selected, and the sender is not suppressed or automated. |
 
 ## Discord
 
 | Symptom | Check |
 | --- | --- |
 | Channels fail to load | If Woes shows a reinvite state, invite the bot again and refresh channel discovery. |
-| Mention does nothing | Confirm the gateway worker is running, the channel is configured, and mention mode includes the Woes app mention. |
-| Bot appears offline | Confirm the worker token is valid, message content intent is enabled, and only one worker is running for the bot token. |
-| Diagnostic row says `message_ignored_unconfigured` | The server or channel is not configured for intake. |
-| Diagnostic row says `message_ignored_empty` | The Discord message did not contain usable text. |
-| Diagnostic row says `message_thread_create_failed` | Woes could not create or find the support thread for the message. |
+| Mention does nothing | Confirm the channel is enabled in Woes and the message includes the Woes app mention when the channel uses mention mode. |
+| Bot appears offline | Reinvite the Woes app and confirm it has permission to read and reply in the selected channel. |
+| Message is ignored | Confirm the server and channel are configured for intake and the message contains usable text. |
+| Conversation is not created | Confirm Woes can access the selected channel or thread, then send one fresh test message. |
 
 ## Agents
 
@@ -68,7 +67,7 @@ Use this page when a workspace setup or support workflow does not behave as expe
 | Symptom | Check |
 | --- | --- |
 | Widget survey does not appear | Confirm survey channel, trigger timing, and closed/solved conversation state. |
-| Email survey does not send | Confirm Resend configuration, verified domain, customer email, and enabled email survey. |
+| Email survey does not send | Confirm email delivery is configured, the sending domain is verified, the customer has an email address, and email surveys are enabled. |
 | NPS score is rejected | Confirm the survey type is NPS and score is 0 to 10. |
 
 ## Analytics
@@ -84,9 +83,9 @@ Use this page when a workspace setup or support workflow does not behave as expe
 | Symptom | Check |
 | --- | --- |
 | Manage subscription fails | Confirm Stripe is configured and the workspace has permission to manage billing. |
-| Subscription status is missing | Confirm Checkout or Stripe Portal has completed and webhook sync has run. |
+| Subscription status is missing | Confirm Checkout or Stripe Portal has completed, then refresh after billing confirmation sync finishes. |
 | Plan downgrade is blocked | Current features or usage exceed the target plan's limits. |
-| Add-on capacity is not reflected | Confirm the Stripe subscription item quantity and wait for the subscription update webhook. |
+| Add-on capacity is not reflected | Confirm the add-on quantity in billing, then refresh after billing confirmation sync finishes. |
 | Public API usage looks high | Review the Public API by key section in Billing and rotate unused API keys. |
 
 ## Bring Your Own AI

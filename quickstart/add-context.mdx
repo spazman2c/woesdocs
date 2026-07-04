@@ -8,7 +8,8 @@ description: "Add documentation, specifications, repositories, and examples so W
 Woes answers developer questions from workspace-scoped source context. A source
 can be a formal API specification, a documentation site, raw Markdown, SDK
 examples, a connected GitHub repository, or selected pages from a connected
-Notion workspace.
+Notion workspace. Teams can also import Confluence spaces or sync HubSpot CRM
+records when those integrations are connected.
 
 Start with the material your support team already trusts. The agent can only be
 as specific as the source context it can retrieve.
@@ -29,6 +30,8 @@ as specific as the source context it can retrieve.
 | SOAP or gRPC docs | Service operations, request/response contracts, and integration notes. |
 | GitHub repository | Default-branch README, docs, specs, SDK examples, and source-adjacent API guidance. |
 | Notion pages | Product notes, FAQs, setup guides, release notes, and support playbooks shared with the Woes Notion integration. |
+| Confluence spaces | Support runbooks, internal troubleshooting guides, release notes, and implementation notes imported from Confluence. |
+| HubSpot CRM context | Operator-only company, contact, deal, and owner context for support triage. |
 
 ## Add a Source
 
@@ -62,7 +65,9 @@ as specific as the source context it can retrieve.
 | A docs homepage | Website crawl | Keep the crawl scope to the docs domain or path you trust. |
 | A single troubleshooting article | Raw documentation URL | Add tags or folders so operators can find it later. |
 | A private docs repository | GitHub repository | Review the default-branch docs-like files that Woes imports before attaching the source to an agent. |
-| A Notion support playbook | Notion integration | Share the page with the Woes integration, import it from Settings -> Integrations, then attach it to the right agent. |
+| A Notion support playbook | Notion integration | Share the page with the Woes integration, select it from Settings -> Integrations, then attach it to the right agent. |
+| A Confluence runbook space | Confluence integration | Connect Confluence, import the selected space, then review the source in Context. |
+| HubSpot account data | HubSpot integration | Sync CRM records from Settings -> Integrations and use them as operator-only context. |
 | A support runbook | Markdown or text | Keep it concise and remove operator-only secrets before ingestion. |
 
 ## Source Health

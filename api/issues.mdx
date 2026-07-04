@@ -36,6 +36,14 @@ portal.
     "channel": "api",
     "conversationId": null
   },
+  "externalLinks": [
+    {
+      "provider": "linear",
+      "key": "ENG-123",
+      "url": "https://linear.app/example/issue/ENG-123/oauth-redirect-uri-mismatch",
+      "status": "In Progress"
+    }
+  ],
   "createdAt": "2026-06-29T13:00:00.000Z",
   "updatedAt": "2026-06-29T13:00:00.000Z",
   "lastActivityAt": "2026-06-29T13:00:00.000Z",
@@ -87,6 +95,14 @@ curl "https://woes.dev/api/v1/issues?statusCategory=new&limit=10" \
         "channel": "api",
         "conversationId": null
       },
+      "externalLinks": [
+        {
+          "provider": "linear",
+          "key": "ENG-123",
+          "url": "https://linear.app/example/issue/ENG-123/oauth-redirect-uri-mismatch",
+          "status": "In Progress"
+        }
+      ],
       "createdAt": "2026-06-29T13:00:00.000Z",
       "updatedAt": "2026-06-29T13:00:00.000Z",
       "lastActivityAt": "2026-06-29T13:00:00.000Z",
@@ -157,6 +173,7 @@ Response: `201 Created`
       "channel": "api",
       "conversationId": null
     },
+    "externalLinks": [],
     "createdAt": "2026-06-29T13:00:00.000Z",
     "updatedAt": "2026-06-29T13:00:00.000Z",
     "lastActivityAt": "2026-06-29T13:00:00.000Z",
@@ -175,6 +192,21 @@ GET /api/v1/issues/{issueId}
 curl https://woes.dev/api/v1/issues/7f6d1d2c-7e21-4f5e-9f60-23d8f67121a2 \
   -H "Authorization: Bearer $WOES_API_KEY"
 ```
+
+## External Links
+
+Issue responses include `externalLinks`, an array of customer-safe links to
+external product or engineering work. Today those links are Linear-shaped:
+
+| Field | Description |
+| --- | --- |
+| `provider` | External provider, such as `linear`. |
+| `key` | Human-readable external issue key. |
+| `url` | Direct URL to the external issue when available. |
+| `status` | External issue status when available. |
+
+The API does not return private integration credentials, webhook details, or
+operator-only notes.
 
 ## Update Issue
 

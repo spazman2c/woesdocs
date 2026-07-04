@@ -5,7 +5,8 @@ description: "Connect Discord so community support messages become Woes conversa
 
 # Discord
 
-Discord support routes server messages into Woes using the same conversation and message model as live chat and email.
+Discord support routes server messages into Woes using the same conversation
+model as live chat, email, and Slack.
 
 ## What Discord Adds
 
@@ -13,7 +14,6 @@ Discord support routes server messages into Woes using the same conversation and
 - Workspace-bound server installation.
 - Channel listing for text, announcement, and forum channels.
 - Inbound message forwarding to Woes.
-- Dedicated gateway worker for always-on Discord events.
 - Agent and operator handling from the same Inbox.
 
 ## Setup Flow
@@ -27,9 +27,6 @@ Discord support routes server messages into Woes using the same conversation and
   </Step>
   <Step title="Choose channels">
     Select the Discord channels Woes should listen to.
-  </Step>
-  <Step title="Run the gateway worker">
-    Production Discord intake requires the gateway process unless you have deployed another server-side Discord event source.
   </Step>
   <Step title="Test a message">
     Send a message in the selected channel and confirm it appears in Inbox.
@@ -60,19 +57,16 @@ After reinviting:
 3. Send a test message in an enabled channel.
 4. Confirm exactly one conversation appears in Inbox.
 
-## Delivery Diagnostics
+## Delivery Troubleshooting
 
-The Discord gateway writes delivery diagnostics for messages that do not become
-Woes conversations. Common states include:
+If a Discord message does not appear in Woes, check:
 
-| Diagnostic | Meaning |
-| --- | --- |
-| `message_ignored_unconfigured` | The server/channel was not configured for intake. |
-| `message_ignored_empty` | The routed Discord message had no usable text. |
-| `message_thread_create_failed` | Woes could not create or find the support thread. |
-
-Use these diagnostics with worker logs when a message reaches Discord but does
-not appear in Woes.
+- Discord intake is enabled.
+- The Woes app is still installed in the server.
+- The channel is selected and enabled in Woes.
+- The channel mode matches the test message. Mention mode requires mentioning
+  the Woes app; all-message mode routes normal readable messages.
+- The message has usable text content.
 
 ## Production Checklist
 
@@ -82,14 +76,7 @@ Before relying on Discord in production:
 - Select only the channels Woes should ingest.
 - Make sure the bot has permission to read messages, send replies, and read
   thread/forum activity where needed.
-- Run only one gateway worker for the same bot token and workspace deployment.
-- Verify the bot token is stored in server-side environment variables, not in
-  docs, client code, or screenshots.
 - Send one test message and confirm exactly one Woes conversation is created.
-
-If Discord reports repeated reconnects or token resets, stop the worker,
-confirm there are no duplicate deployments using the same token, rotate the
-token, and restart a single production worker.
 
 ## Operator Workflow
 

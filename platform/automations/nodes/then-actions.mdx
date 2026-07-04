@@ -148,6 +148,32 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 | Use it for | Assignee reminders, team-channel instructions, escalation notes, or owner follow-up. |
 | Caveats | This is not an external Slack/email delivery integration today. It records a stored note/notification inside Woes. |
 
+## Workflow integration actions
+
+### Create Jira issue
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `create_jira_issue` |
+| Action kind | `create_jira_issue` |
+| Category | Routing |
+| Required config | A connected Jira workspace integration. Jira uses the workspace default project unless the action supplies a project key. |
+| Runtime effect | Creates or links a Jira issue for the Woes issue. If the issue is already linked, Woes avoids creating a duplicate. |
+| Use it for | Escalating reproducible bugs, docs gaps, or technical blockers into Jira from an issue workflow. |
+| Caveats | This action requires the Jira integration to be connected. Jira outages or permission errors are reported without blocking unrelated automation steps. |
+
+### Create Linear issue
+
+| Field | Details |
+| --- | --- |
+| Catalog id | `create_linear_issue` |
+| Action kind | `create_linear_issue` |
+| Category | Routing |
+| Required config | A connected Linear workspace integration. |
+| Runtime effect | Creates or links a Linear issue for the Woes issue using the connected workspace and available team selection. If the issue is already linked, Woes avoids creating a duplicate. |
+| Use it for | Routing product bugs, feature requests, repeated customer pain, or docs gaps into Linear. |
+| Caveats | This action requires Linear to be connected and an accessible team to be available. It creates support-to-product work, not customer-visible replies. |
+
 ### Send CSAT survey
 
 | Field | Details |
@@ -223,5 +249,5 @@ Automation effects are stored with the support record they act on:
 | Delay queue | Conversation metadata `automationDelayQueue`, capped. |
 | Idempotency | Conversation metadata `automationsApplied` and `automationOnce`. |
 | Tags, status, priority, assignment, SLA, snooze, archive | Conversation metadata and, where applicable, conversation status. |
-| Auto-replies | `support_messages` rows with automation metadata. |
+| Auto-replies | Conversation timeline messages marked as automation replies. |
 | Internal notes and notifications | Conversation metadata `automationNotes`; issue copies become automation-sourced notes. |

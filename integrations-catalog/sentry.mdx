@@ -1,42 +1,83 @@
 ---
-title: "Sentry Connector"
+title: "Sentry Integration"
 sidebarTitle: "Sentry"
-description: "Planned Sentry connector for linking support conversations to application errors and issue evidence."
+description: "Connect Sentry so operators can review safe organization and project context in Woes."
 ---
 
-# Sentry Connector
+# Sentry Integration
 
-Sentry is a planned customer connector for connecting developer support conversations to application errors and production issue evidence.
+Sentry connects error-monitoring context to Woes for operator triage. The
+current integration is an operator-only connection foundation: admins can
+connect a Sentry organization, review safe organization/user metadata, list
+available projects, and disconnect the workspace connection.
 
 ## Status
 
-**Planned connector.** This is not currently a live Woes connector. It should remain disabled until project access, event lookup, permissions, redaction, and audit behavior are implemented.
+**Available now.** Workspace admins can connect Sentry from **Workspace Settings
+-> Integrations -> Sentry**.
 
-## What it will do
+## What It Does Today
 
-A Sentry connector should help operators answer error-driven support questions faster:
+| Capability | What you can do |
+| --- | --- |
+| Connect Sentry | Authorize a Sentry organization from Workspace Settings. |
+| Review connection status | See whether Sentry is connected and which organization/user authorized it. |
+| List projects | Refresh and review the Sentry projects available to the connection. |
+| Keep it operator-only | Sentry details stay out of the customer widget and public API responses. |
+| Disconnect | Remove the Woes connection when operators should no longer use Sentry context. |
 
-- Attach relevant Sentry issues or events to Woes conversations.
-- Search recent errors by customer, release, environment, route, or error fingerprint where safe.
-- Add operator-visible error context to support issues.
-- Trigger automations when a customer reports a known production error.
-- Link back to the Sentry issue for engineering investigation.
+## What It Does Not Do Yet
 
-## Product fit
+The current Sentry integration does not yet:
 
-Many API support questions begin with an error message, failed webhook, or unexpected server response. Connecting Woes to error telemetry can help distinguish documentation confusion from a real product failure.
+- Attach Sentry events or issues to Woes conversations.
+- Search error events by customer, release, environment, route, or fingerprint.
+- Create Woes issues from Sentry alerts.
+- Expose stack traces, request payloads, breadcrumbs, or event metadata to
+  customers.
+- Provide automation actions based on Sentry events.
 
-## Implementation requirements
+## Setup
 
-Before Sentry becomes active, Woes needs:
+<Steps>
+  <Step title="Open Integrations">
+    In Woes, go to **Workspace Settings -> Integrations**.
+  </Step>
+  <Step title="Connect Sentry">
+    Open **Sentry** and click **Connect**.
+  </Step>
+  <Step title="Authorize access">
+    Approve the Sentry organization you want Woes operators to reference.
+  </Step>
+  <Step title="Review projects">
+    Return to Woes, open the Sentry integration, and refresh projects to confirm
+    the expected organization is connected.
+  </Step>
+</Steps>
 
-- Project and environment selection.
-- Workspace-scoped OAuth or token installation.
-- Customer-safe matching rules for users, accounts, releases, and routes.
-- Redaction of stack frames, request data, and metadata that should not leave operator-only context.
-- Rate limits and payload bounds for issue and event lookup.
-- Audit logs for attach, detach, and automation-driven actions.
+## Data And Privacy
 
-## Possible first version
+Sentry is not a customer support channel and is not a Context Library source.
+Woes keeps Sentry connection details server-side and returns only safe status,
+organization, user, and project metadata to the workspace UI.
 
-Start with read-only issue lookup and manual attachment from the operator panel. Keep automatic event ingestion and alert-triggered issue creation for a later version.
+<Warning>
+  Do not copy stack traces, request bodies, access tokens, or customer-private
+  Sentry event data into customer replies unless your team has reviewed and
+  redacted it.
+</Warning>
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| The Sentry card says setup needed | Ask a workspace admin or Woes support to confirm Sentry is enabled for the workspace. |
+| The wrong organization is connected | Disconnect Sentry from Woes, then reconnect and choose the correct organization. |
+| Projects are missing | Refresh the project list and confirm the connected Sentry user can access those projects. |
+| Operators need event-level evidence | Use Sentry directly for now; event attachment and search are not available in Woes yet. |
+
+## Related Docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Issues](/platform/issues)
+- [Data Privacy](/security/data-privacy)

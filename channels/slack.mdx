@@ -1,0 +1,91 @@
+---
+title: "Slack"
+description: "Connect Slack so approved messages, DMs, mentions, and ticket emoji become Woes conversations."
+---
+
+# Slack
+
+Slack support routes approved Slack activity into the same Woes inbox as live
+chat, email, and Discord. Use it when customers, partners, or internal teams ask
+support questions in shared Slack channels or direct messages.
+
+## What Slack Adds
+
+- OAuth install for a Slack workspace.
+- Workspace-level Slack intake controls.
+- Direct-message support when enabled.
+- Per-channel intake modes for app mentions, every message, or ticket emoji.
+- Safe file metadata capture when file handling is enabled.
+- AI and operator replies posted back into the original Slack thread.
+- Optional operator Slack notifications through each operator's notification
+  settings.
+
+## Setup Flow
+
+<Steps>
+  <Step title="Connect Slack">
+    Go to **Workspace Settings -> Integrations -> Slack** and click
+    **Connect**.
+  </Step>
+  <Step title="Enable Slack intake">
+    Open **Settings -> Channels -> Slack** and turn on Slack intake for the
+    workspace.
+  </Step>
+  <Step title="Choose intake surfaces">
+    Decide whether Woes should accept direct messages, file metadata, and
+    selected channel messages.
+  </Step>
+  <Step title="Configure channels">
+    Refresh the channel list, then choose the ticket mode for each enabled
+    channel.
+  </Step>
+  <Step title="Choose the answering agent">
+    In assignment settings, choose the agent that should handle Slack
+    conversations.
+  </Step>
+  <Step title="Test a thread">
+    Send a test app mention, direct message, or ticket emoji in an enabled
+    Slack surface and confirm it appears in the Woes inbox.
+  </Step>
+</Steps>
+
+## Intake Modes
+
+| Mode | How it works |
+| --- | --- |
+| App mentions | Woes creates or continues a conversation when the Woes app is mentioned. |
+| Every message | Woes routes normal messages from selected high-signal channels. |
+| Ticket emoji | Woes creates support work when someone reacts with the configured ticket emoji. |
+
+## Slack Replies
+
+When a Slack message becomes a Woes conversation, operators work from the Woes
+inbox. AI replies and operator replies are posted back into the original Slack
+thread when the Slack connection and channel rules allow it.
+
+## Data And Privacy
+
+Slack is a customer conversation channel, not a Context Library source. Woes
+uses Slack metadata to route and display conversations, but private file URLs
+and raw connection credentials are not exposed to customers.
+
+Only enable channels where support messages belong in Woes. For broad community
+channels, app mentions or ticket emoji usually create a cleaner support flow
+than every-message intake.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| Slack card is not connected | Reconnect Slack from **Workspace Settings -> Integrations**. |
+| Messages do not enter Woes | Confirm Slack intake is enabled and the channel or DM surface is allowed. |
+| A channel is missing | Invite the Woes app to the channel, then refresh the channel list. |
+| Replies do not post back | Confirm the conversation came from Slack and the Slack connection is still active. |
+| Operators do not receive Slack notifications | Connect the operator's Slack account from **Account settings -> Notifications** and enable the desired events. |
+
+## Related Docs
+
+- [Slack Integration](/integrations-catalog/slack)
+- [Omnichannel Support](/support-workflows/omnichannel-support)
+- [Inbox](/platform/inbox)
+- [Assignment Settings](/settings/assignment)

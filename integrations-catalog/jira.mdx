@@ -14,14 +14,15 @@ Jira is the live engineering-ticket connector for Woes. It lets support move a t
 
 ## What it does
 
-- **Connect a Jira site** from **Workspace Settings → Integrations → Jira** using Atlassian OAuth 2.0 (3LO). Woes stores the site and encrypted access/refresh tokens, and refreshes them automatically.
+- **Connect a Jira site** from **Workspace Settings → Integrations → Jira**.
 - **Pick a default project.** In the Jira card's manage dialog, choose the Jira project new issues are created in.
 - **Create a Jira issue from a support issue.** Open a support issue's detail drawer and choose **Create Jira issue**. Woes creates the ticket in your default project from the issue's summary and description, then links the two records.
 - **Jump to the ticket.** Once linked, the issue shows **View in Jira** with the Jira key and a direct link.
 - **Status sync (Woes → Jira).** When a linked support issue changes status — from the board dropdown, drag-and-drop, or an automatic close — Woes moves the Jira issue to the matching status (see the mapping below). Sync is best-effort: a Jira hiccup never blocks the support workflow.
-- **Status sync (Jira → Woes).** A change to the linked Jira issue flows back into Woes. When the ticket moves to a new workflow category (To Do / In Progress / Done), Woes updates the linked support issue's status to match. Woes registers a per-workspace Jira webhook at connect time and refreshes it automatically before it expires.
+- **Status sync (Jira → Woes).** A change to the linked Jira issue flows back into Woes. When the ticket moves to a new workflow category (To Do / In Progress / Done), Woes updates the linked support issue's status to match.
 - **Create Jira issues from automations.** Add **Create Jira issue** as a "then" action in an automation. When the automation fires, Woes creates (and links) a Jira issue for the conversation in your default project. It runs once per conversation — an already-linked issue is never duplicated.
-- **Disconnect** at any time from the Jira card. Disconnecting deletes the stored connection and tokens and removes the Jira webhook.
+- **Disconnect** at any time from the Jira card. Disconnecting removes the Woes
+  connection and Woes attempts to remove the matching Jira sync hook.
 
 ## Where it appears in Woes
 
@@ -51,17 +52,24 @@ Woes transitions to the nearest matching workflow transition available on the Ji
 
 ## Setup
 
-1. Create an OAuth 2.0 (3LO) integration in the [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) with **Resource-level** access.
-2. Add the **Jira platform REST API** and these scopes: `read:jira-work`, `write:jira-work`, `read:jira-user`, `offline_access`, `manage:jira-project`, `manage:jira-webhook` (`offline_access` is required so Woes receives refresh tokens; `manage:jira-webhook` is required for Jira → Woes status sync).
-3. Add the callback URL `https://<your-woes-domain>/api/integrations/jira/callback`.
-4. Set `JIRA_CLIENT_ID` and `JIRA_CLIENT_SECRET` in your Woes deployment.
-5. In Woes, open **Settings → Integrations → Jira → Connect**, authorize the Jira site, then set a default project.
+1. In Woes, open **Workspace Settings -> Integrations**.
+2. Select **Jira** and click **Connect**.
+3. Authorize the Jira Cloud site you want Woes to use.
+4. Return to Woes and choose the default Jira project for newly created issues.
+5. Open a Woes support issue and use **Create Jira issue** to test the link.
+
+If the Jira card says **Setup needed**, contact your Woes workspace admin or
+Woes support.
 
 ## Security model
 
-Woes stores the Jira OAuth access and refresh tokens encrypted at rest and uses them only server-side. Browser routes return safe connection metadata (site name and URL), never the tokens. Every connection, token, and OAuth-state record is scoped to the workspace, and disconnecting removes the stored credentials.
+Woes keeps the Jira connection server-side and shows only safe site, project,
+issue key, URL, and status information in the workspace UI.
 
-Woes stores **no Atlassian personal data** — no account IDs, names, emails, avatars, reporters, assignees, or commenter identities. Inbound sync carries the Jira issue key and its status category only. The inbound webhook is authenticated by a high-entropy token that Woes stores as a salted hash, never in plaintext.
+Woes does not show Atlassian personal data such as account IDs, names, emails,
+avatars, reporters, assignees, or commenter identities in customer-facing
+views. Inbound sync uses the Jira issue key and status category to keep linked
+Woes issues aligned.
 
 ## Current limits
 

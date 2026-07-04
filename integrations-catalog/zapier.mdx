@@ -1,43 +1,107 @@
 ---
-title: "Zapier Connector"
+title: "Zapier Integration"
 sidebarTitle: "Zapier"
-description: "Planned Zapier connector for no-code workflow automation around Woes support events."
+description: "Connect Woes to Zapier with a scoped API key for no-code support workflows."
 ---
 
-# Zapier Connector
+# Zapier Integration
 
-Zapier is a planned no-code automation connector for teams that want Woes events to interact with external systems without custom code.
+Zapier gives teams a no-code way to connect Woes support data to the other
+tools they already use. Use it when an external workflow should read or create
+Woes records without building directly against the REST API.
 
 ## Status
 
-**Planned connector.** Zapier should remain disabled until Woes has stable trigger/action contracts, authentication, payload scopes, and replay-safe delivery behavior.
+**Available now.** Workspace admins can create a scoped Woes API key from
+**Workspace Settings -> Integrations -> Zapier**, copy it once, and use it with
+the Woes Zapier app.
 
-## What it will do
+## What It Does
 
-Zapier should let teams build lightweight integrations around Woes events:
+The Zapier integration creates a workspace API key with the scopes needed for
+supported Zapier actions.
 
-- Trigger a Zap when a new issue is created.
-- Trigger a Zap when an SLA breach, survey response, tag, or assignment event occurs.
-- Send selected external events back into Woes as notes, tags, or workflow inputs.
-- Push Woes activity into spreadsheets, project tools, CRM tools, or notification systems.
+| Capability | What you can do |
+| --- | --- |
+| Create a Zapier key | Generate a scoped Woes API key for Zapier. |
+| Copy once | Copy the key when it is created. Woes does not show the full key again. |
+| Use Woes actions | Let Zapier work with supported Woes conversations, issues, clients, tags, statuses, and priorities. |
+| Review access | See the key prefix, last-used state, and granted scopes in Woes. |
+| Disconnect | Revoke the Zapier connection from Woes when the workflow should stop. |
 
-## Product fit
+## Setup
 
-Zapier is best for long-tail workflow coverage. Core support behavior should remain native in Woes when reliability, tenant boundaries, or customer-facing state matter.
+<Steps>
+  <Step title="Open Integrations">
+    In Woes, go to **Workspace Settings -> Integrations**.
+  </Step>
+  <Step title="Create the Zapier key">
+    Open **Zapier** and click **Connect** or **Create Zapier key**.
+  </Step>
+  <Step title="Copy the key">
+    Copy the generated key immediately and paste it into Zapier when connecting
+    the Woes app.
+  </Step>
+  <Step title="Build the Zap">
+    Choose the Woes trigger, search, or action you need.
+  </Step>
+  <Step title="Test the workflow">
+    Run the Zapier test and confirm the expected record appears in Woes.
+  </Step>
+</Steps>
 
-## Implementation requirements
+## Good Use Cases
 
-Before Zapier becomes active, Woes needs:
+- Add high-priority Woes issues to an operations spreadsheet.
+- Create a CRM task after a low CSAT response.
+- Create a Woes issue from another support or product workflow.
+- Add a conversation message from an approved external workflow.
+- Search Woes records before deciding what an automation should do next.
 
-- Public app authentication model.
-- Stable event schemas and versioning.
-- Workspace-scoped trigger subscriptions.
-- Rate limits and replay protection.
-- Redaction of customer-private fields where needed.
-- Clear failure and retry reporting.
+## Supported Zapier Operations
 
-## Early recipes
+| Type | Operations |
+| --- | --- |
+| Polling triggers | New conversation, new issue, updated issue. |
+| Searches | Conversations, issues, clients, tags, statuses, and priorities. |
+| Actions | Create conversation, add conversation message, create issue, update issue, and create client. |
 
-- Add high-priority Woes issues to a shared operations sheet.
-- Create a CRM task when an enterprise customer leaves low CSAT.
-- Notify an external system when a Woes issue is solved.
+The Zapier key grants the scopes needed for those operations:
+`clients:read`, `clients:write`, `conversations:read`,
+`conversations:write`, `definitions:read`, `issues:read`, and
+`issues:write`.
+
+## Data And Privacy
+
+Zapier uses a Woes API key, so treat it like any other server-side credential.
+Do not paste the key into browser code, public documentation, customer replies,
+or shared notes.
+
+The key is scoped to the workspace and can be revoked by disconnecting Zapier in
+Woes. Disconnecting stops new Zapier API calls but does not delete records that
+Zapier already created.
+
+## Current Boundaries
+
+- Zapier is a workflow integration, not a customer conversation channel.
+- The full API key is shown only once when it is created.
+- Zapier actions follow the same workspace permissions and API limits as other
+  Woes API-key integrations.
+- Webhook-style instant triggers are separate from this key-based Zapier
+  connection and should be documented only when they are available.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| Zapier says the key is invalid | Create a new Zapier key in Woes and update the Zapier connection. |
+| A Zap can read but not write | Confirm the Woes action is supported by the Zapier app and that the key has the required scope. |
+| The key was copied incorrectly | Disconnect Zapier in Woes, create a new key, and paste the new value into Zapier. |
+| A workflow should stop | Disconnect Zapier from the Woes integration card to revoke the key. |
+
+## Related Docs
+
+- [Public REST API](/api/overview)
+- [API Keys](/api/keys)
+- [Issues API](/api/issues)
+- [Conversations API](/api/conversations)

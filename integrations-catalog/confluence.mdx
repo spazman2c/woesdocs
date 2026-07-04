@@ -1,39 +1,124 @@
 ---
-title: "Confluence Candidate"
+title: "Confluence Integration"
 sidebarTitle: "Confluence"
-description: "Future candidate for importing Confluence runbooks and internal documentation into Woes context."
+description: "Connect Confluence and import selected spaces into the Woes Context Library."
 ---
 
-# Confluence Candidate
+# Confluence Integration
 
-Confluence is a future integration candidate for teams whose internal support knowledge lives in Atlassian documentation.
+Confluence is a live context integration for teams that keep support runbooks,
+implementation notes, release guidance, or internal troubleshooting pages in
+Atlassian Confluence.
+
+When you connect Confluence, Woes can import readable pages from selected spaces
+into the Context Library. Operators can inspect that source, and agents can use
+approved Confluence-backed context alongside API specs, docs sites, GitHub
+repositories, Notion pages, and pasted source content.
 
 ## Status
 
-**Future candidate.** This is a researched direction, not a live Woes connector or committed release item.
+**Available now.** Workspace admins can connect Confluence from **Workspace
+Settings -> Integrations**, choose an accessible space, and import it into the
+Woes Context Library as a Confluence-backed source. Repeat the import for each
+additional space you want Woes to use.
 
-## What it could do
+## What It Does
 
-A Confluence integration could turn internal documentation into workspace-scoped support context:
+The Confluence integration helps support teams make practical internal
+knowledge searchable in Woes:
 
-- Import selected spaces, pages, or page trees.
-- Keep support runbooks and implementation notes searchable in Woes.
-- Give agents and operators grounded context beyond public API docs.
-- Track freshness and rescan status for imported pages.
-- Link source evidence back to the originating Confluence page.
+- Import selected Confluence spaces one at a time.
+- Convert readable pages into clean support context.
+- Preserve source links back to Confluence pages.
+- Show imported spaces as sources in the Context Library.
+- Let operators review source coverage before agents use it.
 
-## Why it fits Woes
+## What Gets Imported
 
-Developer-support teams often keep internal explanations, known issues, rollout notes, and customer-specific support procedures in Confluence. Those materials can help operators and AI agents answer accurately, as long as they remain workspace-scoped and safe for model retrieval.
+Woes imports readable page content from the Confluence space you select. Good
+spaces include:
 
-## Key design questions
+- API support runbooks.
+- Setup and migration notes.
+- Known issue and troubleshooting pages.
+- Internal escalation guidance.
+- Release notes that explain customer-facing behavior.
 
-- Which spaces and pages should be eligible for import?
-- How should private or sensitive internal pages be excluded?
-- Should Woes import page comments, attachments, or only rendered page content?
-- How should page permissions map to Woes workspace permissions?
-- How should rescans handle renamed or moved pages?
+Woes does not turn Confluence into a customer channel. It adds source material
+that can help operators and approved agents answer with better evidence.
 
-## Possible first version
+## Setup
 
-Start with read-only page import from selected Confluence spaces, with manual rescan and clear source attribution. Keep write-back and comment sync out of the first version.
+<Steps>
+  <Step title="Open Integrations">
+    In Woes, go to **Workspace Settings -> Integrations**.
+  </Step>
+  <Step title="Connect Confluence">
+    Find **Confluence** and click **Connect**. You will be sent to Atlassian to
+    approve access.
+  </Step>
+  <Step title="Choose a site">
+    Select the Atlassian site that contains the spaces your support team uses.
+  </Step>
+  <Step title="Import a space">
+    Return to Woes, open the Confluence integration, choose a space, and click
+    **Import selected space**. Repeat this step for any additional spaces.
+  </Step>
+  <Step title="Review in Context">
+    Open the Context Library to inspect imported pages, coverage, and source
+    health.
+  </Step>
+  <Step title="Attach to agents">
+    Attach the imported Confluence source only to agents that should answer from
+    that material.
+  </Step>
+</Steps>
+
+## Where It Appears In Woes
+
+| Surface | What you do there |
+| --- | --- |
+| Workspace Settings -> Integrations | Connect, reconnect, disconnect, list spaces, and import a selected Confluence space. |
+| Context Library | Review imported Confluence sources, inspect pages, and manage source health. |
+| Agents | Attach Confluence sources to agents that should retrieve that material. |
+| Inbox | Operators can review retrieved evidence when an agent uses imported context. |
+
+## Permissions And Access
+
+Woes only lists Confluence spaces available to the authorized Atlassian
+connection. If a space does not appear, confirm the user who connected
+Confluence can access that space in Atlassian.
+
+Disconnecting Confluence stops new space listing and imports. Already imported
+Woes context sources remain in the Context Library until an admin deletes them.
+
+<Warning>
+  Only import Confluence pages that are safe for your Woes support workspace to
+  use as context. Do not import pages containing passwords, private customer
+  secrets, access tokens, or content that agents should never retrieve.
+</Warning>
+
+## Maintaining Confluence Context
+
+- Re-import spaces after important runbook, release, or troubleshooting changes.
+- Keep pages focused and support-ready.
+- Remove outdated Confluence sources when they should no longer influence
+  support workflows.
+- Attach Confluence sources only to agents that should use that internal
+  material.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| A space does not appear | Confirm the connected Atlassian user can access the space, then refresh the space list. |
+| Imported context is too vague | Improve headings, examples, troubleshooting steps, and links in Confluence, then re-import. |
+| The wrong agent is using a space | Open the agent and remove the Confluence source from agents that should not use it. |
+| A disconnected site still has old sources | Delete the imported source from Context if Woes should no longer use it. |
+
+## Related Docs
+
+- [Sources](/context/sources)
+- [Knowledge Base Overview](/knowledge-base/overview)
+- [Agents](/agents/overview)
+- [Context Learning](/agents/context-learning)

@@ -27,24 +27,25 @@ A connector should only look actionable when the Woes backend can support the ac
 | [GitHub](./github) | Imports repository docs, examples, SDK material, and source-adjacent notes into Woes API context. |
 | [Discord](./discord) | Connects selected Discord support activity to the shared Woes inbox and routing model. |
 | [Slack](./slack) | Connects Slack mentions, direct messages, selected channels, emoji-created tickets, and threaded replies to the shared Woes inbox. |
+| [Woes CLI](./woes-cli) | Installs the first-party terminal app for inbox triage, conversation review, issues, clients, and JSON output. |
 | [Jira](./jira) | Creates and links Jira issues from Woes support issues and syncs support status to the linked Jira ticket. |
 | [Linear](./linear) | Creates linked Linear issues from support work and syncs lifecycle status in both directions. |
-| [HubSpot](./hubspot) | Connects read-only CRM account context to Woes operator workflows. |
-| [Notion](./notion) | Imports selected product notes, FAQs, setup guides, and support playbooks into Woes context. |
+| [Confluence](./confluence) | Imports selected Confluence spaces into the Woes Context Library as grounded support context. |
+| [HubSpot](./hubspot) | Syncs operator-only CRM account, contact, deal, and owner context into Woes support workflows. |
+| [Notion](./notion) | Imports selected Notion pages into the Woes Context Library as grounded support context. |
+| [Zapier](./zapier) | Creates a scoped Woes API key for no-code workflows that use the Woes Zapier app and public API actions. |
+| [Sentry](./sentry) | Connects a Sentry organization for operator-only project visibility and future error-triage context. |
 
 ## Planned connectors
 
 | Connector | What it will do |
 | --- | --- |
 | [Webhooks](./webhooks) | Send signed Woes support events to customer-owned systems. |
-| [Zapier](./zapier) | Let no-code workflows trigger from or send updates into Woes support events. |
-| [Sentry](./sentry) | Attach application error evidence to support conversations and issues. |
 
 ## Additional connector candidates
 
 | Candidate | Why it fits Woes |
 | --- | --- |
-| [Confluence](./confluence) | Internal support runbooks and implementation notes can become grounded context. |
 | [PagerDuty](./pagerduty) | Urgent support issues can escalate into on-call incident workflows. |
 
 ## Connector principles
@@ -67,4 +68,4 @@ A connector should only look actionable when the Woes backend can support the ac
 
 ## Where to manage connectors
 
-Use **Workspace Settings -> Integrations** for connector status and connector-level actions. Use **Context Library** for GitHub repository imports and source management. Use channel settings pages for live chat, email, Discord, and Slack behavior after a connector is installed.
+Use **Workspace Settings -> Integrations** for connector status and connector-level actions. Use **Context Library** for GitHub, Notion, Confluence, and synced HubSpot source management. Use channel settings pages for live chat, email, Discord, and Slack behavior after a connector is installed.

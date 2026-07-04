@@ -5,14 +5,15 @@ description: "Connect email to Woes so inbound messages, outbound replies, notif
 
 # Email
 
-Email support uses the same conversation model as live chat and Discord. Inbound email creates or updates conversations, and operators reply from Woes.
+Email support uses the same conversation model as live chat, Discord, and Slack.
+Inbound email creates or updates conversations, and operators reply from Woes.
 
 ## What Email Supports
 
 - Verified sending domains.
 - Default from name and local part.
 - Reply-to and support mailbox settings.
-- Inbound receiving through the Resend webhook.
+- Inbound receiving through a Woes forwarding address or a verified sending domain.
 - Operator replies from the shared inbox.
 - Notification email delivery.
 - CSAT and NPS survey emails.
@@ -45,7 +46,7 @@ into these groups:
 | Area | Record | Purpose |
 | --- | --- | --- |
 | Domain verification | TXT DKIM record | Proves the sending domain belongs to your workspace. |
-| Sending | MX and TXT SPF records | Lets Resend send mail for the domain and handle delivery signals. |
+| Sending | MX and TXT SPF records | Lets Woes send support replies for the domain and handle delivery signals. |
 | DMARC | TXT record | Defines domain policy for receiving mail providers. |
 | Receiving | MX record | Routes inbound support mail to Woes. |
 | Tracking | CNAME record | Enables branded link and open tracking when enabled. |
@@ -55,31 +56,27 @@ MX records for Google Workspace, Microsoft 365, or another inbox provider.
 
 ## Inbound Email
 
-Inbound email is received through the Resend webhook and written into the shared `support_conversations` and `support_messages` model with `channel = email`.
+Email support accepts messages after you choose an answering agent and set up an
+intake path. You can forward mail to your Woes forwarding address, or verify a
+domain so customers can write to your own support address.
 
-After DNS verifies, send a real email to the configured support address and
-confirm it appears in **Inbox** as an email conversation. Then reply from Woes
-and confirm the customer receives the response from the expected sender.
+After setup, send a real email to the configured support address and confirm it
+appears in **Inbox** as an email conversation. Then reply from Woes and confirm
+the customer receives the response from the expected sender.
 
 ## Inbound Behavior And Diagnostics
 
-Inbound email is accepted only after webhook authentication succeeds. Woes uses
-the verified recipient in the `To` header for workspace routing; messages sent
-only through `Cc` or `Bcc` are not used to choose a tenant. Deliveries that
-would span multiple workspaces are rejected instead of guessed.
+Woes routes inbound email by the verified support address. Messages that cannot
+be matched to one workspace are skipped instead of guessed.
 
-Provider redelivery is idempotent by email id, so retrying the same webhook
-should not create duplicate customer messages. Permanent skip states include
-missing route, empty email, invalid payload, and ambiguous route. Transient
-server errors return retryable failures so the provider can deliver again.
+Retries from mail providers should not create duplicate customer messages. If
+an email does not appear in Woes, check:
 
-Auto-replies require:
-
-- Email channel enabled.
-- Resend/provider credentials configured in the application environment.
-- A verified sending domain.
-- A non-suppressed sender.
-- A non-automated inbound email.
+- Email support is enabled.
+- An answering agent is selected.
+- The forwarding address or custom support address is correct.
+- The sending domain is verified when you expect Woes to reply from your domain.
+- The message is not empty, automated-only, or sent only through `Cc`/`Bcc`.
 
 Attachments are stored as metadata for operator context. Woes does not store or
 serve raw attachment contents from inbound email in the current flow.
@@ -93,5 +90,7 @@ Configure survey type, timing, delay, and follow-up prompts in
 capture live in the API Reference tab.
 
 <Warning>
-  Email delivery depends on verified domain configuration and provider credentials in the application environment. Do not paste provider secrets into docs, macros, or customer replies.
+  Email delivery depends on verified domain configuration. Do not paste email
+  provider secrets, private headers, or customer-sensitive content into docs,
+  macros, or public replies.
 </Warning>
