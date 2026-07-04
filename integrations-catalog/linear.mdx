@@ -1,44 +1,196 @@
 ---
-title: "Linear Connector"
+title: "Linear Integration"
 sidebarTitle: "Linear"
-description: "Planned Linear connector for linking Woes support issues to product and engineering workflows."
+description: "Connect Linear to Woes so support issues can create product work, stay linked, and keep status in sync."
 ---
 
-# Linear Connector
+# Linear Integration
 
-Linear is a planned product and engineering workflow connector.
+Linear connects Woes support issues to product and engineering work. Use it when
+operators need to turn customer pain, bug reports, docs gaps, or feature
+requests into Linear issues without losing the support context that created the
+work.
+
+<img
+  src="/images/integrations/linear-connected-card.png"
+  alt="Connected Linear integration card in Woes workspace settings."
+/>
 
 ## Status
 
-**Planned connector.** Linear should remain disabled in Woes until account install, team/project selection, issue sync, permissions, and audit behavior are fully designed.
+**Available now.** Workspaces can connect Linear over OAuth, create Linear
+issues from Woes support issues, open or unlink linked Linear issues from the
+issue drawer, run a Linear-create automation action, and sync linked issue
+status in both directions when webhooks and write scope are configured.
 
-## What it will do
+## What Linear does in Woes
 
-Linear should help support and product teams turn real customer pain into product work:
+| Capability | How it works |
+| --- | --- |
+| OAuth connection | Admins connect Linear from **Workspace Settings -> Integrations -> Linear**. Woes stores encrypted access and refresh tokens server-side. |
+| Team selection | Operators can choose an accessible Linear team when creating a Linear issue from a Woes issue. If omitted, Woes uses the first accessible Linear team. |
+| Issue creation | Woes creates a Linear issue from the Woes issue title, description, customer, account, channel, priority, and support context. |
+| Persistent link | The relationship is stored on the Woes issue, so operators can open the Linear issue, see its key/status, or unlink it later. |
+| Woes -> Linear status sync | When a linked Woes issue changes lifecycle status, Woes updates the linked Linear issue's workflow state where a matching team state exists. |
+| Linear -> Woes status sync | Linear Issue webhooks update the stored Linear key/status/link metadata and map Linear workflow state changes back onto the Woes issue lifecycle. |
+| Automation action | Published automations can run **Create Linear issue** during issue-created workflows. The action is idempotent and will not create duplicates for an already-linked issue. |
+| Customer-safe visibility | Public issue API responses and widget issue summaries can expose only `provider`, `key`, `url`, and `status` for linked Linear issues. Tokens, organization ids, actor data, and webhook payloads are never exposed. |
 
-- Create Linear issues from Woes support conversations or issues.
-- Link an existing Linear issue to a Woes support record.
-- Carry customer context, channel, severity, tags, and source evidence into the Linear issue.
-- Reflect product status back into Woes where it is useful for operators.
-- Support closing-the-loop workflows when product work ships.
+<Note>
+  Linear is an operator workflow integration. It is not a support channel and it
+  is not imported into the Context Library as API documentation.
+</Note>
 
-## Product fit
+## Where it appears in Woes
 
-Linear belongs in the support-to-product handoff path. It should not move the customer conversation out of Woes; it should give engineering the right context while Woes keeps ownership of customer communication.
+- **Workspace Settings -> Integrations** — connect, reconnect, disconnect, and
+  confirm the Linear workspace/user connection.
+- **Issues** — create a Linear issue from a Woes support issue, choose a Linear
+  team, open the linked Linear issue, or unlink it.
+- **Automations** — add the **Create Linear issue** action to issue-created
+  workflows.
+- **Public issue API and widget summaries** — show customer-safe Linear link
+  fields when a Woes issue is already linked.
 
-## Implementation requirements
+## Status mapping
 
-Before Linear becomes active, Woes needs:
+Woes maps its support lifecycle to Linear team workflow states by state type.
+If the preferred state type does not exist on the Linear team, Woes falls back
+to the next reasonable available type.
 
-- Linear OAuth install and workspace mapping.
-- Team, project, label, and priority mapping.
-- Create/link/unlink actions with validation.
-- Sync model for status updates and closed-loop notifications.
-- Conflict handling when linked product issues are moved or archived.
-- Tenant-scoped audit logs.
+| Woes issue status | Preferred Linear state type |
+| --- | --- |
+| Closed | `completed`, then `canceled` |
+| On you | `started`, then `unstarted` |
+| On customer | `started`, then `unstarted` |
+| On hold | `backlog`, then `unstarted`, then `triage` |
+| New | `triage`, then `unstarted`, then `backlog` |
 
-## Early recipes
+Inbound Linear webhooks map state types back to Woes as:
 
-- Create a Linear issue when a support issue is tagged `bug` and marked high priority.
-- Link repeated feature requests to an existing product issue.
-- Notify affected customers when linked work moves to shipped or resolved.
+| Linear state type | Woes issue status |
+| --- | --- |
+| `completed` or `canceled` | Closed |
+| `started` | On you |
+| `backlog` | On hold |
+| `triage` or `unstarted` | New |
+
+## Setup
+
+1. In Linear, create an OAuth application.
+2. Set the OAuth redirect URL to:
+
+```txt
+https://woes.dev/api/integrations/linear/callback
+```
+
+3. Configure these OAuth scopes:
+
+```txt
+read
+issues:create
+write
+```
+
+`write` is required for Woes to update linked Linear issue status.
+
+4. Configure a Linear OAuth-app webhook for Issue events.
+5. Set the webhook URL to:
+
+```txt
+https://woes.dev/api/integrations/linear/webhook
+```
+
+6. Copy the Linear webhook signing secret into your Woes deployment as
+   `LINEAR_WEBHOOK_SECRET`.
+7. Set the Linear OAuth credentials in your Woes deployment:
+
+```txt
+LINEAR_CLIENT_ID=
+LINEAR_CLIENT_SECRET=
+LINEAR_REDIRECT_URI=https://woes.dev/api/integrations/linear/callback
+LINEAR_SCOPES=read issues:create write
+LINEAR_WEBHOOK_SECRET=
+```
+
+8. Redeploy Woes so the new environment variables are available.
+9. In Woes, open **Workspace Settings -> Integrations -> Linear -> Connect** and
+   authorize Linear.
+
+<Tip>
+  If Linear was connected before `write` scope or webhooks were added, reconnect
+  Linear so the workspace grants the updated permissions.
+</Tip>
+
+## How webhooks work
+
+1. Linear sends an Issue webhook to `/api/integrations/linear/webhook`.
+2. Woes verifies the `Linear-Signature` HMAC against the exact raw request body.
+3. Woes rejects stale webhook timestamps.
+4. Woes finds matching linked issues by Linear issue id and connected Linear
+   organization.
+5. Woes updates the stored Linear key/status/link metadata.
+6. Woes maps the Linear workflow state type to a Woes issue status and updates
+   the support issue when the mapped status changed.
+
+Webhook processing is idempotent. If a linked issue is already at the mapped
+status, Woes refreshes the link metadata and leaves the issue lifecycle alone.
+
+## Automations
+
+The **Create Linear issue** automation action is available for issue-scoped
+workflows, such as **Issue created**. It uses the same Linear connection and
+external-link storage as the manual issue drawer action.
+
+Good automation patterns:
+
+- Create a Linear issue for new high-priority bug reports.
+- Create a Linear issue when a support issue receives a `docs-gap` tag.
+- Create a Linear issue for repeated customer requests after triage.
+
+The action is safe to retry. If the Woes issue already has a Linear link, Woes
+keeps the existing link instead of creating a duplicate.
+
+## Security model
+
+Woes stores Linear OAuth tokens encrypted at rest and uses them only from
+server-side routes. Client-facing routes return safe connection or link
+metadata only. OAuth state is short-lived and stored as a hash. Linear webhook
+payloads are accepted only after signature and timestamp verification.
+
+Every connection, token, webhook update, and external issue link is scoped to
+the Woes workspace. Public/customer surfaces never receive Linear tokens,
+organization ids, OAuth state, raw webhook payloads, or operator-only debug
+data.
+
+## Current boundaries
+
+- Woes creates Linear issues from Woes support issues; it does not create Woes
+  support issues from arbitrary Linear issues.
+- Woes syncs lifecycle status, but it does not mirror Linear comments,
+  assignees, labels, projects, estimates, or cycles yet.
+- Woes does not import Linear issues into the Context Library and does not use
+  Linear tickets as API documentation for the AI agent.
+- The automation action creates or keeps one Linear link per Woes issue. It does
+  not yet let each automation choose a specific Linear project, label, cycle, or
+  assignee.
+
+## Troubleshooting
+
+| Problem | What to check |
+| --- | --- |
+| Connect fails | Confirm `LINEAR_CLIENT_ID`, `LINEAR_CLIENT_SECRET`, and `LINEAR_REDIRECT_URI` are set and the callback URL matches the Linear OAuth app exactly. |
+| Status does not sync from Woes to Linear | Confirm `LINEAR_SCOPES` includes `write`, reconnect Linear, and confirm the linked Linear team has a compatible workflow state type. |
+| Linear webhook returns 503 | Confirm `LINEAR_WEBHOOK_SECRET` is set in the deployed environment and Woes has been redeployed. |
+| Linear webhook returns 401 | Confirm the webhook signing secret in Linear matches `LINEAR_WEBHOOK_SECRET` and the webhook timestamp is current. |
+| Automation does not create a Linear issue | Confirm the automation is published and enabled, Linear is connected, and the trigger is issue-scoped. |
+| Customers see too much Linear data | Customer surfaces should only include `provider`, `key`, `url`, and `status`; reconnect or redeploy if an older build is running. |
+
+## Related docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Issues](/platform/issues)
+- [Automations](/platform/automations)
+- [Public Issues API](/api/issues)
+- [Linear OAuth documentation](https://linear.app/developers/oauth-2-0-authentication)
+- [Linear webhook documentation](https://linear.app/developers/webhooks)
