@@ -100,6 +100,11 @@
       "source": "/integrations-catalog/woes-mcp",
       "destination": "/api/mcp",
       "permanent": true
+    },
+    {
+      "source": "/integrations-catalog/woes-cli",
+      "destination": "/developer/cli",
+      "permanent": true
     }
   ],
   "navbar": {
@@ -213,12 +218,7 @@
       "proxy": true
     },
     "examples": {
-      "languages": [
-        "curl",
-        "node",
-        "python",
-        "javascript"
-      ],
+      "languages": ["curl", "node", "python", "javascript"],
       "defaults": "required",
       "prefill": true
     },
@@ -526,18 +526,13 @@
                     "group": "Usage",
                     "openapi": "openapi.json",
                     "expanded": false,
-                    "pages": [
-                      "GET /api/v1/usage",
-                      "GET /api/v1/usage/api-keys"
-                    ]
+                    "pages": ["GET /api/v1/usage", "GET /api/v1/usage/api-keys"]
                   },
                   {
                     "group": "Analytics",
                     "openapi": "openapi.json",
                     "expanded": false,
-                    "pages": [
-                      "GET /api/v1/analytics"
-                    ]
+                    "pages": ["GET /api/v1/analytics"]
                   }
                 ]
               }
@@ -552,9 +547,7 @@
           {
             "group": "Start here",
             "icon": "map",
-            "pages": [
-              "integrations-catalog/overview"
-            ]
+            "pages": ["integrations-catalog/overview"]
           },
           {
             "group": "Integrations",
@@ -563,7 +556,6 @@
               "integrations-catalog/github",
               "integrations-catalog/discord",
               "integrations-catalog/slack",
-              "integrations-catalog/woes-cli",
               "integrations-catalog/jira",
               "integrations-catalog/linear",
               "integrations-catalog/confluence",

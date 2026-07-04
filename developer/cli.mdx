@@ -1,144 +1,459 @@
 ---
-title: "Woes CLI"
-sidebarTitle: "CLI"
-description: "Install and use the Woes terminal app for inbox triage, conversations, issues, clients, and JSON output."
+title: "Woes Terminal"
+sidebarTitle: "Terminal"
+description: "Use the in-app Woes Terminal to navigate your workspace, triage conversations, manage issues, inspect clients, and pull JSON output without leaving the browser."
+icon: "square-terminal"
 ---
 
-# Woes CLI
+# Woes Terminal
 
-The Woes CLI lets operators and developers work with a Woes workspace from the
-terminal. Run `woes` for a full-screen inbox, or use one-shot commands for
-scripts and automation.
+Woes Terminal is an in-app command console for operators and developers who want
+to move through the workspace quickly. It runs inside Woes, uses your signed-in
+account, and follows the same workspace permissions as the rest of the platform.
 
-## Install
+Use it to:
+
+- Jump between Inbox, Issues, Clients, Agents, Context Library, Team Chat,
+  Analytics, and Settings.
+- List and inspect conversations, issues, clients, agents, context sources,
+  notifications, tags, and workspace stats.
+- Reply to conversations, close or reopen conversations, set priority, assign
+  conversations to yourself, and archive conversations when your role allows it.
+- Create, update, close, or delete issues.
+- Add API context sources.
+- Return raw JSON for supported data commands when you need a quick structured
+  snapshot.
+
+<Info>
+  Woes Terminal is not a separate public REST API key or an installed desktop
+  CLI. It is a browser-based operator tool inside the Woes app.
+</Info>
+
+## Open Terminal
+
+You can open Terminal in two ways.
+
+<Steps>
+  <Step title="Use the global overlay">
+    Click the **terminal** button in the workspace header, next to the
+    notification bell.
+  </Step>
+  <Step title="Use the keyboard shortcut">
+    Press **Ctrl + Backquote** on Windows/Linux or **⌘ + Backquote** on macOS.
+    The overlay opens above the page you are already using.
+  </Step>
+  <Step title="Open the full page">
+    Go to **Developer tools -> Terminal** in the app, or run `open terminal`
+    from the overlay.
+  </Step>
+</Steps>
+
+The overlay closes when you press **Esc**, click outside it, or run a navigation
+command. The full-page terminal stays open like any other workspace page.
+
+## How It Works
+
+Terminal commands run with your current signed-in Woes session. If you can do
+something in the app, Terminal can usually do the matching supported command. If
+your role does not allow an action, the command fails with the same kind of
+permission error you would see in the app.
+
+Terminal follows these rules:
+
+| Rule                 | What it means                                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Workspace scoped     | Commands only read or change records in the workspace you are signed into.                                    |
+| Role aware           | Your operator permissions still apply. Terminal does not bypass access rules.                                 |
+| Same source of truth | Commands use the same workspace data shown in Inbox, Issues, Clients, Agents, Context Library, and Analytics. |
+| Browser based        | No install command, local token, or separate machine credential is required.                                  |
+| JSON optional        | Add `--json` to supported data commands to show the raw response shape.                                       |
+
+## Command Syntax
+
+Commands use a simple shell-style format:
 
 ```bash
-curl -fsSL https://woes.dev/install.sh | sh
+command subcommand value --flag value --other=value --json
 ```
 
-The installer downloads the CLI to `~/.woes/bin/woes`. If your current shell
-cannot find `woes` immediately, open a new terminal or run:
+Terminal supports:
+
+| Pattern           | Example                                              |
+| ----------------- | ---------------------------------------------------- |
+| Positional values | `inbox view 53113c6c`                                |
+| Quoted text       | `reply 53113c6c "Thanks, we are checking this now."` |
+| Long flags        | `issues --status new --priority high`                |
+| Equals flags      | `clients --search=acme`                              |
+| Short flags       | `inbox -n 10`                                        |
+| Boolean flags     | `agents --json`                                      |
+
+Use `help` to list commands and `help <command>` to see usage examples for one
+command.
 
 ```bash
-export PATH="$HOME/.woes/bin:$PATH"
+help
+help inbox
+help reply
+```
+
+## Keyboard Controls
+
+| Key                   | Action                                                            |
+| --------------------- | ----------------------------------------------------------------- |
+| `Enter`               | Run the current command.                                          |
+| `ArrowUp`             | Recall the previous command.                                      |
+| `ArrowDown`           | Move forward through command history.                             |
+| `Tab`                 | Complete a command name when there is one match, or show matches. |
+| `Ctrl + L` or `⌘ + L` | Clear the terminal scrollback.                                    |
+| `Esc`                 | Close the overlay terminal.                                       |
+
+## Core Commands
+
+### Get Help
+
+```bash
+help
+help issues
+help context
+```
+
+### Check Your Session
+
+```bash
+whoami
+me
+```
+
+Shows the signed-in operator, email, workspace id, user id, and permission
+count.
+
+### Workspace Stats
+
+```bash
+stats
+dashboard
+```
+
+Returns quick counts for conversations, open conversations, issues, clients, and
+agents.
+
+### Clear, History, Echo, And Theme
+
+```bash
+clear
+history
+echo "Checking the inbox"
+theme
+```
+
+`theme` toggles the workspace between light and dark mode.
+
+## Navigation Commands
+
+Use `open` to jump around Woes.
+
+```bash
+open
+open inbox
+open issues
+open clients
+open context
+open team-chat
+open settings
+open terminal
+```
+
+Aliases also work:
+
+```bash
+go issues
+nav analytics
+goto clients
+cd context
+```
+
+Deep-link a conversation from Terminal:
+
+```bash
+open inbox 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+```
+
+## Inbox And Conversations
+
+### List Conversations
+
+```bash
+inbox
+inbox list
+inbox --status open
+inbox --channel "Live chat"
+inbox --limit 10
+inbox --json
+```
+
+Aliases:
+
+```bash
+conversations
+convos
+```
+
+Formatted output includes the conversation id, customer, channel, status,
+priority, and last activity.
+
+```text
+ID            CUSTOMER              CHANNEL    STATUS  PRIORITY  LAST
+────────      ────────────────────  ───────    ──────  ────────  ─────
+53113c6c…1234 Chris Santangelo      Live chat  open    medium    4m ago
+```
+
+### View A Conversation
+
+```bash
+inbox view 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+conversations view 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+```
+
+Terminal shows conversation details and the most recent transcript messages.
+Use `--json` when you need the raw structured conversation object.
+
+### Reply To A Conversation
+
+```bash
+reply 53113c6c-5d49-41b0-8b20-19dc8f5a1234 "Thanks, I am checking that now."
+```
+
+The reply is sent as the signed-in operator. It appears in the conversation
+transcript and follows the same delivery behavior as replying from Inbox.
+
+### Manage Conversation State
+
+```bash
+close 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+solve 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+reopen 53113c6c-5d49-41b0-8b20-19dc8f5a1234
+priority 53113c6c-5d49-41b0-8b20-19dc8f5a1234 high
+assign 53113c6c-5d49-41b0-8b20-19dc8f5a1234 me
+archive 53113c6c-5d49-41b0-8b20-19dc8f5a1234
 ```
 
 <Note>
-  The CLI requires Node.js 18 or newer.
+  Terminal assignment currently supports assigning a conversation to yourself.
+  Use Inbox when you need to assign a conversation to another teammate.
 </Note>
 
-## Log In
+## Issues
+
+### List Issues
 
 ```bash
-woes login
+issues
+issues list
+issues --status new
+issues --priority high
+issues --limit 10
+issues --json
 ```
 
-The CLI opens a browser authorization page. After you approve terminal access in
-Woes, the terminal finishes setup and stores a local workspace key for future
-CLI requests.
+Formatted output includes issue id, subject, status, priority, assignee, and
+last update.
 
-## Open The Terminal Inbox
+### View An Issue
 
 ```bash
-woes
+issues view 90c018aa-d413-49fe-a529-ec7fc888d14b
+issue view 90c018aa-d413-49fe-a529-ec7fc888d14b
 ```
 
-The full-screen inbox shows active conversations and a selected conversation
-preview. Use the keyboard to move quickly:
-
-| Key | Action |
-| --- | --- |
-| `j` or Down arrow | Move to the next conversation. |
-| `k` or Up arrow | Move to the previous conversation. |
-| `Enter` | Open the selected transcript. |
-| `b` or Left arrow | Return to the inbox from a transcript. |
-| `r` | Refresh the inbox or transcript. |
-| `?` or `h` | Show help. |
-| `q` or Ctrl-C | Quit. |
-
-## Commands
-
-### Account
+### Create An Issue
 
 ```bash
-woes status
-woes logout
+issues create "OAuth callback fails on Safari" --priority high --description "User signs in but lands back on marketing."
 ```
 
-### Inbox And Conversations
+### Update An Issue
 
 ```bash
-woes inbox list --limit 20
-woes inbox view <conversation-id>
-woes conversations list --status open --channel live-chat
-woes conversations view <conversation-id>
-woes conversations messages <conversation-id>
+issues update 90c018aa-d413-49fe-a529-ec7fc888d14b --status on_you
+issues update 90c018aa-d413-49fe-a529-ec7fc888d14b --priority low
+issues update 90c018aa-d413-49fe-a529-ec7fc888d14b --subject "OAuth callback follow-up"
 ```
 
-### Issues
+### Close Or Delete An Issue
 
 ```bash
-woes issues list --status open --priority high
-woes issues view <issue-id>
+issues close 90c018aa-d413-49fe-a529-ec7fc888d14b
+issues delete 90c018aa-d413-49fe-a529-ec7fc888d14b
 ```
 
-### Clients
+Delete is permanent for the issue record. Use it carefully and only when your
+workspace process allows removal.
+
+## Clients
+
+### List Clients
 
 ```bash
-woes clients list --search acme
-woes clients view <client-id>
+clients
+clients list
+clients --search acme
+clients --health healthy
+clients --limit 20
+clients --json
 ```
 
-## JSON Output
-
-Add `--json` to supported commands when a script should consume the response.
+### View A Client
 
 ```bash
-woes conversations list --status open --limit 10 --json
+clients view acme
+clients view client_123
 ```
 
-## Use A Different API Base
+Client output shows health, open work, message count, visits, contacts, channels,
+and last activity.
 
-Production uses `https://woes.dev` by default. For a test environment, pass a
-base URL:
+### Create A Client
 
 ```bash
-woes --base-url https://example.test status
+clients create "Acme Inc" --name "Jane Lee" --email jane@acme.com
 ```
 
-## What The CLI Can Do Today
+Use this when you need to create a customer account before support activity has
+created one automatically.
 
-| Area | Available today |
-| --- | --- |
-| Inbox | Full-screen terminal inbox for open and waiting conversations. |
-| Conversations | List conversations, view one conversation, and read its messages. |
-| Issues | List and view workspace issues. |
-| Clients | List and view client account aggregates. |
-| Account | Log in, log out, and check the active workspace connection. |
-| Automation output | Return JSON for command-line scripts. |
+## Agents
+
+List the workspace agents and their enabled state:
+
+```bash
+agents
+agents list
+agents --json
+```
+
+Aliases:
+
+```bash
+agent
+```
+
+## Context Library
+
+### List Context Sources
+
+```bash
+context
+context list
+sources
+context --json
+```
+
+Terminal shows source id, source name or URL, ingestion status, and endpoint
+count when available.
+
+### Add A Context Source
+
+```bash
+context add https://docs.acme.dev/openapi.json
+context add https://api.acme.dev/openapi.yaml
+```
+
+Woes starts ingestion for the URL. Use Context Library in the app for deeper
+source review, authentication settings, rescan controls, and troubleshooting.
+
+## Workspace Commands
+
+### Tags
+
+```bash
+tags
+tags --json
+```
+
+### Analytics
+
+```bash
+analytics
+analytics --json
+```
+
+The formatted view summarizes recent conversation analytics by status and
+channel.
+
+### Notifications
+
+```bash
+notifications
+notifs
+notifications read
+```
+
+`notifications read` marks all notifications as read for your signed-in
+operator.
+
+## JSON Examples
+
+Add `--json` to supported list/view commands:
+
+```bash
+inbox --status open --limit 5 --json
+issues --priority high --json
+clients --search acme --json
+agents --json
+context --json
+analytics --json
+notifications --json
+```
+
+Use JSON output when you want to copy a quick structured snapshot into a report,
+debug a workflow, or compare what the UI is showing.
+
+<Warning>
+  Treat JSON output as workspace data. Do not paste customer transcripts,
+  emails, private context, or internal notes into public channels.
+</Warning>
+
+## Permissions And Safety
+
+Terminal is designed to be fast without being more powerful than the app.
+
+- You must be signed into Woes.
+- Commands run in the active workspace.
+- Your role and permissions still apply.
+- Customer data shown in Terminal follows the same workspace data boundaries as
+  Inbox, Issues, Clients, and Context Library.
+- Terminal does not expose provider secrets, API credentials, or hidden system
+  prompts.
+- Terminal is intended for operators and admins, not public website visitors.
 
 ## Current Boundaries
 
-- The CLI is workspace-scoped to the account you authorize.
-- It reads Woes data through the same public API boundaries as other API-key
-  integrations.
-- It does not currently send operator replies, run macros, assign conversations,
-  or change AI takeover state from the terminal.
-- Keep the local machine trusted. Logging out removes the local CLI credential.
+Terminal is intentionally focused on high-frequency operator work.
+
+| Area                     | Current behavior                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------ |
+| Teammate assignment      | You can assign a conversation to yourself. Assigning another teammate is handled in Inbox. |
+| Macros                   | Run macros from Inbox, not Terminal.                                                       |
+| AI takeover              | Review and take over AI-handled conversations from Inbox.                                  |
+| Bulk destructive actions | Use the app for review-heavy workflows.                                                    |
+| External scripts         | Use the public REST API for server-side automation outside the browser.                    |
 
 ## Troubleshooting
 
-| Issue | What to do |
-| --- | --- |
-| `woes: command not found` | Open a new terminal, or add `~/.woes/bin` to your `PATH`. |
-| Login page approves but terminal stays pending | Re-run `woes login` and complete the browser approval in the same workspace. |
-| `Not logged in` | Run `woes login`. |
-| Empty inbox | Confirm the workspace has open or waiting conversations. Solved conversations are not shown in the interactive inbox. |
-| Need machine-readable output | Add `--json` to the command. |
+| Issue                                                 | What to do                                                                    |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Terminal says you are not authenticated               | Refresh Woes and sign in again.                                               |
+| A command says permission denied                      | Ask a workspace admin to review your role and permissions.                    |
+| A command cannot find a record                        | Confirm the id is from the active workspace and that the record still exists. |
+| `--json` output is too large to scan                  | Add filters such as `--limit`, `--status`, `--priority`, or `--search`.       |
+| Tab completion shows multiple commands                | Type a few more letters, then press `Tab` again.                              |
+| You need a teammate assignment, macro, or AI takeover | Open the record in the app with `open inbox <id>` and use the full UI.        |
 
 ## Related Docs
 
-- [REST API authentication](/api/authentication)
-- [Conversations API](/api/conversations)
-- [Issues API](/api/issues)
-- [Clients API](/api/clients)
+- [Inbox](/platform/inbox)
+- [Issues](/platform/issues)
+- [Clients](/platform/clients)
+- [Context sources](/context/sources)
+- [Keyboard shortcuts and command search](/reference/keyboard-shortcuts)
+- [REST API overview](/api-reference/overview)

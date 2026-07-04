@@ -9,21 +9,20 @@ icon: "plug-zap"
 
 Woes integrations connect the tools your team already uses to the support
 workspace. Use them to bring messages into the inbox, add grounded context,
-hand work to engineering, or let operators work from the terminal.
+or hand work to engineering.
 
 This page is organized by the job each integration helps you do.
 
 ## Pick By Workflow
 
-| Workflow | Integrations | Use them for |
-| --- | --- | --- |
-| Support channels | [Discord](./discord), [Slack](./slack) | Bring community, customer-channel, and direct-message support into the shared inbox. |
-| Context sources | [GitHub](./github), [Confluence](./confluence), [Notion](./notion) | Import docs, runbooks, examples, and internal support knowledge into the Context Library. |
-| CRM context | [HubSpot](./hubspot) | Give operators account, contact, deal, owner, and lifecycle context during support. |
-| Product handoff | [Jira](./jira), [Linear](./linear) | Create linked engineering issues from support work and keep lifecycle status visible. |
-| Workflow automation | [Zapier](./zapier), [Webhooks](./webhooks) | Connect no-code workflows or send signed support events to your own systems. |
-| Error context | [Sentry](./sentry) | Let operators confirm the connected Sentry organization and available projects. |
-| Terminal access | [Woes CLI](./woes-cli) | Review inbox conversations, issues, clients, and workspace status from a shell. |
+| Workflow            | Integrations                                                       | Use them for                                                                              |
+| ------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| Support channels    | [Discord](./discord), [Slack](./slack)                             | Bring community, customer-channel, and direct-message support into the shared inbox.      |
+| Context sources     | [GitHub](./github), [Confluence](./confluence), [Notion](./notion) | Import docs, runbooks, examples, and internal support knowledge into the Context Library. |
+| CRM context         | [HubSpot](./hubspot)                                               | Give operators account, contact, deal, owner, and lifecycle context during support.       |
+| Product handoff     | [Jira](./jira), [Linear](./linear)                                 | Create linked engineering issues from support work and keep lifecycle status visible.     |
+| Workflow automation | [Zapier](./zapier), [Webhooks](./webhooks)                         | Connect no-code workflows or send signed support events to your own systems.              |
+| Error context       | [Sentry](./sentry)                                                 | Let operators confirm the connected Sentry organization and available projects.           |
 
 <Tip>
   Start with the channels where customers already ask for help, then add the
@@ -32,20 +31,19 @@ This page is organized by the job each integration helps you do.
 
 ## Connectors
 
-| Connector | Best for | Main setup surface |
-| --- | --- |
-| [GitHub](./github) | Repository examples, SDK docs, changelogs, and implementation notes. | Context Library |
-| [Discord](./discord) | Developer community support and selected server channels. | Channels > Discord |
-| [Slack](./slack) | Shared-channel support, DMs, app mentions, and emoji-created tickets. | Channels > Slack |
-| [Woes CLI](./woes-cli) | Terminal inbox review and script-friendly workspace reads. | Integrations > Woes CLI |
-| [Jira](./jira) | Atlassian engineering handoff from Woes issues. | Integrations > Jira |
-| [Linear](./linear) | Product and engineering handoff with linked Linear issues. | Integrations > Linear |
-| [Confluence](./confluence) | Spaces, runbooks, and support knowledge stored in Atlassian. | Integrations > Confluence |
-| [HubSpot](./hubspot) | Operator-only CRM account and contact context. | Integrations > HubSpot |
-| [Notion](./notion) | Product notes, FAQs, playbooks, and launch guidance. | Integrations > Notion |
-| [Zapier](./zapier) | No-code triggers, searches, and actions over Woes records. | Integrations > Zapier |
-| [Webhooks](./webhooks) | Signed outbound support events with retries and delivery history. | Integrations > Webhooks |
-| [Sentry](./sentry) | Operator visibility into connected Sentry organization and projects. | Integrations > Sentry |
+| Connector                  | Best for                                                              | Main setup surface        |
+| -------------------------- | --------------------------------------------------------------------- | ------------------------- |
+| [GitHub](./github)         | Repository examples, SDK docs, changelogs, and implementation notes.  | Context Library           |
+| [Discord](./discord)       | Developer community support and selected server channels.             | Channels > Discord        |
+| [Slack](./slack)           | Shared-channel support, DMs, app mentions, and emoji-created tickets. | Channels > Slack          |
+| [Jira](./jira)             | Atlassian engineering handoff from Woes issues.                       | Integrations > Jira       |
+| [Linear](./linear)         | Product and engineering handoff with linked Linear issues.            | Integrations > Linear     |
+| [Confluence](./confluence) | Spaces, runbooks, and support knowledge stored in Atlassian.          | Integrations > Confluence |
+| [HubSpot](./hubspot)       | Operator-only CRM account and contact context.                        | Integrations > HubSpot    |
+| [Notion](./notion)         | Product notes, FAQs, playbooks, and launch guidance.                  | Integrations > Notion     |
+| [Zapier](./zapier)         | No-code triggers, searches, and actions over Woes records.            | Integrations > Zapier     |
+| [Webhooks](./webhooks)     | Signed outbound support events with retries and delivery history.     | Integrations > Webhooks   |
+| [Sentry](./sentry)         | Operator visibility into connected Sentry organization and projects.  | Integrations > Sentry     |
 
 ## How Setup Usually Works
 
@@ -78,13 +76,13 @@ This page is organized by the job each integration helps you do.
 
 ## What belongs elsewhere
 
-| Surface | Where it belongs |
-| --- | --- |
-| Woes subscription billing, invoices, and subscription management | [Billing](/settings/billing) |
-| Email domain setup, provider delivery, inbound receiving, and channel behavior | [Email channel](/channels/email) |
-| Live chat widget installation, launch behavior, identity, and visual setup | [Chat Widget](/chat-widget/overview) |
-| Public REST API and remote MCP usage from customer backends | [API Reference](/api-reference/overview) |
-| Technical route-family boundaries | [Route boundaries](/developer/route-boundaries) |
+| Surface                                                                        | Where it belongs                                |
+| ------------------------------------------------------------------------------ | ----------------------------------------------- |
+| Woes subscription billing, invoices, and subscription management               | [Billing](/settings/billing)                    |
+| Email domain setup, provider delivery, inbound receiving, and channel behavior | [Email channel](/channels/email)                |
+| Live chat widget installation, launch behavior, identity, and visual setup     | [Chat Widget](/chat-widget/overview)            |
+| Public REST API and remote MCP usage from customer backends                    | [API Reference](/api-reference/overview)        |
+| Technical route-family boundaries                                              | [Route boundaries](/developer/route-boundaries) |
 
 ## Where to manage connectors
 

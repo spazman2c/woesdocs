@@ -1,92 +1,29 @@
 ---
-title: "Woes CLI"
-sidebarTitle: "Woes CLI"
-description: "Install the first-party Woes terminal app for inbox triage and workspace inspection."
-icon: "/images/woes-mark.png"
+title: "Woes Terminal"
+sidebarTitle: "Woes Terminal"
+description: "Woes Terminal is built into the app. Use the Developer guide for customer-facing setup, commands, examples, and boundaries."
+icon: "square-terminal"
 ---
 
-# Woes CLI
+# Woes Terminal
 
-<img src="/images/woes-mark.png" alt="Woes logo" width="56" height="56" />
+Woes Terminal is now documented as a built-in developer and operator surface,
+not as a separate integration install.
 
-The Woes CLI is the first-party terminal app for working with your workspace
-from a shell. It is useful for support operators who want a fast inbox view and
-developers who prefer command-line access to conversations, issues, and client
-records.
+Use the full guide here:
 
-## Install
+<Card
+  title="Open Woes Terminal docs"
+  icon="square-terminal"
+  href="/developer/cli"
+>
+  Learn how to open Terminal, run commands, navigate the workspace, triage
+  conversations, manage issues, inspect clients, add context sources, and use
+  JSON output.
+</Card>
 
-```bash
-curl -fsSL https://woes.dev/install.sh | sh
-```
+## Why This Moved
 
-Then authorize the terminal:
-
-```bash
-woes login
-```
-
-## What It Does
-
-| Capability | What you can do |
-| --- | --- |
-| Terminal inbox | Run `woes` to open a full-screen inbox for open and waiting conversations. |
-| Conversation review | Open a selected conversation and read its transcript. |
-| Issue review | List and inspect workspace issues from the terminal. |
-| Client review | List and inspect client account aggregates. |
-| Script output | Add `--json` for machine-readable output. |
-| Local logout | Run `woes logout` to remove the local CLI credential. |
-
-## Setup
-
-<Steps>
-  <Step title="Copy the install command">
-    Open **Workspace Settings -> Integrations -> Woes CLI** and click
-    **Copy install**.
-  </Step>
-  <Step title="Install">
-    Paste the command into a terminal on a machine with Node.js 18 or newer.
-  </Step>
-  <Step title="Authorize">
-    Run `woes login` and approve terminal access in the browser.
-  </Step>
-  <Step title="Open the inbox">
-    Run `woes` to enter the full-screen terminal inbox.
-  </Step>
-</Steps>
-
-## Useful Commands
-
-```bash
-woes
-woes status
-woes inbox list
-woes conversations view <conversation-id>
-woes issues list --priority high
-woes clients list --search acme
-woes logout
-```
-
-## Updates
-
-Run `woes update` to update the installed CLI. Interactive commands also check
-periodically for a newer CLI and ask before replacing the local binary.
-
-Use `woes version` to see the installed version and whether an update is
-available.
-
-## Current Boundaries
-
-- The CLI does not replace the browser operator inbox.
-- The CLI does not currently send operator replies, run macros, assign
-  conversations, or change AI takeover state.
-- CLI access is scoped to the workspace you authorize.
-- Treat the local machine as trusted. Log out when a device should no longer
-  have terminal access.
-
-## Related Docs
-
-- [CLI guide](/developer/cli)
-- [REST API authentication](/api/authentication)
-- [Inbox](/platform/inbox)
-- [Clients](/platform/clients)
+Terminal runs inside the Woes app with your signed-in workspace session. There
+is no separate install command, external connector, or local machine credential
+required for the current customer-facing Terminal experience.
