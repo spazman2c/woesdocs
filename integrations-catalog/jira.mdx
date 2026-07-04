@@ -8,9 +8,11 @@ description: "Link Woes support issues to Jira — create issues from support wo
 
 Jira is the live engineering-ticket connector for Woes. It lets support move a technical issue into Atlassian without losing customer context, and keeps the linked Jira ticket in step as the support issue progresses.
 
-## Status
+## At A Glance
 
-**Available now.** Workspaces can connect a Jira Cloud site over Atlassian OAuth 2.0, choose a default project, create Jira issues from Woes support issues (by hand or from an automation), and keep status in sync in both directions between the support issue and the linked ticket.
+| Use Jira for | Where it appears |
+| --- | --- |
+| Moving bugs, docs gaps, and technical follow-up from support into Atlassian. | Integrations, Issues, and Automations. |
 
 ## What it does
 
@@ -21,8 +23,8 @@ Jira is the live engineering-ticket connector for Woes. It lets support move a t
 - **Status sync (Woes → Jira).** When a linked support issue changes status — from the board dropdown, drag-and-drop, or an automatic close — Woes moves the Jira issue to the matching status (see the mapping below). Sync is best-effort: a Jira hiccup never blocks the support workflow.
 - **Status sync (Jira → Woes).** A change to the linked Jira issue flows back into Woes. When the ticket moves to a new workflow category (To Do / In Progress / Done), Woes updates the linked support issue's status to match.
 - **Create Jira issues from automations.** Add **Create Jira issue** as a "then" action in an automation. When the automation fires, Woes creates (and links) a Jira issue for the conversation in your default project. It runs once per conversation — an already-linked issue is never duplicated.
-- **Disconnect** at any time from the Jira card. Disconnecting removes the Woes
-  connection and Woes attempts to remove the matching Jira sync hook.
+- **Disconnect** at any time from the Jira card when Woes should stop using the
+  Jira site.
 
 ## Where it appears in Woes
 
@@ -61,7 +63,7 @@ Woes transitions to the nearest matching workflow transition available on the Ji
 If the Jira card says **Setup needed**, contact your Woes workspace admin or
 Woes support.
 
-## Security model
+## Data And Access
 
 Woes keeps the Jira connection server-side and shows only safe site, project,
 issue key, URL, and status information in the workspace UI.

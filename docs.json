@@ -557,8 +557,8 @@
             ]
           },
           {
-            "group": "Available now",
-            "icon": "check-circle",
+            "group": "Integrations",
+            "icon": "plug",
             "pages": [
               "integrations-catalog/github",
               "integrations-catalog/discord",
@@ -570,21 +570,8 @@
               "integrations-catalog/hubspot",
               "integrations-catalog/notion",
               "integrations-catalog/zapier",
+              "integrations-catalog/webhooks",
               "integrations-catalog/sentry"
-            ]
-          },
-          {
-            "group": "Planned connectors",
-            "icon": "calendar-clock",
-            "pages": [
-              "integrations-catalog/webhooks"
-            ]
-          },
-          {
-            "group": "Additional connector candidates",
-            "icon": "sparkles",
-            "pages": [
-              "integrations-catalog/pagerduty"
             ]
           }
         ]

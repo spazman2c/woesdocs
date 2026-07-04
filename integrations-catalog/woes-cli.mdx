@@ -11,10 +11,7 @@ from a shell. It is useful for support operators who want a fast inbox view and
 developers who prefer command-line access to conversations, issues, and client
 records.
 
-## Status
-
-**Available now.** Copy the install command from **Workspace Settings ->
-Integrations -> Woes CLI**, or run it directly:
+## Install
 
 ```bash
 curl -fsSL https://woes.dev/install.sh | sh
@@ -66,6 +63,14 @@ woes issues list --priority high
 woes clients list --search acme
 woes logout
 ```
+
+## Updates
+
+Run `woes update` to update the installed CLI. Interactive commands also check
+periodically for a newer CLI and ask before replacing the local binary.
+
+Use `woes version` to see the installed version and whether an update is
+available.
 
 ## Current Boundaries
 

@@ -1,45 +1,302 @@
 ---
-title: "Webhooks Connector"
+title: "Webhooks Integration"
 sidebarTitle: "Webhooks"
-description: "Planned webhook connector for sending Woes support events to customer-owned systems."
+description: "Send signed Woes support events to your own systems with delivery history, test payloads, retries, and secret rotation."
 icon: "webhook"
 ---
 
-# Webhooks Connector
+# Webhooks Integration
 
-Webhooks are a planned connector for teams that want Woes events delivered to customer-owned systems without a no-code platform in the middle.
+Webhooks let Woes push support events to your backend whenever important
+workspace activity happens. Use them when a custom system, data warehouse,
+escalation service, or internal workflow needs to react to Woes events without
+polling the REST API.
 
-## Status
+<Note>
+  Webhooks are outbound events from Woes to your HTTPS endpoint. They are not an
+  intake channel, and they do not replace Slack, Discord, email, live chat, or
+  Zapier.
+</Note>
 
-**Planned connector.** Webhooks should remain disabled until Woes has stable event schemas, signing, delivery retries, per-workspace subscriptions, and operator-visible delivery logs.
+## At A Glance
 
-## What it will do
+| Detail | Value |
+| --- | --- |
+| Setup surface | **Workspace Settings -> Integrations -> Webhooks** |
+| Endpoint type | Public HTTPS URL |
+| Delivery method | `POST` JSON |
+| Signature header | `Woes-Signature` |
+| Event headers | `Woes-Event`, `Woes-Event-Id`, `Woes-Delivery-Id` |
+| Best for | Custom systems, data pipelines, escalation workflows, and audit mirrors |
 
-A Woes webhooks connector should let teams subscribe external systems to support events:
+## What the Webhooks integration does
 
-- New conversation or issue created.
-- Issue status, priority, tag, assignment, or SLA changes.
-- Survey response received.
-- Automation rule completed or failed.
-- Agent handoff, low-confidence skip, or human takeover events.
+| Capability | What it means |
+| --- | --- |
+| Signed event delivery | Woes sends JSON payloads to your HTTPS endpoint and signs every request. |
+| Event selection | Choose exactly which support events each endpoint receives. |
+| Delivery history | Review recent status codes, response text, errors, attempts, and timestamps. |
+| Test delivery | Send a `webhook.test` payload before relying on the endpoint in production. |
+| Retries | Failed deliveries are retried with backoff. |
+| Secret rotation | Rotate the signing secret from Woes and update your receiver when needed. |
 
-## Product fit
+## Supported events
 
-Webhooks are for teams with their own backend, data warehouse, incident tooling, or internal workflow system. They should complement the public REST API: REST lets customers pull or mutate workspace records, while webhooks let Woes push event notifications when something changes.
+| Event | When it fires |
+| --- | --- |
+| `conversation.created` | A new support conversation is created from live chat, email, Slack, Discord, or an operator workflow. |
+| `conversation.message.created` | A message is added to a support conversation. |
+| `conversation.status.updated` | A conversation status changes, such as open, waiting, or solved. |
+| `issue.created` | A Woes support issue is created. |
+| `issue.updated` | A Woes issue changes status, priority, assignee, tags, or core fields. |
+| `client.created` | A client record is created from the Clients page or public API. |
+| `survey.response.created` | A customer submits a CSAT or NPS survey response. |
+| `agent.handoff.created` | The AI agent hands a conversation to a human operator. |
+| `webhook.test` | A workspace admin sends a manual test delivery. |
 
-## Implementation requirements
+## Event data
 
-Before webhooks become active, Woes needs:
+All payloads use the same top-level envelope. The `data` object changes by
+event type.
 
-- Workspace-scoped endpoint subscriptions.
-- Signed payloads and secret rotation.
-- Stable event schemas with versioning.
-- Retry, backoff, dead-letter, and replay behavior.
-- Delivery logs that redact secrets and customer-private fields where needed.
-- Rate limits and permission checks for creating or editing subscriptions.
+| Event family | Data included |
+| --- | --- |
+| Conversations | `conversation` with channel, status, subject, priority, customer fields, and timestamps. Message events also include `message`. |
+| Issues | `issue` with subject, description, status, priority, tags, assignee fields, customer fields, source channel, and source conversation id. |
+| Clients | `client` with the customer/account fields Woes shows in the Clients area. |
+| Surveys | `survey`, `response`, and the related `conversation` summary. |
+| AI handoffs | `conversation` summary for the conversation handed to a human operator. |
+| Tests | `endpoint` summary and a test message. |
 
-## Early recipes
+## Set up Webhooks
 
-- Send high-priority support issues into an internal escalation service.
-- Mirror resolved issues into a data warehouse for reporting.
-- Notify a customer-owned workflow when a survey response is received.
+<Steps>
+  <Step title="Open Webhooks">
+    Go to **Workspace Settings -> Integrations -> Webhooks**.
+  </Step>
+  <Step title="Create an endpoint">
+    Add a name and an HTTPS endpoint URL. Woes only sends webhooks to HTTPS
+    URLs, and the URL cannot contain embedded credentials.
+  </Step>
+  <Step title="Choose events">
+    Select the event types this endpoint should receive. You can create
+    separate endpoints for different systems.
+  </Step>
+  <Step title="Copy the signing secret">
+    Woes shows the signing secret once when you create or rotate it. Store it in
+    your receiver's secret manager.
+  </Step>
+  <Step title="Send a test">
+    Click **Send test** and confirm your receiver verifies the signature and
+    responds with a 2xx status.
+  </Step>
+</Steps>
+
+## Payload shape
+
+Every webhook request is JSON.
+
+```json
+{
+  "id": "a2f8f9c2-3a9c-4c1d-bd0e-f1a2744e1d17",
+  "type": "conversation.message.created",
+  "createdAt": "2026-07-04T17:24:00.000Z",
+  "workspaceId": "workspace_123",
+  "data": {
+    "conversation": {
+      "id": "conversation_123",
+      "channel": "live-chat",
+      "status": "open",
+      "subject": "API authentication issue",
+      "priority": "medium",
+      "customerName": "Avery Lee",
+      "customerEmail": "avery@example.com",
+      "customerCompany": "Acme",
+      "customerId": "customer_123",
+      "createdAt": "2026-07-04T17:20:00.000Z",
+      "updatedAt": "2026-07-04T17:24:00.000Z",
+      "lastMessageAt": "2026-07-04T17:24:00.000Z"
+    },
+    "message": {
+      "id": "message_123",
+      "role": "user",
+      "body": "My API key is getting a 401.",
+      "deliveryStatus": "delivered",
+      "createdAt": "2026-07-04T17:24:00.000Z"
+    }
+  }
+}
+```
+
+Payloads include the Woes record ids and customer/support fields needed to
+route work in your system. Treat webhook payloads as workspace data and store
+them with the same access controls you use for support records.
+
+### Issue payload example
+
+```json
+{
+  "id": "f38b3eb1-4373-4a8d-a20d-fdd9d83ce8f7",
+  "type": "issue.updated",
+  "createdAt": "2026-07-04T17:30:00.000Z",
+  "workspaceId": "workspace_123",
+  "data": {
+    "issue": {
+      "id": "issue_123",
+      "subject": "OAuth redirect mismatch",
+      "description": "Customer cannot complete OAuth callback.",
+      "status": "in_progress",
+      "priority": "high",
+      "tags": ["oauth", "integration"],
+      "assigneeName": "Jordan Smith",
+      "assigneeEmail": "jordan@example.com",
+      "customerName": "Avery Lee",
+      "customerEmail": "avery@example.com",
+      "customerCompany": "Acme",
+      "sourceChannel": "email",
+      "sourceConversationId": "conversation_123",
+      "lastActivityAt": "2026-07-04T17:29:30.000Z",
+      "updatedAt": "2026-07-04T17:30:00.000Z"
+    }
+  }
+}
+```
+
+### Survey payload example
+
+```json
+{
+  "id": "e4e3457c-e3e7-424f-a1d8-d3d987b7fe75",
+  "type": "survey.response.created",
+  "createdAt": "2026-07-04T17:35:00.000Z",
+  "workspaceId": "workspace_123",
+  "data": {
+    "conversation": {
+      "id": "conversation_123",
+      "customerName": "Avery Lee",
+      "customerEmail": "avery@example.com"
+    },
+    "survey": {
+      "id": "survey_123",
+      "name": "Post-support CSAT",
+      "type": "csat",
+      "channel": "live-chat"
+    },
+    "response": {
+      "id": "response_123",
+      "score": 5,
+      "comment": "Fast and helpful."
+    }
+  }
+}
+```
+
+## Verify signatures
+
+Woes signs every delivery with `Woes-Signature`.
+
+```text
+Woes-Signature: t=1783185840,v1=<hmac-sha256>
+Woes-Event: conversation.message.created
+Woes-Event-Id: a2f8f9c2-3a9c-4c1d-bd0e-f1a2744e1d17
+Woes-Delivery-Id: 7f0877c6-6ff6-4a46-91f7-8e2b60a4f9de
+```
+
+The signature is an HMAC-SHA256 of:
+
+```text
+<timestamp>.<raw request body>
+```
+
+Verify the timestamp is recent, rebuild the HMAC with your endpoint signing
+secret, and compare using a timing-safe comparison.
+
+```js
+import crypto from "node:crypto";
+
+export function verifyWoesWebhook({ rawBody, signatureHeader, secret }) {
+  const parts = Object.fromEntries(
+    signatureHeader.split(",").map((part) => {
+      const [key, value] = part.split("=");
+      return [key.trim(), value.trim()];
+    })
+  );
+
+  const timestamp = Number(parts.t);
+  if (!Number.isFinite(timestamp) || !parts.v1) return false;
+
+  const ageSeconds = Math.abs(Date.now() / 1000 - timestamp);
+  if (ageSeconds > 300) return false;
+
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest("hex");
+
+  const received = Buffer.from(parts.v1, "hex");
+  const signed = Buffer.from(expected, "hex");
+
+  return received.length === signed.length && crypto.timingSafeEqual(received, signed);
+}
+```
+
+<Tip>
+  Verify against the raw body bytes exactly as received. Parsing and
+  re-stringifying JSON before verification will change the signed content.
+</Tip>
+
+## Retries and delivery history
+
+Your endpoint should return any 2xx status when the event is accepted.
+
+If delivery fails, Woes records the failure and retries with backoff. Woes
+attempts a failed delivery up to five times before leaving it in a failed state.
+
+Workspace admins can review recent deliveries from **Integrations -> Webhooks**,
+including:
+
+- Event type.
+- Delivery status.
+- Attempt count.
+- HTTP status code.
+- Short response body or error.
+- Next retry time when one is scheduled.
+
+Webhook receivers should be idempotent. Use `Woes-Event-Id` or the top-level
+payload `id` as your idempotency key.
+
+## Security model
+
+- Endpoint URLs must use HTTPS.
+- Signing secrets are shown once when an endpoint is created or rotated.
+- Rotate a secret when a receiver is compromised or a teammate no longer needs
+  access.
+- Woes does not show the full signing secret again after create or rotation.
+- Webhook delivery failures do not block inbox, issue, client, or survey
+  workflows.
+- Store webhook payloads with the same access controls you use for customer
+  support records.
+
+## Webhooks vs Zapier vs REST API
+
+| Tool | Use when |
+| --- | --- |
+| Webhooks | Your backend should react immediately when Woes support events happen. |
+| Zapier | Non-developers want no-code workflows across SaaS tools. |
+| REST API | Your system should pull Woes records or create/update records directly. |
+
+## Troubleshooting
+
+| Problem | What to check |
+| --- | --- |
+| Test delivery fails | Confirm the URL is public HTTPS and your endpoint returns a 2xx status. |
+| Signature verification fails | Verify against the raw request body and use the current endpoint secret. |
+| Events are missing | Confirm the endpoint is enabled and the event type is selected. |
+| Duplicate processing | Use `Woes-Event-Id` as an idempotency key. Retries may deliver the same event more than once. |
+| Secret was lost | Rotate the endpoint secret in Woes and update your receiver. |
+
+## Related docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Zapier integration](/integrations-catalog/zapier)
+- [API Reference](/api-reference/overview)

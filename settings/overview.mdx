@@ -40,9 +40,15 @@ Examples:
 
 ## Integrations Catalog
 
-**Settings -\> Integrations** shows the currently visible workspace integration catalog. It includes available customer, context, CRM, and workflow connectors such as GitHub, Discord, Slack, Jira, Linear, Confluence, HubSpot, Notion, Zapier, and Sentry. Planned or candidate connectors, such as Webhooks and PagerDuty, stay non-actionable until Woes exposes a supported customer setup path.
+**Settings -> Integrations** shows the workspace integration catalog. It
+includes customer, context, CRM, and workflow connectors such as GitHub,
+Discord, Slack, Jira, Linear, Confluence, HubSpot, Notion, Zapier, and Sentry.
+It also includes [Webhooks](/integrations-catalog/webhooks) for sending signed
+support events to customer-owned HTTPS endpoints.
 
-Cards that already have a working setup path route to the relevant Woes page or connection dialog. Planned connectors stay disabled or hidden until their permissions, install state, audit trail, and failure states are ready for customers.
+Cards route to the relevant Woes page or connection dialog. Connector setup
+should explain what admins can configure and what operators can use after the
+connection is complete.
 
 Context-style integrations such as GitHub, Notion, Confluence, and synced
 HubSpot CRM records appear in the Context Library after import or sync. HubSpot

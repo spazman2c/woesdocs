@@ -6,11 +6,15 @@ description: "Use GitHub repositories as workspace-scoped API context for Woes a
 
 # GitHub Integration
 
-GitHub is the live repository-context integration for Woes.
+GitHub brings repository knowledge into Woes so operators and agents can answer
+from the examples, docs, SDK notes, and migration guidance your developers
+already maintain.
 
-## Status
+## At A Glance
 
-**Available now.** Workspaces can connect GitHub, select repositories, and import repository material as API context sources.
+| Use GitHub for | Where it appears |
+| --- | --- |
+| Repository docs, examples, SDK guides, changelogs, and troubleshooting notes. | Context Library, agent source selection, and retrieved evidence in support workflows. |
 
 ## What it does
 
@@ -26,13 +30,22 @@ Imported repository content becomes a Woes context source. Agents can retrieve i
 
 ## Where it appears in Woes
 
-- **Workspace Settings -\> Integrations** shows GitHub connection status.
+- **Workspace Settings -> Integrations** shows GitHub connection state.
 - **Context Library** is where operators connect GitHub, import repositories, rescan sources, inspect indexed files, and disconnect the OAuth account.
 - **Agent context selection** can attach GitHub-backed sources to specific agents.
 
-## Security model
+## Data And Access
 
-Woes stores the GitHub OAuth token encrypted and only uses it server-side to read repository content selected by the workspace. The client receives safe account metadata, not the raw token. Disconnecting GitHub removes the OAuth connection; already-indexed Woes sources remain until the workspace deletes them.
+Woes reads only the repositories and files selected by the workspace. The
+workspace UI shows safe account and repository details, not private connection
+credentials. Disconnecting GitHub stops new repository imports; already-indexed
+Woes sources remain until the workspace deletes them.
+
+<Tip>
+  Import repositories that explain product behavior, not every repository your
+  company owns. Smaller, focused sources are easier for agents and operators to
+  trust.
+</Tip>
 
 ## Good first use cases
 
