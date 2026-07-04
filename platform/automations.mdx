@@ -6,7 +6,7 @@ sidebarTitle: "Overview"
 
 # Automations
 
-Automations are workspace-level workflow rules. They help route support work, apply labels, set lifecycle state, request surveys, schedule follow-up, and record operator-visible notes.
+Automations are workspace-level workflow rules. They help route support work, apply labels, set conversation lifecycle state, request surveys, schedule follow-up, and record operator-visible notes.
 
 Automations are managed from the primary **Automations** surface, not inside Settings.
 
@@ -56,7 +56,7 @@ Use these as starting points, then adjust conditions for your workspace.
 
 | Step | Node |
 | --- | --- |
-| 1 | When: **New message on issue** or **New live chat conversation** |
+| 1 | When: **New customer message** or **New live chat conversation** |
 | 2 | AI condition: **Customer intent is API question** |
 | 3 | Then: **Hand to AI agent** |
 | 4 | Then: **Add tag** such as `api-question` |
@@ -65,7 +65,7 @@ Use these as starting points, then adjust conditions for your workspace.
 
 | Step | Node |
 | --- | --- |
-| 1 | When: **New message on issue** |
+| 1 | When: **New customer message** |
 | 2 | AI condition: **AI outcome is handed-off** |
 | 3 | Then: **Add tag** such as `needs-context` |
 | 4 | Then: **Human handoff** |
@@ -75,19 +75,40 @@ Use these as starting points, then adjust conditions for your workspace.
 
 | Step | Node |
 | --- | --- |
-| 1 | When: **Issue solved** |
+| 1 | When: **Conversation solved** |
 | 2 | Delay: wait long enough for the customer to read the resolution |
-| 3 | If condition: issue does not already have the survey exclusion tag |
+| 3 | If condition: conversation does not already have the survey exclusion tag |
 | 4 | Then: **Send CSAT survey** |
 
 ### Reopen When A Customer Replies
 
 | Step | Node |
 | --- | --- |
-| 1 | When: **New message on issue** |
+| 1 | When: **New customer message** |
 | 2 | If condition: **Status is solved** |
-| 3 | Then: **Set status** to `open` |
+| 3 | Then: **Set conversation status** to `open` |
 | 4 | Then: **Assign team** or **Notify** |
+
+### Move To Waiting After An Operator Reply
+
+Use this when your support workflow treats an operator reply as "waiting on the customer."
+
+| Step | Node |
+| --- | --- |
+| 1 | When: **Operator replied** |
+| 2 | Optional If condition: **Channel is Live chat**, **Priority is urgent**, or **Tag contains vip** |
+| 3 | Then: **Set conversation status** to `waiting` |
+| 4 | Optional Then: **Add internal note** such as "Waiting on customer after operator response." |
+
+### Snooze After An Operator Reply
+
+Use this when you want the reply to temporarily move the conversation out of the active queue.
+
+| Step | Node |
+| --- | --- |
+| 1 | When: **Operator replied** |
+| 2 | Then: **Snooze conversation** |
+| 3 | Choose the snooze duration: `1h`, `4h`, `1d`, `3d`, or `1w` |
 
 ### Escalate SLA Breaches
 
@@ -103,7 +124,7 @@ Use these as starting points, then adjust conditions for your workspace.
 
 Automations can hand work to the AI agent, hand it back to a human operator, or route it to a team. Use [Assignment](/settings/assignment) when you need persistent routing rules with skills, capacity, schedules, or route previews.
 
-Automations should be used for event-driven workflow changes: tags, notes, notifications, surveys, SLA metadata, status, priority, team routing, AI handoff, human handoff, snooze, and archive.
+Automations should be used for event-driven workflow changes: tags, notes, notifications, surveys, SLA metadata, conversation status, priority, team routing, AI handoff, human handoff, snooze, and archive.
 
 ## Testing Automations
 

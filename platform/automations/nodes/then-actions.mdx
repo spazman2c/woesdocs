@@ -6,7 +6,7 @@ description: "Every Then action node in Woes Automations, including configuratio
 
 # Then Actions
 
-Then actions are the nodes that change a conversation, issue, survey request, or operator-visible notes. Logic and Delay nodes decide whether an action is reached; action nodes perform the effect.
+Then actions are the nodes that change a conversation, linked issue, survey request, or operator-visible notes. Logic and Delay nodes decide whether an action is reached; action nodes perform the effect.
 
 All current action nodes are issue- or conversation-scoped. The builder validates required fields and blocks publish when an action cannot run.
 
@@ -50,7 +50,7 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 
 ## Inbox actions
 
-### Set status
+### Set conversation status
 
 | Field | Details |
 | --- | --- |
@@ -60,7 +60,7 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 | Required config | Status value. |
 | Runtime effect | Normalizes lifecycle status and updates the conversation status plus `statusId` and `statusLifecycle` metadata. |
 | Use it for | Reopening, waiting, solving, auto-closing, or moving a conversation back to open. |
-| Caveats | Runtime supports lifecycle values such as `open`, `waiting`, and `solved`, plus common synonyms. Invalid/custom values are skipped. |
+| Caveats | Runtime supports lifecycle values such as `open`, `waiting`, and `solved`, plus common synonyms. Use `waiting` for "waiting on customer." Invalid/custom values are skipped. |
 
 ### Set priority
 
@@ -98,7 +98,7 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 | Use it for | Recording why a workflow fired, what evidence to review, or what follow-up is needed. |
 | Caveats | This action is one-shot per automation per conversation to avoid duplicate notes on recurring message events. |
 
-### Snooze issue
+### Snooze conversation
 
 | Field | Details |
 | --- | --- |
@@ -106,11 +106,11 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 | Action kind | `snooze` |
 | Category | Inbox |
 | Required config | Duration: `1h`, `4h`, `1d`, `3d`, or `1w`. |
-| Runtime effect | Sets status to waiting and writes a `snoozeUntil` timestamp. |
+| Runtime effect | Sets the conversation status to `waiting`, writes `statusId` and `statusLifecycle` as `waiting`, and writes a `snoozeUntil` timestamp. |
 | Use it for | Deferring follow-up, waiting for customers, or temporarily moving a conversation out of the active queue. |
 | Caveats | Snooze durations are fixed. The scheduler can wake elapsed snoozes back to open when appropriate. |
 
-### Archive issue
+### Archive conversation
 
 | Field | Details |
 | --- | --- |
@@ -120,7 +120,7 @@ All current action nodes are issue- or conversation-scoped. The builder validate
 | Required config | None. |
 | Runtime effect | Writes `archivedAt` and `visibility: archived` metadata. |
 | Use it for | Removing conversations from the active inbox after cleanup workflows. |
-| Caveats | Archive does not by itself set the lifecycle status to solved. Pair it with Set status when that is the desired behavior. |
+| Caveats | Archive does not by itself set the lifecycle status to solved. Pair it with Set conversation status when that is the desired behavior. |
 
 ## Messaging actions
 

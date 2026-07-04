@@ -8,7 +8,7 @@ description: "Understand how Woes automation nodes fit together before choosing 
 
 Automation nodes are the building blocks inside the Woes automation builder. Each automation starts with one **When** node, can branch through **If** or **AI condition** nodes, can wait through **Delay**, and finishes by running one or more **Then** action nodes.
 
-The builder intentionally exposes configurable primitives instead of many duplicate preset nodes. For example, choose **Set priority** and then pick `urgent`, `high`, `medium`, or `low`; choose **Snooze issue** and then pick the duration.
+The builder intentionally exposes configurable primitives instead of many duplicate preset nodes. For example, choose **Set priority** and then pick `urgent`, `high`, `medium`, or `low`; choose **Snooze conversation** and then pick the duration.
 
 ## How the menus are organized
 
@@ -24,7 +24,7 @@ The current node library groups are:
 | Group | Nodes |
 | --- | --- |
 | Logic | If condition, AI condition, Delay |
-| Inbox | Add internal note, Add tag, Archive issue, Set priority, Set status, Snooze issue |
+| Inbox | Add internal note, Add tag, Archive conversation, Set conversation status, Set priority, Snooze conversation |
 | Routing | Assign team, Hand to AI agent, Human handoff |
 | Messaging | Auto-reply, Notify, Send CSAT survey, Send NPS survey |
 | SLA | Set SLA target |
@@ -33,7 +33,7 @@ The current node library groups are:
 
 Published and enabled automations run against workspace support records. Drafts can be tested, but they do not run for customers until they are published.
 
-A single runtime event can satisfy more than one trigger. For example, a new live chat conversation can match both **Issue created** and **New live chat conversation**, so generic issue routing and live-chat-specific routing can run in the same pass.
+A single runtime event can satisfy more than one trigger. For example, a new live chat conversation can match both **New conversation or issue** and **New live chat conversation**, so generic conversation routing and live-chat-specific routing can run in the same pass.
 
 ## Validation rules
 

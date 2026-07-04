@@ -110,7 +110,7 @@ AI outcome is available after the AI agent has handled or stamped the conversati
 | Let AI handle API questions | Customer intent `isapi-question` -\> Hand to AI agent |
 | Escalate human requests | Customer intent `ishuman-request` -\> Human handoff |
 | Tag AI handoffs | AI outcome `ishanded-off` -\> Add tag |
-| Close polite endings | Customer intent `isclosing` -\> Set status solved |
+| Close polite endings | Customer intent `isclosing` -\> Set conversation status solved |
 
 ### Limitations
 
@@ -155,8 +155,8 @@ Delayed actions are stored on the conversation metadata until they are due. The 
 | Goal | Setup |
 | --- | --- |
 | Warn before an SLA miss | When status changes -\> If status is open -\> Delay 2 hours -\> Notify. |
-| Close stale waiting issues | When status changes -\> If status is waiting -\> Delay 3 days -\> Set status solved. |
-| Send a survey later | When issue solved -\> Delay 15 minutes -\> Send CSAT survey. |
+| Close stale waiting conversations | When conversation status changes -\> If status is waiting -\> Delay 3 days -\> Set conversation status solved. |
+| Send a survey later | When conversation solved -\> Delay 15 minutes -\> Send CSAT survey. |
 
 ## Validation behavior
 

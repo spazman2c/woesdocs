@@ -12,25 +12,35 @@ Woes only shows trigger events that are currently wired to runtime sources. Olde
 
 ## Conversations
 
-### Issue created
+### New conversation or issue
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_created` |
-| Dropdown label | Issue created |
-| Runs when | A new support issue event is created. This includes new widget/live-chat conversations, new Discord threads routed into Woes, and standalone Issues-board issues. |
+| Dropdown label | New conversation or issue |
+| Runs when | A new support record is created. This includes new widget/live-chat conversations, new Discord threads routed into Woes, and standalone Issues-board issues. |
 | Good for | Initial triage, default tags, priority setting, assigning AI, assigning a team, or adding an internal note. |
 | Notes | Converted Issues-board issues do not fire this again if they were already created from a conversation. Email inbound and public REST create paths should not be assumed unless verified in your workspace. |
 
-### New message on issue
+### New customer message
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_new_message` |
-| Dropdown label | New message on issue |
+| Dropdown label | New customer message |
 | Runs when | A customer adds a new message to an existing conversation. |
 | Good for | Routing human requests, classifying API questions, tagging bug reports or documentation gaps, reopening solved conversations, or escalating after AI handoff. |
 | Notes | This is a customer-message trigger, not an operator-reply trigger. Channel routes may skip automations when a conversation is already operator-owned. |
+
+### Operator replied
+
+| Field | Details |
+| --- | --- |
+| Event id | `conversation_operator_replied` |
+| Dropdown label | Operator replied |
+| Runs when | A signed-in operator sends a reply from the Woes inbox conversation reply path. |
+| Good for | Moving a conversation to waiting, snoozing a conversation after a reply, adding a follow-up note, applying tags, or notifying a team. |
+| Notes | This does not fire for customer messages. It also does not represent the AI agent's generated customer reply; use AI outcome conditions on customer-message workflows when you want to react to agent handling. |
 
 ### No first response in time
 
@@ -64,84 +74,84 @@ Woes only shows trigger events that are currently wired to runtime sources. Olde
 | Good for | Tagging Discord conversations, routing app mentions, notifying a team, or keeping Discord-specific support flows separate. |
 | Notes | Discord reactions are not a current automation trigger. The runtime may skip Discord automation effects for conversations already owned by an operator. |
 
-## Issue lifecycle
+## Conversation lifecycle
 
-### Issue status changed
+### Conversation status changed
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_status_changed` |
-| Dropdown label | Issue status changed |
-| Runs when | An operator-side issue or conversation status update is submitted. |
+| Dropdown label | Conversation status changed |
+| Runs when | An operator-side conversation or issue status update is submitted. |
 | Good for | Delayed follow-up, auto-close flows, customer-waiting reminders, or status-based routing. |
 | Notes | This is wired to the status update path, not every direct database mutation. |
 
-### Issue solved
+### Conversation solved
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_solved` |
-| Dropdown label | Issue solved |
+| Dropdown label | Conversation solved |
 | Runs when | A conversation or issue is marked solved through the operator workflow. |
 | Good for | Sending CSAT or NPS, adding a resolution note, archiving, or notifying an owner. |
 | Notes | Use a Delay before survey actions when you want to wait before requesting feedback. |
 
-### Issue reopened
+### Conversation reopened
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_reopened` |
-| Dropdown label | Issue reopened |
-| Runs when | A previously solved issue is moved away from solved. |
-| Good for | Reassigning the issue, restoring priority, notifying the prior owner, or restarting SLA tracking. |
+| Dropdown label | Conversation reopened |
+| Runs when | A previously solved conversation is moved away from solved. |
+| Good for | Reassigning the conversation, restoring priority, notifying the prior owner, or restarting SLA tracking. |
 | Notes | The runtime detects this from the status transition path. |
 
-### Issue priority changed
+### Conversation priority changed
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_priority_changed` |
-| Dropdown label | Issue priority changed |
+| Dropdown label | Conversation priority changed |
 | Runs when | A priority update is submitted. |
 | Good for | Applying urgent SLA metadata, notifying support, or routing high-priority issues to a team. |
 | Notes | Use an If condition when you only want to react to a specific priority value. |
 
-### Issue assigned
+### Conversation assigned
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_assigned` |
-| Dropdown label | Issue assigned |
+| Dropdown label | Conversation assigned |
 | Runs when | An assignee update is submitted through the operator workflow. |
 | Good for | Adding an ownership note, notifying the assignee, setting a team, or applying a tag. |
 | Notes | This is verified through the operator update path. |
 
-### Tag added to issue
+### Tag added to conversation
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_tag_added` |
-| Dropdown label | Tag added to issue |
+| Dropdown label | Tag added to conversation |
 | Runs when | One or more tags are added to an issue or conversation. |
 | Good for | Tag-driven escalation, VIP routing, bug routing, docs-gap routing, or adding notes. |
 | Notes | This reacts to tag additions, not tag removals. |
 
-### Issue archived
+### Conversation archived
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_archived` |
-| Dropdown label | Issue archived |
+| Dropdown label | Conversation archived |
 | Runs when | A conversation is archived from the active inbox. |
 | Good for | Recording cleanup notes, notifying a team, or applying an archive tag. |
 | Notes | Archive is an inbox visibility action; it does not by itself mean the issue was solved. |
 
-### Issue snoozed
+### Conversation snoozed
 
 | Field | Details |
 | --- | --- |
 | Event id | `issue_snoozed` |
-| Dropdown label | Issue snoozed |
+| Dropdown label | Conversation snoozed |
 | Runs when | A conversation is moved into the waiting/snoozed state. |
 | Good for | Deferred reminders, adding a waiting tag, or notifying a team after a snooze action. |
 | Notes | In the runtime, snoozed maps to the `waiting` lifecycle state. |
@@ -199,7 +209,9 @@ Most triggers should be narrowed with an If or AI condition. For example:
 
 | Goal | Recommended setup |
 | --- | --- |
-| Route only urgent new issues | When **Issue created** -\> If **Priority is urgent** -\> Assign team or Notify. |
+| Route only urgent new conversations | When **New conversation or issue** -\> If **Priority is urgent** -\> Assign team or Notify. |
 | Handle only Discord app mentions | When **New Discord message** -\> If **Message mentions workspace is true** -\> Assign team. |
+| Move operator replies to waiting | When **Operator replied** -\> Then **Set conversation status** to `waiting`. |
+| Snooze after a reply | When **Operator replied** -\> Then **Snooze conversation** for the chosen duration. |
 | Follow up on low CSAT | When **CSAT completed** -\> If **Survey score less than 4** -\> Add tag and Notify. |
 | Escalate unanswered first responses | When **No first response in time** -\> Set priority and Notify. |
