@@ -1,44 +1,212 @@
 ---
-title: "Slack Connector"
+title: "Slack Integration"
 sidebarTitle: "Slack"
-description: "Planned Slack connector for support notifications, escalations, and team workflow handoff."
+description: "Connect Slack to Woes so app mentions, direct messages, selected channel messages, and emoji-created tickets enter the shared support inbox."
 ---
 
-# Slack Connector
+# Slack Integration
 
-Slack is a planned team-workflow connector for support alerts and escalation visibility.
+Slack connects customer and community conversations to the same Woes support
+inbox used by live chat, email, and Discord. Once installed, Slack messages
+become normal Woes conversations: the selected Slack agent can answer from your
+workspace context, operators can take over, and replies post back into the
+original Slack thread.
 
-## Status
+<img
+  src="/images/integrations/woes-slack-card.png"
+  alt="Slack integration card in Woes workspace settings."
+/>
 
-**Planned connector.** The Settings catalog may show Slack as planned, but Woes should not present a working Slack install action until OAuth, workspace mapping, delivery routes, permission checks, retry behavior, and audit logging are implemented.
+## What Slack does in Woes
 
-## What it will do
+Use Slack when customers, community members, or internal teams already ask API
+questions in Slack and you want those conversations routed, answered, measured,
+and escalated in one place.
 
-Slack should help support teams keep important Woes events visible where teammates already coordinate:
+| Capability | How it works |
+| --- | --- |
+| Shared inbox intake | App mentions, direct messages, selected channel messages, and ticket emoji reactions can create or continue Woes conversations. |
+| Agent routing | Slack uses the same channel assignment model as live chat, email, and Discord, so you can choose which agent answers Slack. |
+| AI replies | When the selected agent has enough grounded context, Woes posts the answer back into the Slack thread. |
+| Operator takeover | Operators can take over in Woes and reply back to Slack from the inbox. |
+| Emoji ticket trigger | Selected channels can turn an existing Slack message into a Woes conversation when someone reacts with a supported ticket-style emoji. |
+| File metadata | Woes records safe metadata for Slack attachments, such as name, title, MIME type, file type, and size. |
+| Profile enrichment | Woes can attach the Slack display name and email when the app has profile scopes. |
+| Analytics | Slack conversations flow into normalized conversation, channel, agent-run, and support analytics. |
 
-- Send SLA breach alerts to selected Slack channels.
-- Notify teams when urgent issues are created or reassigned.
-- Post automation-generated alerts from Woes workflows.
-- Link back to the relevant Woes conversation, issue, or client.
-- Optionally support channel-specific routing rules later.
+<Note>
+  Slack is a support channel integration. It is not a separate inbox or a
+  replacement for Woes assignment, SLA, audit, and analytics workflows.
+</Note>
 
-## Product fit
+## Current boundaries
 
-Slack is best as a notification and escalation surface, not a replacement for the Woes inbox. Operators should still resolve customer conversations in Woes so assignment, status, SLA, audit, and analytics stay coherent.
+The current Slack integration is intentionally conservative about Slack data
+access.
 
-## Implementation requirements
+<img
+  src="/images/integrations/slack-capability-gap.png"
+  alt="Slack integration implementation notes showing current boundaries."
+/>
 
-Before Slack becomes active, Woes needs:
+- Woes does not have a Slack MCP adapter yet.
+- Woes does not ingest full private Slack file contents yet.
+- Woes stores safe file metadata, but not private Slack file URLs.
+- Slack-specific analytics are currently layered on the normalized conversation channel rather than a separate Slack-only dashboard.
+- Email enrichment requires `users:read.email` and a reconnect after that scope is added.
 
-- Slack OAuth install and reconnect flow.
-- Workspace-to-Slack-team mapping.
-- Channel picker with safe permission checks.
-- Message delivery, retry, and error states.
-- Automation action support.
-- Tenant-scoped activity logs and secret redaction.
+## Setup
 
-## Early recipes
+1. In Woes, open **Workspace Settings -> Integrations -> Slack**.
+2. Click **Connect**.
+3. Approve the Slack app install.
+4. Return to Woes and open **Manage Slack**.
+5. Refresh channel intake.
+6. Enable the Slack channels Woes should listen to.
+7. Pick an intake mode for each channel.
 
-- Notify `#support-triage` when an issue breaches first-response SLA.
-- Post urgent customer issues to a product support channel.
-- Notify the assigned team when a Discord support thread becomes high priority.
+<Tip>
+  If you add new Slack scopes after the first install, reconnect Slack so the
+  workspace grants the updated permissions.
+</Tip>
+
+## Channel intake modes
+
+Each discovered Slack channel can be configured independently.
+
+| Mode | What happens |
+| --- | --- |
+| App mentions | Woes creates or continues a conversation when someone mentions the Slack app. |
+| Every message | Woes creates or continues conversations from normal messages in the selected channel. |
+| Ticket emoji | Woes creates a conversation when someone reacts to a message with a supported ticket-style emoji. |
+
+Direct messages to the Slack app are treated as support conversations once
+Slack is connected.
+
+## Supported ticket emoji
+
+Ticket emoji mode currently accepts:
+
+- `:ticket:`
+- `:admission_tickets:`
+- `:rotating_light:`
+- `:warning:`
+- `:sos:`
+
+When a supported reaction is added, Woes fetches the original message when
+Slack permits it, then creates the Woes conversation from that message. If Slack
+cannot return the message body, Woes still creates a clear fallback ticket from
+the reaction event.
+
+## Slack app scopes
+
+Configure these bot token scopes in Slack:
+
+```txt
+app_mentions:read
+channels:history
+channels:read
+chat:write
+files:read
+groups:history
+groups:read
+im:history
+im:read
+reactions:read
+team:read
+users:read
+users:read.email
+```
+
+These scopes allow Woes to receive mentions, direct messages, selected channel
+messages, reaction-created tickets, safe file metadata, and Slack profile
+details.
+
+## Event subscriptions
+
+Set the Slack request URL to:
+
+```txt
+https://woes.dev/api/slack/events
+```
+
+Subscribe the bot to these events:
+
+```txt
+app_mention
+message.channels
+message.groups
+message.im
+reaction_added
+app_uninstalled
+```
+
+Slack sends a `url_verification` challenge to the request URL. Woes verifies the
+Slack request signature before parsing the payload and responds with the
+challenge value.
+
+## OAuth redirect URL
+
+Set the Slack OAuth redirect URL to:
+
+```txt
+https://woes.dev/api/integrations/slack/callback
+```
+
+Woes stores OAuth state as a short-lived hash and stores Slack bot tokens
+encrypted. Tokens are never returned to the browser.
+
+## How routing works
+
+1. Slack sends an event to `/api/slack/events`.
+2. Woes verifies the Slack signature against the raw request body.
+3. Woes resolves the installed Slack team and app to exactly one workspace.
+4. Woes checks the selected channel intake rule.
+5. Woes creates or updates a normalized support conversation.
+6. Woes routes the conversation to the Slack channel agent assignment.
+7. The AI agent answers when it has enough grounded context, or hands off to an operator.
+8. Replies from AI or operators are posted back into the Slack thread.
+
+## Files and attachments
+
+When a Slack message includes files, Woes records safe metadata such as file id,
+name, title, MIME type, file type, and size. This helps operators understand
+that the customer attached a screenshot or document without exposing private
+Slack file URLs or downloading private file contents.
+
+Full Slack file-content ingestion is planned separately.
+
+## Troubleshooting
+
+| Problem | What to check |
+| --- | --- |
+| Connect does nothing | Confirm the Slack app credentials and `SLACK_SCOPES` are configured in the deployment environment. |
+| Slack says the event URL failed | Confirm `https://woes.dev/api/slack/events` is deployed and `SLACK_SIGNING_SECRET` matches the Slack app. |
+| Mentions do not create conversations | Confirm the app is installed, the bot is invited to the channel, and the channel is enabled in Manage Slack. |
+| Emoji reactions do not create tickets | Confirm the channel is enabled and set to Ticket emoji mode, and that `reaction_added` plus `reactions:read` are configured. |
+| Emails do not appear on Slack customers | Confirm `users:read.email` is included and reconnect Slack so the app receives the new scope. |
+| Operator replies fail | Confirm the Slack app still has `chat:write`, the app was not removed from the workspace, and the original channel/thread still exists. |
+
+## Slack brand assets
+
+The Slack logo and brand examples below come from Slack's official media kit.
+
+<img
+  src="/images/integrations/slack-logo.svg"
+  alt="Official Slack logo."
+/>
+
+<img
+  src="/images/integrations/slack-brand-examples.png"
+  alt="Official Slack brand logo examples."
+/>
+
+## Related docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Omnichannel support](/support-workflows/omnichannel-support)
+- [Discord integration](/integrations-catalog/discord)
+- [Slack Media Kit](https://slack.com/media-kit)
+- [Slack Events API](https://api.slack.com/events-api)
+- [Slack message events](https://api.slack.com/events/message)
+- [Slack file handling](https://api.slack.com/messaging/files)
