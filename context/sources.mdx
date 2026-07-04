@@ -11,7 +11,8 @@ Sources are the material Woes uses to answer customer questions. They can be API
 
 <Steps>
   <Step title="Create">
-    Add a URL, file, raw text, schema, or GitHub repository in Context.
+    Add a URL, file, raw text, schema, GitHub repository, or imported Notion
+    page in Context.
   </Step>
   <Step title="Scan">
     Woes fetches, parses, normalizes, and chunks the source.
@@ -92,6 +93,7 @@ Woes can auto-detect or ingest a specific source type:
 - SDK docs.
 - Raw Markdown or text.
 - GitHub repository docs and examples.
+- Notion pages shared with the Woes integration.
 
 ## Safe Fetch And Crawl Boundaries
 
@@ -104,9 +106,10 @@ site.
 
 ## Rescan And Source Limits
 
-URL-backed sources can be rescanned when the upstream material changes. Manual
-or pasted-content sources should be recreated when their content changes because
-there is no upstream URL to fetch again.
+URL-backed and connected-context sources can be updated when the upstream
+material changes. Manual or pasted-content sources should be recreated when
+their content changes because there is no upstream URL or connector to fetch
+again.
 
 Workspaces have plan and add-on source capacity. When a new source would exceed
 the effective source limit, Woes blocks creation instead of silently dropping or

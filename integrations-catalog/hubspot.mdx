@@ -1,39 +1,128 @@
 ---
-title: "HubSpot Candidate"
+title: "HubSpot Integration"
 sidebarTitle: "HubSpot"
-description: "Future candidate for CRM and account context inside Woes support workflows."
+description: "Connect HubSpot to Woes so operators can use CRM account context while supporting customers."
 ---
 
-# HubSpot Candidate
+# HubSpot Integration
 
-HubSpot is a future integration candidate for bringing CRM and account context into Woes support workflows.
+HubSpot connects CRM account context to Woes. Use it when your support team needs to understand the company, contact, owner, lifecycle stage, or deal context behind a conversation without leaving the support workflow.
 
 ## Status
 
-**Future candidate.** This is not currently a live Woes connector.
+**Available now.** Workspace admins can connect a HubSpot portal from **Workspace Settings > Integrations**.
 
-## What it could do
+## What the HubSpot integration does
 
-A HubSpot integration could help operators understand the account behind a support conversation:
+The HubSpot integration gives Woes permission to read CRM context that can help operators understand who they are helping.
 
-- Match Woes clients to HubSpot companies and contacts.
-- Show account owner, lifecycle stage, plan context, and recent CRM activity where allowed.
-- Create HubSpot tasks or tickets from Woes support issues.
-- Add Woes support summaries back to CRM records.
-- Support routing or automations based on CRM fields.
+| Capability | What customers get |
+| --- | --- |
+| Workspace connection | Admins can connect one HubSpot portal to a Woes workspace. |
+| CRM context access | Woes can read HubSpot contacts, companies, deals, and owners for CRM-aware support workflows. |
+| Portal status | Woes shows whether the workspace is connected and which HubSpot portal/user authorized it. |
+| Operator context | HubSpot information is used as support context for your team, not as a customer-facing channel. |
+| Disconnect control | Admins can disconnect HubSpot from Woes when CRM context should no longer be available. |
 
-## Why it fits Woes
+<Note>
+  HubSpot is not a support channel in Woes. Live chat, email, Discord, and Slack remain the customer conversation channels. HubSpot adds account context around those conversations.
+</Note>
 
-Support teams need account context to prioritize urgent customers, route ownership, and coordinate with success or sales teams. CRM context can improve support decisions without turning Woes into a CRM.
+## What Woes can read
 
-## Key design questions
+When you authorize HubSpot, Woes requests read access for:
 
-- Which HubSpot objects should be read or written first?
-- How should contact matching work when widget identity is anonymous or partial?
-- Which CRM fields are safe for agent context versus operator-only display?
-- Should Woes create HubSpot tickets, tasks, notes, or timeline events?
-- How should duplicate company/contact matches be handled?
+- HubSpot contacts
+- HubSpot companies
+- HubSpot deals
+- HubSpot owners
 
-## Possible first version
+This lets Woes support CRM-aware views such as account identity, relationship ownership, lifecycle stage, and related sales/customer context where those surfaces are available in the workspace.
 
-Start with read-only contact/company lookup for verified customer emails, plus operator-only account context in the client panel.
+## What Woes does not do yet
+
+The current HubSpot integration is read-oriented. Woes does not currently:
+
+- Create HubSpot tickets.
+- Create HubSpot tasks.
+- Write support notes back to HubSpot records.
+- Update HubSpot contact, company, deal, or owner records.
+- Turn HubSpot into a customer support inbox channel.
+
+Use Woes Issues, Jira, Linear, Slack, email, Discord, or live chat workflows for support actions and customer communication.
+
+## Setup
+
+1. Open **Workspace Settings > Integrations**.
+2. Find **HubSpot**.
+3. Click **Connect**.
+4. Review the requested HubSpot permissions.
+5. Choose the HubSpot account and portal you want Woes to use.
+6. Approve the connection.
+7. Return to Woes and confirm the HubSpot card shows **Connected**.
+
+After connection, the HubSpot card shows the connected portal and authorizing HubSpot user when that information is available.
+
+<Tip>
+  If you manage multiple HubSpot portals, double-check the portal name during authorization before approving the connection.
+</Tip>
+
+## Permissions Woes requests
+
+Woes requests the minimum HubSpot OAuth permissions needed for CRM context:
+
+| Permission area | Why Woes asks for it |
+| --- | --- |
+| OAuth connection | Lets Woes complete the secure HubSpot authorization flow. |
+| Contacts read | Lets Woes match and understand people related to a support conversation. |
+| Companies read | Lets Woes show account and company context. |
+| Deals read | Lets operators understand relevant commercial context when available. |
+| Owners read | Lets operators see HubSpot ownership context. |
+
+Woes does not request write permissions for HubSpot CRM records in the current version.
+
+## Data visibility
+
+HubSpot data is workspace-scoped support context.
+
+- Operators and admins may see HubSpot connection status and CRM context inside Woes.
+- Customers using the chat widget, email, Discord, or Slack do not receive HubSpot records.
+- Public REST API responses do not expose HubSpot access tokens or raw integration credentials.
+- Disconnecting HubSpot stops Woes from using the HubSpot connection for future CRM context.
+
+## Disconnect HubSpot
+
+1. Open **Workspace Settings > Integrations**.
+2. Select **HubSpot**.
+3. Open the HubSpot management dialog.
+4. Click **Disconnect**.
+
+Disconnecting removes the Woes connection to HubSpot. If you reconnect later, an admin will need to approve HubSpot access again.
+
+## Troubleshooting
+
+### The HubSpot card still says Connect
+
+Refresh Woes after returning from HubSpot. If it still says **Connect**, try connecting again and make sure the HubSpot authorization screen is approved rather than cancelled.
+
+### The wrong HubSpot portal is connected
+
+Disconnect HubSpot in Woes, then connect again and choose the correct HubSpot portal during authorization.
+
+### I do not see CRM context
+
+Confirm that:
+
+- HubSpot shows **Connected** in **Workspace Settings > Integrations**.
+- The customer or account information in Woes can match a HubSpot contact or company.
+- Your Woes role has access to the operator surfaces where CRM context is shown.
+
+### I want Woes to create HubSpot tickets or notes
+
+HubSpot write-back is not part of the current integration. Use Woes Issues, Jira, Linear, or your public API workflows for ticketing and follow-up automation.
+
+## Related docs
+
+- [Integrations Catalog](/integrations-catalog/overview)
+- [Settings Overview](/settings/overview)
+- [Clients](/platform/clients)

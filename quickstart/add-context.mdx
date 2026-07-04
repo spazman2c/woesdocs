@@ -7,7 +7,8 @@ description: "Add documentation, specifications, repositories, and examples so W
 
 Woes answers developer questions from workspace-scoped source context. A source
 can be a formal API specification, a documentation site, raw Markdown, SDK
-examples, or a connected GitHub repository.
+examples, a connected GitHub repository, or selected pages from a connected
+Notion workspace.
 
 Start with the material your support team already trusts. The agent can only be
 as specific as the source context it can retrieve.
@@ -27,6 +28,7 @@ as specific as the source context it can retrieve.
 | AsyncAPI | Event, message, and webhook documentation. |
 | SOAP or gRPC docs | Service operations, request/response contracts, and integration notes. |
 | GitHub repository | Default-branch README, docs, specs, SDK examples, and source-adjacent API guidance. |
+| Notion pages | Product notes, FAQs, setup guides, release notes, and support playbooks shared with the Woes Notion integration. |
 
 ## Add a Source
 
@@ -60,6 +62,7 @@ as specific as the source context it can retrieve.
 | A docs homepage | Website crawl | Keep the crawl scope to the docs domain or path you trust. |
 | A single troubleshooting article | Raw documentation URL | Add tags or folders so operators can find it later. |
 | A private docs repository | GitHub repository | Review the default-branch docs-like files that Woes imports before attaching the source to an agent. |
+| A Notion support playbook | Notion integration | Share the page with the Woes integration, import it from Settings -> Integrations, then attach it to the right agent. |
 | A support runbook | Markdown or text | Keep it concise and remove operator-only secrets before ingestion. |
 
 ## Source Health

@@ -561,7 +561,10 @@
               "integrations-catalog/github",
               "integrations-catalog/discord",
               "integrations-catalog/slack",
-              "integrations-catalog/linear"
+              "integrations-catalog/jira",
+              "integrations-catalog/linear",
+              "integrations-catalog/hubspot",
+              "integrations-catalog/notion"
             ]
           },
           {
@@ -570,9 +573,7 @@
             "pages": [
               "integrations-catalog/webhooks",
               "integrations-catalog/zapier",
-              "integrations-catalog/jira",
-              "integrations-catalog/sentry",
-              "integrations-catalog/notion"
+              "integrations-catalog/sentry"
             ]
           },
           {
@@ -580,8 +581,7 @@
             "icon": "sparkles",
             "pages": [
               "integrations-catalog/confluence",
-              "integrations-catalog/pagerduty",
-              "integrations-catalog/hubspot"
+              "integrations-catalog/pagerduty"
             ]
           }
         ]

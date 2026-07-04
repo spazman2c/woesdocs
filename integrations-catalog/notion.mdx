@@ -1,42 +1,145 @@
 ---
-title: "Notion Connector"
+title: "Notion Integration"
 sidebarTitle: "Notion"
-description: "Planned Notion connector for importing product notes, FAQs, and support playbooks into Woes context."
+description: "Connect Notion and import selected product notes, FAQs, setup guides, and support playbooks into Woes context."
 ---
 
-# Notion Connector
+# Notion Integration
 
-Notion is a planned customer connector for teams that manage product notes, FAQs, implementation guides, and support playbooks in Notion.
+Notion is a live context integration for teams that keep product knowledge,
+implementation notes, FAQs, support scripts, release notes, or troubleshooting
+playbooks in Notion.
+
+When you connect Notion, Woes can import selected pages into the Context
+Library. Agents and operators can then use that material as grounded evidence
+alongside API specs, docs sites, GitHub repositories, and pasted source content.
 
 ## Status
 
-**Planned connector.** This is not currently a live Woes connector. It should remain disabled until page selection, permission handling, source attribution, rescans, and redaction behavior are implemented.
+**Available now.** Workspace admins can connect Notion from **Workspace
+Settings -> Integrations -> Notion**, choose shared pages, and import them as
+Woes context sources.
 
-## What it will do
+## What It Does
 
-A Notion connector should bring selected workspace pages into the Woes context layer:
+The Notion integration helps Woes answer support questions with practical
+knowledge that often lives outside formal API reference docs:
 
-- Import pages or databases selected by an admin.
-- Use FAQs, troubleshooting guides, and internal runbooks as support context.
-- Preserve source links so operators can inspect the original note.
-- Rescan pages when support documentation changes.
-- Help identify outdated or weak knowledge-base coverage.
+- Product behavior notes.
+- Customer onboarding guides.
+- Internal FAQs.
+- Troubleshooting playbooks.
+- Release and migration notes.
+- Setup guides that explain how customers should configure your product.
 
-## Product fit
+Imported Notion pages become searchable context for the workspace. You can
+attach those sources to specific agents so each agent only answers from the
+material that belongs to its product, website, or customer segment.
 
-Notion often holds the practical explanations that are missing from formal API specs: edge cases, rollout notes, implementation details, and support scripts. Woes can use that material to improve answers while preserving confidence, citations, and handoff rules.
+## What Gets Imported
 
-## Implementation requirements
+Woes imports the readable content from the Notion pages you select during
+import.
 
-Before Notion becomes active, Woes needs:
+Good Notion pages include:
 
-- OAuth install and workspace/page picker.
-- Page, database, and child-page import rules.
-- Permission checks for internal-only material.
-- Source attribution and freshness tracking.
-- Manual rescan and stale-content behavior.
-- Clear rules for what can be cited to customers versus shown only to operators.
+- Clear titles.
+- Short sections with descriptive headings.
+- Exact product names, feature names, and configuration terms.
+- Troubleshooting steps and known failure cases.
+- Links to related docs, API references, or customer-facing pages.
+- Notes about when an operator should take over instead of letting AI answer.
 
-## Possible first version
+If you need multiple pages, select each page you want Woes to use. If a child
+page contains important content, share and import that page too.
 
-Start with read-only import of selected pages and child pages, plus manual rescan. Keep database sync and write-back for a later version.
+## Setup
+
+<Steps>
+  <Step title="Open Integrations">
+    In Woes, go to **Workspace Settings -> Integrations**.
+  </Step>
+  <Step title="Connect Notion">
+    Find **Notion** and click **Connect**. You will be sent to Notion to approve
+    the connection.
+  </Step>
+  <Step title="Choose the Notion workspace">
+    Select the Notion workspace that contains the pages you want Woes to use.
+  </Step>
+  <Step title="Share pages with the integration">
+    In Notion, make sure the relevant pages are shared with the Woes
+    integration. Pages that are not shared will not appear in Woes.
+  </Step>
+  <Step title="Select pages to import">
+    Return to Woes, open the Notion integration, and choose the pages you want
+    to import.
+  </Step>
+  <Step title="Import into Context">
+    Click **Import selected pages**. Woes adds the pages to the Context Library
+    as Notion-backed sources.
+  </Step>
+  <Step title="Attach to agents">
+    Open **Agents**, choose the right agent, and attach the imported Notion
+    source so the agent can retrieve it when answering.
+  </Step>
+</Steps>
+
+## Where It Appears In Woes
+
+| Surface | What you do there |
+| --- | --- |
+| Workspace Settings -> Integrations | Connect, reconnect, disconnect, and import selected Notion pages. |
+| Context Library | Review imported Notion sources, inspect coverage, and rescan or delete sources. |
+| Agents | Attach Notion sources to the agents that should use them. |
+| Inbox | Operators can review retrieved evidence when an agent uses imported context. |
+
+## Permissions And Access
+
+Notion only shows Woes the pages available to the authorized Notion connection.
+If a page does not appear during import, check Notion and confirm the page or
+its parent is shared with the Woes integration.
+
+Disconnecting Notion stops new page listing and imports. Already imported Woes
+context sources remain in the Context Library until an admin deletes them.
+
+<Warning>
+  Only import pages that are safe for your support workspace to use as context.
+  Do not import pages containing passwords, private customer secrets, access
+  tokens, or content that agents should never retrieve.
+</Warning>
+
+## Maintaining Notion Context
+
+When Notion content changes, update the matching source in Woes so agents use
+the latest guidance.
+
+- Re-import or rescan pages after important product, pricing, or setup changes.
+- Keep troubleshooting pages specific and step-by-step.
+- Remove outdated pages from Context when they should no longer influence
+  answers.
+- Attach Notion sources only to agents that should answer from that material.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| The Notion page does not appear in Woes | Share the page with the Woes integration in Notion, then refresh the page list in Woes. |
+| Imported context is too vague | Add clearer headings, examples, troubleshooting steps, and links in Notion, then update the source in Woes. |
+| The wrong agent is using the page | Open the agent and remove the Notion source from agents that should not use it. |
+| A disconnected workspace still has old Notion sources | Delete the imported source from Context if you no longer want Woes to retrieve it. |
+
+## Best Practices
+
+- Keep one page focused on one workflow, feature, or support scenario.
+- Use customer-safe language when the page may be cited or summarized.
+- Put internal escalation notes in clearly labeled sections.
+- Include links to the canonical API docs when Notion explains an API behavior.
+- Review agent answers after importing new pages to confirm the retrieved
+  evidence is useful.
+
+## Related Docs
+
+- [Sources](/context/sources)
+- [Knowledge Base Overview](/knowledge-base/overview)
+- [Agents](/agents/overview)
+- [Context Learning](/agents/context-learning)
